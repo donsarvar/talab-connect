@@ -1,24 +1,28 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Toaster } from "@/components/ui/sonner";
+import { ImsProvider, useIms } from "@/components/ims/store";
+import { RoleSwitcher } from "@/components/ims/RoleSwitcher";
+import { StudentView } from "@/components/ims/StudentView";
+import { MentorView } from "@/components/ims/MentorView";
+import { AdminView } from "@/components/ims/AdminView";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
+function ActiveView() {
+  const { role } = useIms();
+  if (role === "student") return <StudentView />;
+  if (role === "mentor") return <MentorView />;
+  return <AdminView />;
+}
+
 function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
+    <ImsProvider>
+      <ActiveView />
+      <RoleSwitcher />
+      <Toaster position="top-center" richColors />
+    </ImsProvider>
   );
 }
