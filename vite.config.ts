@@ -19,15 +19,16 @@ export default defineConfig(({ command }) => {
       // TanStack Start (router) JSX dan oldin bo'lishi shart
       tanstackStart({
         server: { entry: "server" },
+        prerender: isGithubPages
+          ? {
+              enabled: true,
+            }
+          : undefined,
       }),
       tailwindcss(),
       viteReact(),
       // Nitro faqat build paytida faollashadi
-      command === "build"
-        ? nitro({
-            preset: isGithubPages ? "github-pages" : "cloudflare-module",
-          })
-        : null,
+      command === "build" ? nitro() : null,
     ].filter(Boolean),
     server: {
       host: "::",
