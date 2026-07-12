@@ -5,7 +5,10 @@ import viteReact from "@vitejs/plugin-react";
 import { nitro } from "nitro/vite";
 
 export default defineConfig(({ command }) => {
+  const isGithubPages = process.env.GITHUB_PAGES === "true";
+
   return {
+    base: isGithubPages ? "/talab-connect/" : "/",
     resolve: {
       tsconfigPaths: true,
       alias: {
@@ -20,7 +23,11 @@ export default defineConfig(({ command }) => {
       tailwindcss(),
       viteReact(),
       // Nitro faqat build paytida faollashadi
-      command === "build" ? nitro({ preset: "cloudflare-module" }) : null,
+      command === "build"
+        ? nitro({
+            preset: isGithubPages ? "github-pages" : "cloudflare-module",
+          })
+        : null,
     ].filter(Boolean),
     server: {
       host: "::",
@@ -28,3 +35,4 @@ export default defineConfig(({ command }) => {
     },
   };
 });
+
