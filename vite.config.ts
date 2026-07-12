@@ -2,9 +2,8 @@ import { defineConfig } from "vite";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import tailwindcss from "@tailwindcss/vite";
 import viteReact from "@vitejs/plugin-react";
-import { nitro } from "nitro/vite";
 
-export default defineConfig(({ command }) => {
+export default defineConfig(() => {
   const isGithubPages = process.env.GITHUB_PAGES === "true";
 
   return {
@@ -27,8 +26,6 @@ export default defineConfig(({ command }) => {
       }),
       tailwindcss(),
       viteReact(),
-      // Nitro faqat build paytida faollashadi
-      command === "build" ? nitro() : null,
     ].filter(Boolean),
     server: {
       host: "::",
@@ -36,4 +33,3 @@ export default defineConfig(({ command }) => {
     },
   };
 });
-
