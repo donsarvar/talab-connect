@@ -81,10 +81,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "description", content: "Modern platform for managing student internships, mentor evaluations, and coordinator oversight." },
       { name: "author", content: "IMS" },
       { property: "og:title", content: "IMS — Internship Management Platform" },
-      { property: "og:description", content: "Manage internships with check-ins, AI daily logs, and mentor evaluations." },
+      { property: "og:description", content: "Modern platform for managing student internships, mentor evaluations, and coordinator oversight." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "IMS — Internship Management Platform" },
+      { name: "twitter:description", content: "Modern platform for managing student internships, mentor evaluations, and coordinator oversight." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/59018c50-bd61-43f6-ab7b-74c9aadd6023/id-preview-e46edf91--06051fa0-5d5c-417a-8949-99b6f61ead12.lovable.app-1783876511408.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/59018c50-bd61-43f6-ab7b-74c9aadd6023/id-preview-e46edf91--06051fa0-5d5c-417a-8949-99b6f61ead12.lovable.app-1783876511408.png" },
     ],
     links: [
       {
