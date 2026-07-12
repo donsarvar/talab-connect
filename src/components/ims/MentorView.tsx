@@ -47,7 +47,7 @@ export function MentorView() {
             {mentor.avatar}
           </div>
           <div className="min-w-0 flex-1">
-            <p className="text-xs text-muted-foreground">Mentor · {org?.name}</p>
+            <p className="text-xs text-muted-foreground">Tashkilot rahbari · {org?.name}</p>
             <h1 className="truncate text-lg font-bold">{mentor.name}</h1>
           </div>
         </div>
@@ -56,16 +56,16 @@ export function MentorView() {
       <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
         {/* Stat cards */}
         <section className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-          <StatCard label="Total Students" value={myStudents.length} Icon={Users} tint="primary" />
-          <StatCard label="Present Today" value={presentToday} Icon={ClipboardCheck} tint="emerald" />
-          <StatCard label="Pending Approvals" value={pending} Icon={Clock} tint="amber" />
+          <StatCard label="Jami talabalar" value={myStudents.length} Icon={Users} tint="primary" />
+          <StatCard label="Bugun kelganlar" value={presentToday} Icon={ClipboardCheck} tint="emerald" />
+          <StatCard label="Tasdiqlash kutilmoqda" value={pending} Icon={Clock} tint="amber" />
         </section>
 
         {/* Content grid */}
         <section className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,320px)_minmax(0,1fr)]">
           {/* Student list */}
           <div className="glass rounded-3xl p-4">
-            <h2 className="mb-3 px-2 text-sm font-semibold text-muted-foreground">Assigned Students</h2>
+            <h2 className="mb-3 px-2 text-sm font-semibold text-muted-foreground">Biriktirilgan talabalar</h2>
             <div className="space-y-1.5">
               {myStudents.map((s) => {
                 const present = logs.some(
@@ -124,11 +124,11 @@ export function MentorView() {
                         selectedLogs
                           .filter((l) => l.status === "pending")
                           .forEach((l) => updateLog(l.id, { status: "approved" }));
-                        toast.success("Weekly log approved");
+                        toast.success("Haftalik hisobot tasdiqlandi");
                       }}
                       className="gradient-primary text-white"
                     >
-                      <Check className="mr-1.5 h-4 w-4" /> Approve Weekly Log
+                      <Check className="mr-1.5 h-4 w-4" /> Haftalik hisobotni tasdiqlash
                     </Button>
                   </div>
 
@@ -144,25 +144,29 @@ export function MentorView() {
                               </span>
                             ) : (
                               <Badge variant="outline" className="border-destructive/40 text-destructive">
-                                Absent
+                                Kelmagan
                               </Badge>
                             )}
                           </div>
                           <Badge
                             className={
                               l.status === "approved"
-                                ? "bg-emerald-500/15 text-emerald-600 hover:bg-emerald-500/15"
+                                ? "bg-emerald-500/15 text-emerald-600 hover:bg-emerald-500/15 font-medium"
                                 : l.status === "rejected"
-                                  ? "bg-destructive/15 text-destructive hover:bg-destructive/15"
-                                  : "bg-amber-500/15 text-amber-600 hover:bg-amber-500/15"
+                                  ? "bg-destructive/15 text-destructive hover:bg-destructive/15 font-medium"
+                                  : "bg-amber-500/15 text-amber-600 hover:bg-amber-500/15 font-medium"
                             }
                           >
-                            {l.status}
+                            {l.status === "approved"
+                              ? "Tasdiqlangan"
+                              : l.status === "rejected"
+                                ? "Rad etilgan"
+                                : "Kutilmoqda"}
                           </Badge>
                         </div>
                         {l.report && <p className="mt-2 text-sm text-foreground/90">{l.report}</p>}
                         {l.rejectionReason && (
-                          <p className="mt-1 text-xs text-destructive">Rejected: {l.rejectionReason}</p>
+                          <p className="mt-1 text-xs text-destructive">Rad etilganlik sababi: {l.rejectionReason}</p>
                         )}
                         {l.status === "pending" && l.report && (
                           <div className="mt-3 flex gap-2">
@@ -171,10 +175,10 @@ export function MentorView() {
                               className="bg-emerald-500 text-white hover:bg-emerald-600"
                               onClick={() => {
                                 updateLog(l.id, { status: "approved" });
-                                toast.success("Log approved");
+                                toast.success("Kunlik hisobot tasdiqlandi");
                               }}
                             >
-                              <Check className="mr-1 h-3.5 w-3.5" /> Approve
+                              <Check className="mr-1 h-3.5 w-3.5" /> Tasdiqlash
                             </Button>
                             <Button
                               size="sm"
@@ -184,7 +188,7 @@ export function MentorView() {
                                 setRejectReason("");
                               }}
                             >
-                              <X className="mr-1 h-3.5 w-3.5" /> Reject
+                              <X className="mr-1 h-3.5 w-3.5" /> Rad etish
                             </Button>
                           </div>
                         )}
@@ -195,10 +199,10 @@ export function MentorView() {
 
                 {/* Evaluation */}
                 <div className="glass rounded-3xl p-6 animate-fade-up">
-                  <h3 className="mb-4 text-base font-semibold">Final Evaluation</h3>
+                  <h3 className="mb-4 text-base font-semibold">Yakuniy baholash</h3>
                   <div className="mb-4">
                     <div className="mb-2 flex items-center justify-between">
-                      <span className="text-xs text-muted-foreground">Rating</span>
+                      <span className="text-xs text-muted-foreground">Baho (Reyting)</span>
                       <div className="flex items-center gap-1">
                         {[1, 2, 3, 4, 5].map((n) => (
                           <Star
@@ -214,7 +218,7 @@ export function MentorView() {
                     <Slider min={1} max={5} step={1} value={rating} onValueChange={setRating} />
                   </div>
                   <Textarea
-                    placeholder="Feedback for the student…"
+                    placeholder="Talaba haqida taqriz/fikr-mulohaza yozing…"
                     value={feedback}
                     onChange={(e) => setFeedback(e.target.value)}
                     className="min-h-[100px] rounded-xl"
@@ -223,10 +227,10 @@ export function MentorView() {
                     className="gradient-primary mt-3 w-full text-white"
                     onClick={() => {
                       setStudentEvaluation(selected.id, rating[0], feedback);
-                      toast.success("Evaluation saved");
+                      toast.success("Baholash muvaffaqiyatli saqlandi");
                     }}
                   >
-                    Save Evaluation
+                    Bahoni saqlash
                   </Button>
                 </div>
               </>
@@ -238,28 +242,28 @@ export function MentorView() {
       <Dialog open={!!rejectLog} onOpenChange={(o) => !o && setRejectLog(null)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Reject daily log</DialogTitle>
+            <DialogTitle>Kunlik hisobotni rad etish</DialogTitle>
           </DialogHeader>
           <Textarea
-            placeholder="Reason for rejection…"
+            placeholder="Rad etish sababini kiriting…"
             value={rejectReason}
             onChange={(e) => setRejectReason(e.target.value)}
             className="min-h-[120px]"
           />
           <DialogFooter>
             <Button variant="outline" onClick={() => setRejectLog(null)}>
-              Cancel
+              Bekor qilish
             </Button>
             <Button
               variant="destructive"
               onClick={() => {
-                if (!rejectReason.trim()) return toast.error("Please provide a reason");
+                if (!rejectReason.trim()) return toast.error("Iltimos, rad etish sababini kiriting");
                 updateLog(rejectLog!, { status: "rejected", rejectionReason: rejectReason });
                 setRejectLog(null);
-                toast.success("Log rejected");
+                toast.success("Hisobot rad etildi");
               }}
             >
-              Confirm Reject
+              Rad etishni tasdiqlash
             </Button>
           </DialogFooter>
         </DialogContent>

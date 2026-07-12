@@ -3,9 +3,9 @@ import { useIms } from "./store";
 import type { Role } from "@/lib/ims-data";
 
 const ROLES: { id: Role; label: string; Icon: typeof GraduationCap }[] = [
-  { id: "student", label: "Student", Icon: GraduationCap },
-  { id: "mentor", label: "Mentor", Icon: UserCog },
-  { id: "admin", label: "Admin", Icon: ShieldCheck },
+  { id: "student", label: "Talaba", Icon: GraduationCap },
+  { id: "mentor", label: "Rahbar (Mentor)", Icon: UserCog },
+  { id: "admin", label: "Koordinator", Icon: ShieldCheck },
 ];
 
 export function RoleSwitcher() {

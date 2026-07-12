@@ -75,8 +75,8 @@ export function AdminView() {
             <ShieldAlert className="h-5 w-5" />
           </div>
           <div className="min-w-0 flex-1">
-            <p className="text-xs text-muted-foreground">Coordinator Dashboard</p>
-            <h1 className="truncate text-lg font-bold">Internship Management System</h1>
+            <p className="text-xs text-muted-foreground">Koordinator nazorat paneli</p>
+            <h1 className="truncate text-lg font-bold">Talabalar Amaliyoti Platformasi</h1>
           </div>
         </div>
       </header>
@@ -84,25 +84,25 @@ export function AdminView() {
       <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
         <Tabs defaultValue="overview">
           <TabsList className="glass mb-6 h-11 rounded-full p-1">
-            <TabsTrigger value="overview" className="rounded-full">Overview</TabsTrigger>
-            <TabsTrigger value="import" className="rounded-full">Import</TabsTrigger>
-            <TabsTrigger value="assign" className="rounded-full">Assignments</TabsTrigger>
-            <TabsTrigger value="fraud" className="rounded-full">Alerts</TabsTrigger>
-            <TabsTrigger value="reports" className="rounded-full">Reports</TabsTrigger>
+            <TabsTrigger value="overview" className="rounded-full">Umumiy ma'lumotlar</TabsTrigger>
+            <TabsTrigger value="import" className="rounded-full">Ommaviy yuklash</TabsTrigger>
+            <TabsTrigger value="assign" className="rounded-full">Biriktirish</TabsTrigger>
+            <TabsTrigger value="fraud" className="rounded-full">Shubhali holatlar</TabsTrigger>
+            <TabsTrigger value="reports" className="rounded-full">Hisobotlar</TabsTrigger>
           </TabsList>
 
           {/* OVERVIEW */}
           <TabsContent value="overview" className="space-y-6">
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              <MetricCard label="Attendance Rate" value={`${rate}%`} Icon={GaugeCircle} tint="primary" progress={rate} />
-              <MetricCard label="Active Interns" value={students.length} Icon={Users} tint="emerald" />
-              <MetricCard label="Host Organizations" value={orgs.length} Icon={Building2} tint="amber" />
-              <MetricCard label="Fraud Alerts" value={alerts.length} Icon={AlertTriangle} tint="rose" />
+              <MetricCard label="Davomat ko'rsatkichi" value={`${rate}%`} Icon={GaugeCircle} tint="primary" progress={rate} />
+              <MetricCard label="Faol talabalar" value={students.length} Icon={Users} tint="emerald" />
+              <MetricCard label="Hamkor tashkilotlar" value={orgs.length} Icon={Building2} tint="amber" />
+              <MetricCard label="Shubhali vaziyatlar" value={alerts.length} Icon={AlertTriangle} tint="rose" />
             </div>
 
             <div className="grid gap-6 lg:grid-cols-3">
               <div className="glass rounded-3xl p-6 lg:col-span-2 animate-fade-up">
-                <h3 className="mb-4 text-sm font-semibold text-muted-foreground">Attendance — last 7 days</h3>
+                <h3 className="mb-4 text-sm font-semibold text-muted-foreground">Davomat — oxirgi 7 kun</h3>
                 <div className="h-64">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={attendanceData}>
@@ -116,14 +116,14 @@ export function AdminView() {
                           borderRadius: "12px",
                         }}
                       />
-                      <Bar dataKey="present" fill="oklch(0.55 0.19 275)" radius={[6, 6, 0, 0]} />
-                      <Bar dataKey="absent" fill="oklch(0.7 0.2 25)" radius={[6, 6, 0, 0]} />
+                      <Bar dataKey="present" fill="oklch(0.55 0.19 275)" name="Kelgan" radius={[6, 6, 0, 0]} />
+                      <Bar dataKey="absent" fill="oklch(0.7 0.2 25)" name="Kelmagan" radius={[6, 6, 0, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
               </div>
               <div className="glass rounded-3xl p-6 animate-fade-up">
-                <h3 className="mb-4 text-sm font-semibold text-muted-foreground">Students per Organization</h3>
+                <h3 className="mb-4 text-sm font-semibold text-muted-foreground">Tashkilotlar bo'yicha talabalar</h3>
                 <div className="h-64">
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
@@ -157,7 +157,7 @@ export function AdminView() {
             </div>
 
             <div className="glass rounded-3xl p-6 animate-fade-up">
-              <h3 className="mb-4 text-sm font-semibold text-muted-foreground">Top performing organizations</h3>
+              <h3 className="mb-4 text-sm font-semibold text-muted-foreground">Eng yaxshi ko'rsatkichga ega tashkilotlar</h3>
               <div className="space-y-3">
                 {orgData
                   .sort((a, b) => b.performance - a.performance)
@@ -188,15 +188,15 @@ export function AdminView() {
           {/* ASSIGNMENTS */}
           <TabsContent value="assign">
             <div className="glass rounded-3xl p-6">
-              <h3 className="mb-4 text-base font-semibold">Assign students to organization & mentor</h3>
+              <h3 className="mb-4 text-base font-semibold">Talabalarni tashkilot va mentorlarga biriktirish</h3>
               <div className="overflow-x-auto">
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Student</TableHead>
-                      <TableHead>Group</TableHead>
-                      <TableHead>Organization</TableHead>
-                      <TableHead>Mentor</TableHead>
+                      <TableHead>Talaba</TableHead>
+                      <TableHead>Guruh</TableHead>
+                      <TableHead>Amaliyot joyi (Tashkilot)</TableHead>
+                      <TableHead>Tashkilot mentori (Rahbar)</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -217,7 +217,7 @@ export function AdminView() {
                             onValueChange={(orgId) => {
                               const firstMentor = mentors.find((m) => m.organizationId === orgId);
                               assignStudent(s.id, orgId, firstMentor?.id ?? s.mentorId);
-                              toast.success(`${s.name} moved`);
+                              toast.success(`${s.name} yangi tashkilotga o'tkazildi`);
                             }}
                           >
                             <SelectTrigger className="w-[180px]">
@@ -235,7 +235,7 @@ export function AdminView() {
                             value={s.mentorId}
                             onValueChange={(mid) => {
                               assignStudent(s.id, s.organizationId, mid);
-                              toast.success("Mentor updated");
+                              toast.success("Mentor yangilandi");
                             }}
                           >
                             <SelectTrigger className="w-[200px]">
@@ -263,7 +263,7 @@ export function AdminView() {
             <div className="space-y-3">
               {alerts.length === 0 && (
                 <div className="glass rounded-3xl p-10 text-center text-muted-foreground">
-                  No active alerts. Everything looks clean.
+                  Hozircha hech qanday shubhali holat aniqlanmadi.
                 </div>
               )}
               {alerts.map((a) => {
@@ -298,10 +298,10 @@ export function AdminView() {
                       size="sm"
                       onClick={() => {
                         dismissAlert(a.id);
-                        toast.success("Alert dismissed");
+                        toast.success("Ogohlantirish yopildi");
                       }}
                     >
-                      Dismiss
+                      Yopish
                     </Button>
                   </div>
                 );
@@ -419,18 +419,18 @@ function ImportTab({
           <Upload className="h-6 w-6 text-white" />
         </div>
         <div>
-          <p className="text-base font-semibold">Drop Excel or CSV file here</p>
-          <p className="text-sm text-muted-foreground">or click to browse — click again to simulate an upload</p>
+          <p className="text-base font-semibold">Excel yoki CSV formatidagi talabalar ro'yxatini shu yerga yuklang</p>
+          <p className="text-sm text-muted-foreground">yoki kompyuterdan tanlash uchun bosing (simulyatsiya qilish uchun)</p>
         </div>
         <div className="flex items-center gap-2 text-xs text-muted-foreground">
-          <FileSpreadsheet className="h-4 w-4" /> Supported: .xlsx, .csv
+          <FileSpreadsheet className="h-4 w-4" /> Qo'llab-quvvatlanadi: .xlsx, .csv
         </div>
       </div>
 
       {(uploading || progress > 0) && (
         <div className="glass rounded-3xl p-5 animate-fade-up">
           <div className="mb-2 flex items-center justify-between text-sm">
-            <span className="font-medium">{uploading ? "Uploading students.xlsx…" : "Upload complete"}</span>
+            <span className="font-medium">{uploading ? "Talabalar ro'yxati yuklanmoqda (students.xlsx)…" : "Muvaffaqiyatli yuklandi"}</span>
             <span className="text-muted-foreground">{progress}%</span>
           </div>
           <Progress value={progress} />
@@ -441,20 +441,20 @@ function ImportTab({
         <div className="glass rounded-3xl p-6 animate-fade-up">
           <div className="mb-3 flex items-center gap-2">
             <UserPlus className="h-4 w-4 text-primary" />
-            <h3 className="text-base font-semibold">Imported students ({imported.length})</h3>
-            <Badge variant="outline" className="ml-auto">Total now: {students.length}</Badge>
+            <h3 className="text-base font-semibold">Yuklangan talabalar ro'yxati ({imported.length})</h3>
+            <Badge variant="outline" className="ml-auto">Jami talabalar soni: {students.length}</Badge>
           </div>
           <p className="mb-3 text-xs text-muted-foreground">
-            Credentials: <strong>Login</strong> = phone number, <strong>Password</strong> = date of birth (DDMMYYYY)
+            Boshlang'ich hisob ma'lumotlari: <strong>Login</strong> = telefon raqami, <strong>Parol</strong> = tug'ilgan kuni (KUNOYIL formatida)
           </p>
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Group</TableHead>
-                  <TableHead>Login (Phone)</TableHead>
-                  <TableHead>Default Password</TableHead>
+                  <TableHead>Ism-familiya</TableHead>
+                  <TableHead>Guruh</TableHead>
+                  <TableHead>Login (Telefon)</TableHead>
+                  <TableHead>Boshlang'ich parol</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -489,70 +489,72 @@ function ReportsTab() {
   return (
     <div className="grid gap-6 lg:grid-cols-[minmax(0,320px)_minmax(0,1fr)]">
       <div className="glass rounded-3xl p-6">
-        <h3 className="mb-4 text-base font-semibold">Filters</h3>
+        <h3 className="mb-4 text-base font-semibold">Filtrlar</h3>
         <div className="space-y-3">
           <div>
-            <label className="text-xs text-muted-foreground">Group</label>
+            <label className="text-xs text-muted-foreground">Guruh</label>
             <Select value={group} onValueChange={setGroup}>
               <SelectTrigger className="mt-1"><SelectValue /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All groups</SelectItem>
+                <SelectItem value="all">Barcha guruhlar</SelectItem>
                 {groups.map((g) => <SelectItem key={g} value={g}>{g}</SelectItem>)}
               </SelectContent>
             </Select>
           </div>
           <div>
-            <label className="text-xs text-muted-foreground">Organization</label>
+            <label className="text-xs text-muted-foreground">Tashkilot</label>
             <Select value={org} onValueChange={setOrg}>
               <SelectTrigger className="mt-1"><SelectValue /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All organizations</SelectItem>
+                <SelectItem value="all">Barcha tashkilotlar</SelectItem>
                 {orgs.map((o) => <SelectItem key={o.id} value={o.id}>{o.name}</SelectItem>)}
               </SelectContent>
             </Select>
           </div>
           <Button
             className="gradient-primary mt-2 w-full text-white"
-            onClick={() => toast.success(`Report exported (${filtered.length} students)`)}
+            onClick={() => toast.success(`Hisobot eksport qilindi (${filtered.length} talaba)`)}
           >
-            <Download className="mr-2 h-4 w-4" /> Download Report
+            <Download className="mr-2 h-4 w-4" /> Hisobotni yuklab olish
           </Button>
         </div>
       </div>
 
       <div className="glass rounded-3xl p-6">
         <div className="mb-4 flex items-center justify-between">
-          <h3 className="text-base font-semibold">Report preview</h3>
+          <h3 className="text-base font-semibold">Hisobot ko'rinishi</h3>
           <Badge variant="outline">PDF / XLSX</Badge>
         </div>
         <div className="rounded-2xl bg-white p-6 text-slate-900 shadow-inner">
           <div className="mb-4 border-b pb-3">
-            <p className="text-xs uppercase tracking-widest text-slate-500">Internship Management System</p>
-            <h2 className="text-xl font-bold">Attendance & Performance Report</h2>
-            <p className="text-xs text-slate-500">Generated {new Date().toLocaleDateString()}</p>
+            <p className="text-xs uppercase tracking-widest text-slate-500">Talabalar amaliyoti monitoring tizimi</p>
+            <h2 className="text-xl font-bold">Davomat va natijalar hisoboti</h2>
+            <p className="text-xs text-slate-500">Yaratilgan vaqti: {new Date().toLocaleDateString()}</p>
           </div>
-          <table className="w-full text-sm">
-            <thead className="border-b text-left text-xs uppercase text-slate-500">
-              <tr>
-                <th className="pb-2">Student</th>
-                <th className="pb-2">Group</th>
-                <th className="pb-2">Organization</th>
-                <th className="pb-2">Rating</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filtered.map((s) => (
-                <tr key={s.id} className="border-b last:border-0">
-                  <td className="py-2 font-medium">{s.name}</td>
-                  <td className="py-2">{s.group}</td>
-                  <td className="py-2">{orgs.find((o) => o.id === s.organizationId)?.name}</td>
-                  <td className="py-2">{s.rating ? `${s.rating}/5` : "—"}</td>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead className="border-b text-left text-xs uppercase text-slate-500">
+                <tr>
+                  <th className="pb-2">Talaba</th>
+                  <th className="pb-2">Guruh</th>
+                  <th className="pb-2">Tashkilot</th>
+                  <th className="pb-2">Baho (Reyting)</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {filtered.map((s) => (
+                  <tr key={s.id} className="border-b last:border-0">
+                    <td className="py-2 font-medium">{s.name}</td>
+                    <td className="py-2">{s.group}</td>
+                    <td className="py-2">{orgs.find((o) => o.id === s.organizationId)?.name}</td>
+                    <td className="py-2">{s.rating ? `${s.rating}/5` : "—"}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
           {filtered.length === 0 && (
-            <p className="py-8 text-center text-sm text-slate-500">No results match your filters.</p>
+            <p className="py-8 text-center text-sm text-slate-500">Filtrga mos keladigan ma'lumot topilmadi.</p>
           )}
         </div>
       </div>

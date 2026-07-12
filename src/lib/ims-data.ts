@@ -52,9 +52,9 @@ export interface FraudAlert {
 }
 
 export const ORGS: Organization[] = [
-  { id: "org-1", name: "Nova Systems", industry: "IT & Networking", performance: 94 },
-  { id: "org-2", name: "Meridian Health", industry: "Healthcare", performance: 88 },
-  { id: "org-3", name: "Atlas Logistics", industry: "Logistics", performance: 79 },
+  { id: "org-1", name: "Nova Systems", industry: "AKT va Tarmoqlar", performance: 94 },
+  { id: "org-2", name: "Meridian Health", industry: "Tibbiyot va Sog'liqni saqlash", performance: 88 },
+  { id: "org-3", name: "Atlas Logistics", industry: "Logistika va Yuk tashish", performance: 79 },
 ];
 
 export const MENTORS: Mentor[] = [
@@ -89,27 +89,27 @@ function daysAgo(n: number): string {
 }
 
 export const INITIAL_LOGS: DailyLog[] = [
-  { id: "l-1", studentId: "s-1", date: daysAgo(1), checkIn: "09:02", checkOut: "17:15", attendance: "present", report: "Configured the local server and completed network troubleshooting under supervisor guidance.", status: "approved" },
-  { id: "l-2", studentId: "s-1", date: daysAgo(2), checkIn: "09:10", checkOut: "17:05", attendance: "present", report: "Assisted the team with router firmware upgrade and documented findings.", status: "approved" },
+  { id: "l-1", studentId: "s-1", date: daysAgo(1), checkIn: "09:02", checkOut: "17:15", attendance: "present", report: "Rahbar ko'rsatmasi ostida lokal server sozlandi va tarmoqdagi nosozliklar bartaraf etildi.", status: "approved" },
+  { id: "l-2", studentId: "s-1", date: daysAgo(2), checkIn: "09:10", checkOut: "17:05", attendance: "present", report: "Router dasturiy ta'minotini yangilashda jamoaga yordam berildi va natijalar qayd etildi.", status: "approved" },
   { id: "l-3", studentId: "s-1", date: daysAgo(3), attendance: "absent", status: "pending" },
-  { id: "l-4", studentId: "s-1", date: daysAgo(4), checkIn: "09:00", checkOut: "17:00", attendance: "present", report: "Performed cable testing and structured wiring diagrams.", status: "pending" },
-  { id: "l-5", studentId: "s-2", date: daysAgo(1), checkIn: "08:58", checkOut: "17:20", attendance: "present", report: "Supported deployment of internal chat service.", status: "pending" },
-  { id: "l-6", studentId: "s-3", date: daysAgo(1), checkIn: "09:15", checkOut: "17:00", attendance: "present", report: "Reviewed security logs and prepared incident summary.", status: "approved" },
-  { id: "l-7", studentId: "s-4", date: daysAgo(1), checkIn: "08:45", checkOut: "16:40", attendance: "present", report: "Shadowed physician during morning rounds and reviewed EMR workflow.", status: "pending" },
+  { id: "l-4", studentId: "s-1", date: daysAgo(4), checkIn: "09:00", checkOut: "17:00", attendance: "present", report: "Kabel liniyalari sinovdan o'tkazildi va tarmoq ulanish sxemalari chizildi.", status: "pending" },
+  { id: "l-5", studentId: "s-2", date: daysAgo(1), checkIn: "08:58", checkOut: "17:20", attendance: "present", report: "Tashkilot ichki chat xizmatini ishga tushirish jarayonida ko'maklashildi.", status: "pending" },
+  { id: "l-6", studentId: "s-3", date: daysAgo(1), checkIn: "09:15", checkOut: "17:00", attendance: "present", report: "Xavfsizlik jurnallari tahlil qilindi va yuz bergan hodisalar bo'yicha hisobot tayyorlandi.", status: "approved" },
+  { id: "l-7", studentId: "s-4", date: daysAgo(1), checkIn: "08:45", checkOut: "16:40", attendance: "present", report: "Ertalabki tibbiy ko'rikda shifokorga hamrohlik qilindi va elektron yozuvlar tizimi o'rganildi.", status: "pending" },
   { id: "l-8", studentId: "s-5", date: daysAgo(1), attendance: "absent", status: "pending" },
 ];
 
 export const INITIAL_ALERTS: FraudAlert[] = [
-  { id: "a-1", severity: "high", title: "Device signature collision", detail: "Multiple check-ins from the same device signature for Aziz Yusupov and Malika Tashkentova." },
-  { id: "a-2", severity: "medium", title: "Log similarity 90%", detail: "High textual similarity detected between reports of Rustam Ergashev and Jasur Alimov this week." },
-  { id: "a-3", severity: "low", title: "GPS mismatch", detail: "Sitora Nazarova checked in 1.4 km outside the assigned facility." },
+  { id: "a-1", severity: "high", title: "Qurilma imzosi mos kelishi", detail: "Aziz Yusupov va Malika Tashkentova uchun bitta qurilmadan check-in amalga oshirilganligi aniqlandi." },
+  { id: "a-2", severity: "medium", title: "Hisobotlarning 90% o'xshashligi", detail: "Shu haftada Rustam Ergashev va Jasur Alimovning hisobotlari o'rtasida juda yuqori matnli o'xshashlik aniqlandi." },
+  { id: "a-3", severity: "low", title: "GPS mos kelmasligi", detail: "Sitora Nazarova belgilangan amaliyot binosidan 1.4 km uzoqlikda turib check-in qildi." },
 ];
 
 export function generateAIReport(keywords: string): string {
   const kw = keywords.trim().toLowerCase();
-  if (!kw) return "Today I contributed to daily operations and completed tasks assigned by my supervisor.";
+  if (!kw) return "Bugungi kunda kunlik topshiriqlar bajarildi va rahbar ko'rsatmalari amalga oshirildi.";
   const parts = kw.split(/[,\n]+/).map((k) => k.trim()).filter(Boolean);
-  const first = parts[0] ?? "assigned tasks";
-  const rest = parts.slice(1).join(", ") || "additional operational duties";
-  return `Today, I worked on ${first} and completed ${rest} under supervisor guidance. I documented outcomes, applied best practices, and prepared to continue the workflow tomorrow.`;
+  const first = parts[0] ?? "berilgan topshiriqlar";
+  const rest = parts.slice(1).join(", ") || "boshqa amaliy vazifalar";
+  return `Bugun men rahbar ko'rsatmalari asosida ${first} ishi ustida ishladim va ${rest} bo'yicha berilgan vazifalarni bajardim. Natijalarni rasmiylashtirib, hisobot tayyorladim.`;
 }
