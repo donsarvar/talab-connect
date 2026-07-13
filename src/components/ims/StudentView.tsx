@@ -105,12 +105,12 @@ function StudentApp() {
   return (
     <div className="relative min-h-screen w-full bg-white text-foreground overflow-x-hidden pb-32">
       {/* Premium Ambient Background */}
-      <div className="absolute inset-0 z-0 opacity-30 pointer-events-none overflow-hidden">
+      <div className="absolute inset-0 z-0 opacity-35 pointer-events-none overflow-hidden">
         <div className="absolute top-[-10%] right-[-10%] h-[500px] w-[500px] rounded-full bg-[radial-gradient(circle,rgba(168,85,247,0.1),transparent_70%)] blur-[70px]" />
         <div className="absolute bottom-[20%] left-[-10%] h-[500px] w-[500px] rounded-full bg-[radial-gradient(circle,rgba(99,102,241,0.06),transparent_70%)] blur-[70px]" />
       </div>
 
-      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-6">
+      <div className="relative z-10 mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 pt-6">
         {/* Header */}
         <header className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between pb-6 border-b border-slate-100/80">
           <div className="flex items-center gap-3.5">
@@ -135,7 +135,7 @@ function StudentApp() {
           </div>
         </header>
 
-        {/* Navigation and Content Grid */}
+        {/* Navigation and Content Container */}
         <Tabs defaultValue="home" className="w-full pt-6">
           <div className="flex justify-start mb-6">
             <TabsList className="bg-slate-50/80 p-1 rounded-xl border border-slate-100/50 grid grid-cols-2 w-full max-w-[320px]">
@@ -154,161 +154,157 @@ function StudentApp() {
             </TabsList>
           </div>
 
-          <TabsContent value="home" className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start pt-2 outline-none">
-            {/* Left Column: QR Attendance */}
-            <div className="lg:col-span-6 w-full min-w-0">
-              <section className="bg-white/80 border border-slate-150/60 rounded-[28px] p-6 shadow-xl shadow-slate-100/50 backdrop-blur-md animate-fade-up">
-                <div className="mb-4 flex items-center justify-between">
-                  <h2 className="text-base font-bold text-slate-900 tracking-tight">Bugungi davomat</h2>
-                  {todayLog?.checkIn && (
-                    <Badge className="gradient-primary text-white border-0 font-bold px-2.5 py-0.5 rounded-full text-xs">
-                      Kelgan vaqti: {todayLog.checkIn}
-                    </Badge>
-                  )}
-                </div>
+          <TabsContent value="home" className="space-y-6 pt-2 outline-none w-full">
+            {/* Top Card: QR Attendance */}
+            <section className="bg-white/80 border border-slate-150/60 rounded-[28px] p-6 shadow-xl shadow-slate-100/50 backdrop-blur-md animate-fade-up w-full">
+              <div className="mb-4 flex items-center justify-between">
+                <h2 className="text-base font-bold text-slate-900 tracking-tight">Bugungi davomat</h2>
+                {todayLog?.checkIn && (
+                  <Badge className="gradient-primary text-white border-0 font-bold px-2.5 py-0.5 rounded-full text-xs">
+                    Kelgan vaqti: {todayLog.checkIn}
+                  </Badge>
+                )}
+              </div>
 
-                <div className="relative">
-                  <button
-                    onClick={handleScan}
-                    disabled={scanning}
-                    className="group relative flex h-56 w-full flex-col items-center justify-center overflow-hidden rounded-2xl gradient-primary text-white shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/25 active:scale-[0.99] transition-all duration-300 w-full"
-                  >
-                    {scanning ? (
-                      <>
-                        <div className="absolute inset-5 rounded-xl border-2 border-white/20" />
-                        <div className="absolute inset-5 overflow-hidden rounded-xl">
-                          <div className="absolute inset-0 origin-center animate-radar">
-                            <div className="mx-auto h-1/2 w-0.5 origin-bottom bg-gradient-to-t from-white to-transparent" />
-                          </div>
+              <div className="relative">
+                <button
+                  onClick={handleScan}
+                  disabled={scanning}
+                  className="group relative flex h-56 w-full flex-col items-center justify-center overflow-hidden rounded-2xl gradient-primary text-white shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/25 active:scale-[0.99] transition-all duration-300"
+                >
+                  {scanning ? (
+                    <>
+                      <div className="absolute inset-5 rounded-xl border-2 border-white/20" />
+                      <div className="absolute inset-5 overflow-hidden rounded-xl">
+                        <div className="absolute inset-0 origin-center animate-radar">
+                          <div className="mx-auto h-1/2 w-0.5 origin-bottom bg-gradient-to-t from-white to-transparent" />
                         </div>
-                        <QrCode className="relative z-10 h-16 w-16 animate-pulse" />
-                        <p className="relative z-10 mt-4 text-xs font-semibold tracking-wide">QR-kod skanerlanmoqda…</p>
-                      </>
-                    ) : justCheckedIn ? (
-                      <>
-                        <div className="animate-check-pop grid h-16 w-16 place-items-center rounded-full bg-white/20 backdrop-blur-md border border-white/10">
-                          <Check className="h-9 w-9 text-white" strokeWidth={3} />
-                        </div>
-                        <p className="mt-4 text-lg font-extrabold tracking-tight">Davomat belgilandi</p>
-                        <p className="text-xs font-semibold opacity-90 mt-1">Vaqt: {justCheckedIn.time}</p>
-                      </>
-                    ) : (
-                      <>
-                        <QrCode className="h-16 w-16 transition-transform duration-300 group-hover:scale-105" />
-                        <p className="mt-4 text-lg font-extrabold tracking-tight">QR-kodni skanerlash</p>
-                        <p className="text-xs font-semibold opacity-90 mt-1">Davomatni belgilash uchun bosing</p>
-                      </>
-                    )}
-                  </button>
-
-                  {!scanning && !justCheckedIn && !todayLog?.checkIn && (
-                    <div className="absolute bottom-4 right-4 z-20">
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleScan();
-                        }}
-                        className="flex items-center gap-1.5 rounded-xl bg-white/15 backdrop-blur-md border border-white/20 px-3 py-1.5 text-[11px] font-bold text-white hover:bg-white/25 active:scale-95 transition-all shadow-sm"
-                      >
-                        <Camera className="h-3.5 w-3.5" />
-                        <span>Kamera orqali</span>
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </section>
-            </div>
-
-            {/* Right Column: AI Log Helper */}
-            <div className="lg:col-span-6 w-full min-w-0">
-              <section className="bg-white/80 border border-slate-150/60 rounded-[28px] p-6 shadow-xl shadow-slate-100/50 backdrop-blur-md animate-fade-up">
-                <div className="mb-3 flex items-center gap-2">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/5 text-primary">
-                    <Sparkles className="h-4.5 w-4.5" />
-                  </div>
-                  <div>
-                    <h2 className="text-base font-bold text-slate-900 tracking-tight">Kunlik kundalik — AI Yordamchi</h2>
-                    <p className="text-xs text-muted-foreground mt-0.5">
-                      Kalit so'zlar orqali AI sizga tez va aniq hisobot yozib beradi.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="space-y-4 pt-3">
-                  {/* Input and generate row */}
-                  <div className="flex flex-col sm:flex-row gap-2 w-full">
-                    <div className="flex-1 min-w-0">
-                      <div className="flex h-11 items-center rounded-[14px] border border-slate-200 bg-white px-3 transition-all focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/10 w-full">
-                        <input
-                          type="text"
-                          value={keywords}
-                          onChange={(e) => setKeywords(e.target.value)}
-                          placeholder="Kalit so'zlar: server sozlash, tarmoq tekshirish"
-                          className="h-full w-full text-xs font-semibold text-slate-800 placeholder-slate-400 outline-none bg-transparent min-w-0"
-                        />
                       </div>
-                    </div>
-                    <Button
+                      <QrCode className="relative z-10 h-16 w-16 animate-pulse" />
+                      <p className="relative z-10 mt-4 text-xs font-semibold tracking-wide">QR-kod skanerlanmoqda…</p>
+                    </>
+                  ) : justCheckedIn ? (
+                    <>
+                      <div className="animate-check-pop grid h-16 w-16 place-items-center rounded-full bg-white/20 backdrop-blur-md border border-white/10">
+                        <Check className="h-9 w-9 text-white" strokeWidth={3} />
+                      </div>
+                      <p className="mt-4 text-lg font-extrabold tracking-tight">Davomat belgilandi</p>
+                      <p className="text-xs font-semibold opacity-90 mt-1">Vaqt: {justCheckedIn.time}</p>
+                    </>
+                  ) : (
+                    <>
+                      <QrCode className="h-16 w-16 transition-transform duration-300 group-hover:scale-105" />
+                      <p className="mt-4 text-lg font-extrabold tracking-tight">QR-kodni skanerlash</p>
+                      <p className="text-xs font-semibold opacity-90 mt-1">Davomatni belgilash uchun bosing</p>
+                    </>
+                  )}
+                </button>
+
+                {!scanning && !justCheckedIn && !todayLog?.checkIn && (
+                  <div className="absolute bottom-4 right-4 z-20">
+                    <button
                       type="button"
-                      onClick={handleGenerate}
-                      disabled={generating}
-                      className="gradient-primary h-11 px-5 rounded-[14px] text-xs font-bold text-white shadow-md shadow-primary/20 hover:shadow-lg active:scale-[0.99] transition-all shrink-0"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleScan();
+                      }}
+                      className="flex items-center gap-1.5 rounded-xl bg-white/15 backdrop-blur-md border border-white/20 px-3 py-1.5 text-[11px] font-bold text-white hover:bg-white/25 active:scale-95 transition-all shadow-sm"
                     >
-                      <Sparkles className="mr-1.5 h-3.5 w-3.5" />
-                      {generating ? "Tayyorlanmoqda…" : "AI yordamida yozish"}
+                      <Camera className="h-3.5 w-3.5" />
+                      <span>Kamera orqali</span>
+                    </button>
+                  </div>
+                )}
+              </div>
+            </section>
+
+            {/* Bottom Card: AI Log Helper */}
+            <section className="bg-white/80 border border-slate-150/60 rounded-[28px] p-6 shadow-xl shadow-slate-100/50 backdrop-blur-md animate-fade-up w-full">
+              <div className="mb-3 flex items-center gap-2">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/5 text-primary">
+                  <Sparkles className="h-4.5 w-4.5" />
+                </div>
+                <div>
+                  <h2 className="text-base font-bold text-slate-900 tracking-tight">Kunlik kundalik — AI Yordamchi</h2>
+                  <p className="text-xs text-muted-foreground mt-0.5">
+                    Kalit so'zlar orqali AI sizga tez va aniq hisobot yozib beradi.
+                  </p>
+                </div>
+              </div>
+
+              <div className="space-y-4 pt-3">
+                {/* Input and generate row */}
+                <div className="flex flex-col sm:flex-row gap-2 w-full">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex h-11 items-center rounded-[14px] border border-slate-200 bg-white px-3 transition-all focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/10 w-full">
+                      <input
+                        type="text"
+                        value={keywords}
+                        onChange={(e) => setKeywords(e.target.value)}
+                        placeholder="Kalit so'zlar: server sozlash, tarmoq tekshirish"
+                        className="h-full w-full text-xs font-semibold text-slate-800 placeholder-slate-400 outline-none bg-transparent min-w-0"
+                      />
+                    </div>
+                  </div>
+                  <Button
+                    type="button"
+                    onClick={handleGenerate}
+                    disabled={generating}
+                    className="gradient-primary h-11 px-5 rounded-[14px] text-xs font-bold text-white shadow-md shadow-primary/20 hover:shadow-lg active:scale-[0.99] transition-all shrink-0"
+                  >
+                    <Sparkles className="mr-1.5 h-3.5 w-3.5" />
+                    {generating ? "Tayyorlanmoqda…" : "AI yordamida yozish"}
+                  </Button>
+                </div>
+
+                {/* Suggestion Chips */}
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Mavzular bo'yicha shablonlar</label>
+                  <div className="flex flex-wrap gap-1.5">
+                    {SUGGESTIONS.map((suggestion) => (
+                      <button
+                        key={suggestion}
+                        type="button"
+                        onClick={() => handleSuggestionClick(suggestion)}
+                        className="text-[11px] px-3 py-1.5 rounded-xl border border-slate-100 bg-slate-50/80 text-slate-600 hover:bg-primary/5 hover:border-primary/20 hover:text-primary active:scale-95 transition-all font-semibold"
+                      >
+                        {suggestion}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {generating && (
+                  <div className="mt-3 space-y-2 pt-2 animate-pulse">
+                    <div className="h-3 w-full rounded-full bg-slate-100" />
+                    <div className="h-3 w-11/12 rounded-full bg-slate-100" />
+                    <div className="h-3 w-3/4 rounded-full bg-slate-100" />
+                  </div>
+                )}
+
+                {!generating && report && (
+                  <div className="pt-2 space-y-3 animate-fade-up">
+                    <Textarea
+                      value={report}
+                      onChange={(e) => setReport(e.target.value)}
+                      placeholder="AI yaratgan hisobot bu yerda ko'rinadi..."
+                      className="min-h-[140px] rounded-2xl border-slate-200 text-xs font-semibold leading-relaxed focus-visible:ring-primary focus-visible:border-primary p-4"
+                    />
+                    <Button 
+                      onClick={handleSubmit} 
+                      className="gradient-primary h-11 w-full rounded-[14px] text-xs font-bold text-white shadow-md shadow-primary/20 hover:shadow-lg active:scale-[0.99] transition-all"
+                    >
+                      Kunlik hisobotni jo'natish
                     </Button>
                   </div>
-
-                  {/* Suggestion Chips */}
-                  <div className="space-y-1.5">
-                    <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Mavzular bo'yicha shablonlar</label>
-                    <div className="flex flex-wrap gap-1.5">
-                      {SUGGESTIONS.map((suggestion) => (
-                        <button
-                          key={suggestion}
-                          type="button"
-                          onClick={() => handleSuggestionClick(suggestion)}
-                          className="text-[11px] px-3 py-1.5 rounded-xl border border-slate-100 bg-slate-50/80 text-slate-600 hover:bg-primary/5 hover:border-primary/20 hover:text-primary active:scale-95 transition-all font-semibold"
-                        >
-                          {suggestion}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {generating && (
-                    <div className="mt-3 space-y-2 pt-2 animate-pulse">
-                      <div className="h-3 w-full rounded-full bg-slate-100" />
-                      <div className="h-3 w-11/12 rounded-full bg-slate-100" />
-                      <div className="h-3 w-3/4 rounded-full bg-slate-100" />
-                    </div>
-                  )}
-
-                  {!generating && report && (
-                    <div className="pt-2 space-y-3 animate-fade-up">
-                      <Textarea
-                        value={report}
-                        onChange={(e) => setReport(e.target.value)}
-                        placeholder="AI yaratgan hisobot bu yerda ko'rinadi..."
-                        className="min-h-[140px] rounded-2xl border-slate-200 text-xs font-semibold leading-relaxed focus-visible:ring-primary focus-visible:border-primary p-4"
-                      />
-                      <Button 
-                        onClick={handleSubmit} 
-                        className="gradient-primary h-11 w-full rounded-[14px] text-xs font-bold text-white shadow-md shadow-primary/20 hover:shadow-lg active:scale-[0.99] transition-all"
-                      >
-                        Kunlik hisobotni jo'natish
-                      </Button>
-                    </div>
-                  )}
-                </div>
-              </section>
-            </div>
+                )}
+              </div>
+            </section>
           </TabsContent>
 
           {/* History Tab */}
           <TabsContent value="history" className="pt-2 outline-none">
-            <section className="bg-white/80 border border-slate-150/60 rounded-[28px] p-6 shadow-xl shadow-slate-100/50 backdrop-blur-md animate-fade-up max-w-3xl mx-auto">
+            <section className="bg-white/80 border border-slate-150/60 rounded-[28px] p-6 shadow-xl shadow-slate-100/50 backdrop-blur-md animate-fade-up w-full">
               <div className="mb-4 flex items-center gap-2">
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/5 text-primary">
                   <CalendarIcon className="h-4.5 w-4.5" />
