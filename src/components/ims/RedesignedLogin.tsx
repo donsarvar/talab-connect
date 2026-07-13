@@ -210,21 +210,21 @@ export function RedesignedLogin({ onLogin }: RedesignedLoginProps) {
               {/* Form fields */}
               <form onSubmit={handleLogin} className="space-y-4">
                 {/* Telephone input */}
-                <div className="space-y-1">
+                <div className="space-y-1.5">
                   <label className="text-[11px] font-semibold text-slate-700">Telefon raqam</label>
                   <div className="flex h-11 items-center rounded-[14px] border border-slate-200 bg-white px-3 transition-all focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/10">
-                    <div className="flex items-center gap-1 pr-2 border-r border-slate-100">
-                      <span className="text-sm select-none">🇺🇿</span>
-                      <span className="text-xs font-bold text-slate-800">+998</span>
+                    <div className="flex items-center gap-1.5 pr-2.5 border-r border-slate-150 h-5">
+                      <span className="text-sm select-none leading-none flex items-center">🇺🇿</span>
+                      <span className="text-sm font-bold text-slate-800 leading-none flex items-center">+998</span>
                     </div>
                     <input
                       type="text"
                       value={phoneNumber}
                       onChange={(e) => handlePhoneChange(e.target.value)}
                       placeholder="90 123 45 67"
-                      className="h-full w-full pl-2 text-xs font-semibold text-slate-800 placeholder-slate-400 outline-none"
+                      className="h-full w-full pl-3 text-sm font-semibold text-slate-800 placeholder-slate-400 outline-none bg-transparent flex items-center"
                     />
-                    <Phone className="h-4 w-4 text-slate-400" />
+                    <Phone className="h-4 w-4 text-slate-400 shrink-0" />
                   </div>
                 </div>
 
