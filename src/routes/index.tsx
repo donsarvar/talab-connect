@@ -12,11 +12,11 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-function ActiveView() {
+function ActiveView({ onLogout }: { onLogout: () => void }) {
   const { role } = useIms();
-  if (role === "student") return <StudentView />;
-  if (role === "mentor") return <MentorView />;
-  return <AdminView />;
+  if (role === "student") return <StudentView onLogout={onLogout} />;
+  if (role === "mentor") return <MentorView onLogout={onLogout} />;
+  return <AdminView onLogout={onLogout} />;
 }
 
 function Index() {
@@ -25,7 +25,7 @@ function Index() {
   return (
     <ImsProvider>
       {authed ? (
-        <ActiveView />
+        <ActiveView onLogout={() => setAuthed(false)} />
       ) : (
         <RedesignedLogin onLogin={() => setAuthed(true)} />
       )}

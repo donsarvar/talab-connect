@@ -26,11 +26,11 @@ const SUGGESTIONS = [
   "Jamoaviy yig'ilishda qatnashish"
 ];
 
-export function StudentView() {
-  return <StudentApp />;
+export function StudentView({ onLogout }: { onLogout?: () => void }) {
+  return <StudentApp onLogout={onLogout} />;
 }
 
-function StudentApp() {
+function StudentApp({ onLogout }: { onLogout?: () => void }) {
   const { students, currentStudentId, logs, orgs, addLog } = useIms();
   const student = students.find((s) => s.id === currentStudentId)!;
   const org = orgs.find((o) => o.id === student.organizationId);
@@ -47,6 +47,7 @@ function StudentApp() {
   const [keywords, setKeywords] = useState("");
   const [generating, setGenerating] = useState(false);
   const [report, setReport] = useState("");
+  const [profileOpen, setProfileOpen] = useState(false);
 
   const handleScan = () => {
     if (todayLog?.checkIn) {
@@ -105,7 +106,7 @@ function StudentApp() {
   return (
     <div className="relative min-h-screen w-full bg-white text-foreground overflow-x-hidden pb-8">
       {/* Premium Ambient Background */}
-      <div className="absolute inset-0 z-0 opacity-35 pointer-events-none overflow-hidden">
+      <div className="absolute inset-0 z-0 opacity-30 pointer-events-none overflow-hidden">
         <div className="absolute top-[-10%] right-[-10%] h-[500px] w-[500px] rounded-full bg-[radial-gradient(circle,rgba(168,85,247,0.1),transparent_70%)] blur-[70px]" />
         <div className="absolute bottom-[20%] left-[-10%] h-[500px] w-[500px] rounded-full bg-[radial-gradient(circle,rgba(99,102,241,0.06),transparent_70%)] blur-[70px]" />
       </div>
@@ -138,18 +139,38 @@ function StudentApp() {
               <Bell className="h-4 w-4" />
             </button>
 
-            {/* Separate Profile Frame */}
-            <div className="flex items-center gap-2.5 px-3 py-1.5 border border-slate-150 bg-white rounded-xl shadow-xs hover:border-slate-200 transition-all cursor-pointer">
-              <img 
-                src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=256&auto=format&fit=crop" 
-                alt={student.name}
-                className="h-6.5 w-6.5 rounded-full object-cover border border-slate-100 shadow-xs"
-              />
-              <div className="hidden sm:block text-left">
-                <p className="text-[11px] font-extrabold text-slate-800 leading-none">{student.name}</p>
-                <p className="text-[9px] font-semibold text-slate-400 mt-0.5">Talaba</p>
+            {/* Separate Profile Frame Dropdown */}
+            <div className="relative">
+              <div 
+                onClick={() => setProfileOpen(!profileOpen)}
+                className="flex items-center gap-2.5 px-3 py-1.5 border border-slate-150 bg-white rounded-xl shadow-xs hover:border-slate-200 transition-all cursor-pointer select-none"
+              >
+                <img 
+                  src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=256&auto=format&fit=crop" 
+                  alt={student.name}
+                  className="h-6.5 w-6.5 rounded-full object-cover border border-slate-100 shadow-xs"
+                />
+                <div className="hidden sm:block text-left">
+                  <p className="text-[11px] font-extrabold text-slate-800 leading-none">{student.name}</p>
+                  <p className="text-[9px] font-semibold text-slate-400 mt-0.5">Talaba</p>
+                </div>
+                <span className="text-slate-400 text-[8px] ml-0.5">▼</span>
               </div>
-              <span className="text-slate-400 text-[8px] ml-0.5">▼</span>
+
+              {profileOpen && (
+                <div className="absolute right-0 top-full mt-2 w-44 rounded-2xl border border-slate-150/80 bg-white p-1.5 shadow-xl shadow-slate-200/50 z-30 animate-fade-in">
+                  <button
+                    onClick={() => {
+                      if (onLogout) onLogout();
+                      toast.success("Tizimdan chiqdingiz");
+                    }}
+                    className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-xs font-bold text-rose-600 hover:bg-rose-50/50 active:scale-95 transition-all"
+                  >
+                    <span className="text-sm">🚪</span>
+                    <span>Chiqish</span>
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </header>
