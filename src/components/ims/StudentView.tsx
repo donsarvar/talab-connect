@@ -110,7 +110,7 @@ function StudentApp() {
         <div className="absolute bottom-[20%] left-[-10%] h-[500px] w-[500px] rounded-full bg-[radial-gradient(circle,rgba(99,102,241,0.06),transparent_70%)] blur-[70px]" />
       </div>
 
-      <div className="relative z-10 mx-auto max-w-7xl px-4 pt-4 sm:px-6 sm:pt-6 lg:px-8 lg:pt-8">
+      <div className="relative z-10 w-full px-4 pt-4 sm:px-6 sm:pt-6 lg:px-8 lg:pt-8">
         {/* Header */}
         <header className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between pb-6 border-b border-slate-100/80">
           <div className="flex items-center gap-3.5">
