@@ -19,11 +19,11 @@ import { generateAIReport } from "@/lib/ims-data";
 import { useIms } from "./store";
 
 const SUGGESTIONS = [
-  "Server sozlash",
-  "Tarmoq tekshirish",
-  "Xavfsizlik devori",
-  "Ma'lumotlar zaxirasi",
-  "Monitoring tekshiruvi"
+  "Kod yozish va xatolarni tuzatish",
+  "Tizimni test qilish va tekshirish",
+  "Hujjatlar va yo'riqnomalarni o'rganish",
+  "Mentor topshiriqlarini bajarish",
+  "Jamoaviy yig'ilishda qatnashish"
 ];
 
 export function StudentView() {
@@ -241,7 +241,7 @@ function StudentApp() {
                         type="text"
                         value={keywords}
                         onChange={(e) => setKeywords(e.target.value)}
-                        placeholder="Kalit so'zlar: server sozlash, tarmoq tekshirish"
+                        placeholder="Masalan: kod yozdim, xatolarni to'g'riladim"
                         className="h-full w-full text-xs font-semibold text-slate-800 placeholder-slate-400 outline-none bg-transparent min-w-0"
                       />
                     </div>
