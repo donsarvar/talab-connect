@@ -116,13 +116,15 @@ const DICTIONARY: Record<Language, Record<string, string>> = {
 };
 
 export function RedesignedLogin({ onLogin }: RedesignedLoginProps) {
-  const { role, setRole, students, mentors, currentStudentId, currentMentorId } = useIms();
+  const { role, setRole, students, mentors, currentStudentId, currentMentorId, lang, setLang } = useIms();
   const [phoneNumber, setPhoneNumber] = useState("90 123 45 67");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
-  const [language, setLanguage] = useState<Language>("UZ");
   const [showLangDropdown, setShowLangDropdown] = useState(false);
+
+  const language = lang.toUpperCase() as Language;
+  const setLanguage = (newLang: Language) => setLang(newLang.toLowerCase() as "uz" | "ru" | "en");
 
   const t = DICTIONARY[language];
 

@@ -31,6 +31,8 @@ interface ImsState {
   setStudentEvaluation: (id: string, rating: number, feedback: string) => void;
   assignStudent: (studentId: string, orgId: string, mentorId: string) => void;
   dismissAlert: (id: string) => void;
+  lang: "uz" | "ru" | "en";
+  setLang: (lang: "uz" | "ru" | "en") => void;
 }
 
 const ImsCtx = createContext<ImsState | null>(null);
@@ -43,6 +45,7 @@ export function ImsProvider({ children }: { children: ReactNode }) {
   const [mentors, setMentors] = useState<Mentor[]>(MENTORS);
   const [logs, setLogs] = useState<DailyLog[]>(INITIAL_LOGS);
   const [alerts, setAlerts] = useState<FraudAlert[]>(INITIAL_ALERTS);
+  const [lang, setLang] = useState<"uz" | "ru" | "en">("uz");
 
   const addStudents = useCallback((s: Student[]) => {
     setStudents((prev) => [...prev, ...s]);
@@ -86,8 +89,10 @@ export function ImsProvider({ children }: { children: ReactNode }) {
       setStudentEvaluation,
       assignStudent,
       dismissAlert,
+      lang,
+      setLang,
     }),
-    [role, currentStudentId, currentMentorId, students, mentors, logs, alerts, addStudents, addLog, updateLog, setStudentEvaluation, assignStudent, dismissAlert],
+    [role, currentStudentId, currentMentorId, students, mentors, logs, alerts, addStudents, addLog, updateLog, setStudentEvaluation, assignStudent, dismissAlert, lang],
   );
 
   return <ImsCtx.Provider value={value}>{children}</ImsCtx.Provider>;
