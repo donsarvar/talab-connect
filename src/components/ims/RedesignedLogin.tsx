@@ -213,8 +213,7 @@ export function RedesignedLogin({ onLogin }: RedesignedLoginProps) {
                 <div className="space-y-1.5">
                   <label className="text-[11px] font-semibold text-slate-700">Telefon raqam</label>
                   <div className="flex h-11 items-center rounded-[14px] border border-slate-200 bg-white px-3 transition-all focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/10">
-                    <div className="flex items-center gap-1.5 pr-2.5 border-r border-slate-150 h-5">
-                      <span className="text-sm select-none leading-none flex items-center">🇺🇿</span>
+                    <div className="flex items-center pr-2.5 border-r border-slate-150 h-5">
                       <span className="text-sm font-bold text-slate-800 leading-none flex items-center">+998</span>
                     </div>
                     <input
