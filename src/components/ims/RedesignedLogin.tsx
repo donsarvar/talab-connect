@@ -19,27 +19,95 @@ import { Badge } from "@/components/ui/badge";
 import { useIms } from "./store";
 import type { Role } from "@/lib/ims-data";
 
+type Language = "UZ" | "RU" | "EN";
+
 interface RedesignedLoginProps {
   onLogin: () => void;
 }
 
-const FEATURE_ITEMS = [
-  {
-    title: "Xavfsiz autentifikatsiya",
-    desc: "Ma'lumotlaringiz eng yuqori darajada himoyalangan.",
-    icon: Lock,
+const DICTIONARY: Record<Language, Record<string, string>> = {
+  UZ: {
+    headline_1: "Tizimli boshqaruv,",
+    headline_2: "ishonchli natijalar.",
+    desc: "Talabalar, mentorlar va koordinatorlar uchun maxsus loyihalashtirilgan zamonaviy amaliyot boshqaruvi platformasi.",
+    feat_1_title: "Xavfsiz autentifikatsiya",
+    feat_1_desc: "Ma'lumotlaringiz eng yuqori darajada himoyalangan.",
+    feat_2_title: "Tez va qulay kirish",
+    feat_2_desc: "Bir necha soniyada tizimga kiring va ishni davom ettiring.",
+    feat_3_title: "Korxona darajasidagi platforma",
+    feat_3_desc: "Barqaror, ishonchli va doimo siz bilan.",
+    copyright: "© 2026 Talaba Platform. Barcha huquqlar himoyalangan.",
+    welcome: "Xush kelibsiz",
+    welcome_sub: "Amaliyotni davom ettirish uchun tizimga kiring",
+    phone_label: "Telefon raqam",
+    password_label: "Parol (KunOyYil, masalan: 12042003)",
+    remember_me: "Meni eslab qolish",
+    forgot_password: "Parolni unutdingizmi?",
+    login_btn: "Kirish",
+    pwd_info: "Eslatma: Tug'ilgan kuningiz sizning dastlabki parolingiz hisoblanadi.",
+    pwd_format: "Format: DDMMYYYY",
+    role_label: "Tizimga kirish turi",
+    role_student: "Talaba",
+    role_mentor: "Rahbar",
+    role_admin: "Koordinator",
+    support_text: "Yordam kerakmi?",
+    support_link: "Qo'llab-quvvatlash xizmati",
   },
-  {
-    title: "Tez va qulay kirish",
-    desc: "Bir necha soniyada tizimga kiring va ishni davom ettiring.",
-    icon: CheckCircle,
+  RU: {
+    headline_1: "Системное управление,",
+    headline_2: "надежные результаты.",
+    desc: "Современная платформа управления стажировками, разработанная специально для студентов, менторов и координаторов.",
+    feat_1_title: "Безопасная аутентификация",
+    feat_1_desc: "Ваши данные защищены на самом высоком уровне.",
+    feat_2_title: "Быстрый и удобный вход",
+    feat_2_desc: "Войдите в систему за пару секунд и продолжайте работу.",
+    feat_3_title: "Платформа корпоративного уровня",
+    feat_3_desc: "Стабильно, надежно и всегда с вами.",
+    copyright: "© 2026 Платформа Талаба. Все права защищены.",
+    welcome: "Добро пожаловать",
+    welcome_sub: "Войдите в систему для продолжения стажировки",
+    phone_label: "Номер телефона",
+    password_label: "Пароль (ДеньМесяцГод, например: 12042003)",
+    remember_me: "Запомнить меня",
+    forgot_password: "Забыли пароль?",
+    login_btn: "Войти",
+    pwd_info: "Примечание: Дата вашего рождения является вашим первоначальным паролем.",
+    pwd_format: "Формат: ДДММГГГГ",
+    role_label: "Тип входа в систему",
+    role_student: "Студент",
+    role_mentor: "Руководитель",
+    role_admin: "Координатор",
+    support_text: "Нужна помощь?",
+    support_link: "Служба поддержки",
   },
-  {
-    title: "Korxona darajasidagi platforma",
-    desc: "Barqaror, ishonchli va doimo siz bilan.",
-    icon: ShieldCheck,
+  EN: {
+    headline_1: "Systemic management,",
+    headline_2: "reliable results.",
+    desc: "Modern internship management platform specifically designed for students, mentors, and coordinators.",
+    feat_1_title: "Secure Authentication",
+    feat_1_desc: "Your data is protected at the highest level.",
+    feat_2_title: "Fast & Convenient Access",
+    feat_2_desc: "Sign in within seconds and continue your work.",
+    feat_3_title: "Enterprise-grade Platform",
+    feat_3_desc: "Stable, reliable, and always with you.",
+    copyright: "© 2026 Talaba Platform. All rights reserved.",
+    welcome: "Welcome",
+    welcome_sub: "Sign in to continue your internship",
+    phone_label: "Phone number",
+    password_label: "Password (DDMMYYYY, e.g. 12042003)",
+    remember_me: "Remember me",
+    forgot_password: "Forgot password?",
+    login_btn: "Sign In",
+    pwd_info: "Note: Your date of birth acts as your default password.",
+    pwd_format: "Format: DDMMYYYY",
+    role_label: "System access type",
+    role_student: "Student",
+    role_mentor: "Mentor",
+    role_admin: "Coordinator",
+    support_text: "Need help?",
+    support_link: "Support service",
   },
-];
+};
 
 export function RedesignedLogin({ onLogin }: RedesignedLoginProps) {
   const { role, setRole, students, mentors, currentStudentId, currentMentorId } = useIms();
@@ -47,8 +115,28 @@ export function RedesignedLogin({ onLogin }: RedesignedLoginProps) {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
-  const [language, setLanguage] = useState("UZ");
+  const [language, setLanguage] = useState<Language>("UZ");
   const [showLangDropdown, setShowLangDropdown] = useState(false);
+
+  const t = DICTIONARY[language];
+
+  const featureItems = [
+    {
+      title: t.feat_1_title,
+      desc: t.feat_1_desc,
+      icon: Lock,
+    },
+    {
+      title: t.feat_2_title,
+      desc: t.feat_2_desc,
+      icon: CheckCircle,
+    },
+    {
+      title: t.feat_3_title,
+      desc: t.feat_3_desc,
+      icon: ShieldCheck,
+    },
+  ];
 
   // Telefon raqamini formatlash (XX XXX XX XX)
   const handlePhoneChange = (val: string) => {
@@ -80,7 +168,13 @@ export function RedesignedLogin({ onLogin }: RedesignedLoginProps) {
       targetName = "Koordinator (Admin)";
     }
 
-    toast.success(`Xush kelibsiz, ${targetName}!`);
+    const welcomeMsg = language === "UZ" 
+      ? `Xush kelibsiz, ${targetName}!` 
+      : language === "RU" 
+        ? `Добро пожаловать, ${targetName}!` 
+        : `Welcome, ${targetName}!`;
+
+    toast.success(welcomeMsg);
     onLogin();
   };
 
@@ -114,17 +208,17 @@ export function RedesignedLogin({ onLogin }: RedesignedLoginProps) {
             {/* Headline & Desc */}
             <div className="space-y-3 pt-2">
               <h1 className="text-2xl font-extrabold tracking-tight sm:text-3xl text-slate-900 leading-tight">
-                Tizimli boshqaruv, <br />
-                <span className="text-transparent bg-clip-text gradient-primary font-black">ishonchli natijalar.</span>
+                {t.headline_1} <br />
+                <span className="text-transparent bg-clip-text gradient-primary font-black">{t.headline_2}</span>
               </h1>
               <p className="text-sm text-muted-foreground max-w-sm">
-                Talabalar, mentorlar va koordinatorlar uchun maxsus loyihalashtirilgan zamonaviy amaliyot boshqaruvi platformasi.
+                {t.desc}
               </p>
             </div>
 
             {/* Premium Feature Items */}
             <div className="space-y-4 pt-4">
-              {FEATURE_ITEMS.map((item, idx) => {
+              {featureItems.map((item, idx) => {
                 const Icon = item.icon;
                 return (
                   <div key={idx} className="flex gap-3 items-start group">
@@ -143,7 +237,7 @@ export function RedesignedLogin({ onLogin }: RedesignedLoginProps) {
 
           {/* Footer Copyright */}
           <div className="pt-6 text-xs text-muted-foreground border-t border-slate-100 lg:border-t-0">
-            &copy; 2026 Talaba Platform. Barcha huquqlar himoyalangan.
+            {t.copyright}
           </div>
         </div>
 
@@ -201,9 +295,9 @@ export function RedesignedLogin({ onLogin }: RedesignedLoginProps) {
                 <div className="mb-2 grid h-12 w-12 place-items-center rounded-full bg-primary/5 text-primary ring-6 ring-primary/5">
                   <GraduationCap className="h-6 w-6 text-primary" />
                 </div>
-                <h2 className="text-xl font-bold text-slate-900 tracking-tight">Xush kelibsiz</h2>
+                <h2 className="text-xl font-bold text-slate-900 tracking-tight">{t.welcome}</h2>
                 <p className="text-xs text-muted-foreground mt-0.5">
-                  Amaliyotni davom ettirish uchun tizimga kiring
+                  {t.welcome_sub}
                 </p>
               </div>
 
@@ -211,7 +305,7 @@ export function RedesignedLogin({ onLogin }: RedesignedLoginProps) {
               <form onSubmit={handleLogin} className="space-y-4">
                 {/* Telephone input */}
                 <div className="space-y-1.5">
-                  <label className="text-[11px] font-semibold text-slate-700">Telefon raqam</label>
+                  <label className="text-[11px] font-semibold text-slate-700">{t.phone_label}</label>
                   <div className="flex h-11 items-center rounded-[14px] border border-slate-200 bg-white px-3 transition-all focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/10">
                     <div className="flex items-center pr-2.5 border-r border-slate-150 h-5">
                       <span className="text-sm font-bold text-slate-800 leading-none flex items-center">+998</span>
@@ -229,7 +323,7 @@ export function RedesignedLogin({ onLogin }: RedesignedLoginProps) {
 
                 {/* Password input */}
                 <div className="space-y-1">
-                  <label className="text-[11px] font-semibold text-slate-700">Parol (KunOyYil, masalan: 12042003)</label>
+                  <label className="text-[11px] font-semibold text-slate-700">{t.password_label}</label>
                   <div className="flex h-11 items-center rounded-[14px] border border-slate-200 bg-white px-3 transition-all focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/10">
                     <input
                       type={showPassword ? "text" : "password"}
@@ -257,10 +351,10 @@ export function RedesignedLogin({ onLogin }: RedesignedLoginProps) {
                       onChange={(e) => setRememberMe(e.target.checked)}
                       className="h-3.5 w-3.5 rounded border-slate-300 text-primary focus:ring-primary/20 accent-primary"
                     />
-                    <span>Meni eslab qolish</span>
+                    <span>{t.remember_me}</span>
                   </label>
                   <a href="#" className="text-[11px] font-bold text-primary hover:underline">
-                    Parolni unutdingizmi?
+                    {t.forgot_password}
                   </a>
                 </div>
 
@@ -269,7 +363,7 @@ export function RedesignedLogin({ onLogin }: RedesignedLoginProps) {
                   type="submit"
                   className="gradient-primary h-11 w-full rounded-[14px] text-xs font-bold text-white shadow-md shadow-primary/20 hover:opacity-95 hover:shadow-lg hover:shadow-primary/25 active:scale-[0.99] transition-all duration-200 mt-1"
                 >
-                  <span>Kirish</span>
+                  <span>{t.login_btn}</span>
                   <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
                 </Button>
 
@@ -278,15 +372,15 @@ export function RedesignedLogin({ onLogin }: RedesignedLoginProps) {
                   <Info className="h-4.5 w-4.5 text-primary shrink-0 mt-0.5" />
                   <div className="space-y-0.5">
                     <p className="text-[10px] font-semibold text-slate-800 leading-tight">
-                      Eslatma: Tug'ilgan kuningiz sizning dastlabki parolingiz hisoblanadi.
+                      {t.pwd_info}
                     </p>
-                    <p className="text-[9px] font-bold text-primary">Format: DDMMYYYY</p>
+                    <p className="text-[9px] font-bold text-primary">{t.pwd_format}</p>
                   </div>
                 </div>
 
                 {/* Role Selector */}
                 <div className="pt-3 border-t border-slate-50 space-y-1.5">
-                  <label className="text-[10px] font-bold text-muted-foreground block text-center">Tizimga kirish turi</label>
+                  <label className="text-[10px] font-bold text-muted-foreground block text-center">{t.role_label}</label>
                   <div className="grid grid-cols-3 gap-1 rounded-xl bg-slate-50/80 p-1 border border-slate-100/50">
                     <button
                       type="button"
@@ -298,7 +392,7 @@ export function RedesignedLogin({ onLogin }: RedesignedLoginProps) {
                       }`}
                     >
                       <GraduationCap className="h-4 w-4" />
-                      <span className="text-[9px]">Talaba</span>
+                      <span className="text-[9px]">{t.role_student}</span>
                     </button>
                     <button
                       type="button"
@@ -310,7 +404,7 @@ export function RedesignedLogin({ onLogin }: RedesignedLoginProps) {
                       }`}
                     >
                       <UserCog className="h-4 w-4" />
-                      <span className="text-[9px] whitespace-nowrap">Rahbar</span>
+                      <span className="text-[9px] whitespace-nowrap">{t.role_mentor}</span>
                     </button>
                     <button
                       type="button"
@@ -322,7 +416,7 @@ export function RedesignedLogin({ onLogin }: RedesignedLoginProps) {
                       }`}
                     >
                       <ShieldCheck className="h-4 w-4" />
-                      <span className="text-[9px]">Koordinator</span>
+                      <span className="text-[9px]">{t.role_admin}</span>
                     </button>
                   </div>
                 </div>
@@ -330,9 +424,9 @@ export function RedesignedLogin({ onLogin }: RedesignedLoginProps) {
 
               {/* Support footer */}
               <div className="mt-4 text-center text-[10px] text-muted-foreground">
-                Yordam kerakmi?{" "}
+                {t.support_text}{" "}
                 <a href="#" className="font-bold text-primary hover:underline">
-                  Qo'llab-quvvatlash xizmati
+                  {t.support_link}
                 </a>
               </div>
 
