@@ -193,7 +193,7 @@ function StudentApp({ onLogout }: { onLogout?: () => void }) {
     }
     setGenerating(true);
     setTimeout(() => {
-      setReport(generateAIReport(keywords));
+      setReport(generateAIReport(keywords, lang));
       setGenerating(false);
     }, 1500);
   };

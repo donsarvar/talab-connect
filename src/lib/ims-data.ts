@@ -105,10 +105,26 @@ export const INITIAL_ALERTS: FraudAlert[] = [
   { id: "a-3", severity: "low", title: "GPS mos kelmasligi", detail: "Sitora Nazarova belgilangan amaliyot binosidan 1.4 km uzoqlikda turib check-in qildi." },
 ];
 
-export function generateAIReport(keywords: string): string {
+export function generateAIReport(keywords: string, lang: "uz" | "ru" | "en" = "uz"): string {
   const kw = keywords.trim().toLowerCase();
-  if (!kw) return "Bugungi kunda kunlik topshiriqlar bajarildi va rahbar ko'rsatmalari amalga oshirildi.";
   const parts = kw.split(/[,\n]+/).map((k) => k.trim()).filter(Boolean);
+  
+  if (lang === "en") {
+    if (!kw) return "Today, daily internship tasks were completed under the guidance of the mentor.";
+    const first = parts[0] ?? "assigned tasks";
+    const rest = parts.slice(1).join(", ") || "other practical duties";
+    return `Today, under the guidance of my mentor, I worked on ${first} and completed tasks related to ${rest}. I finalized the results and prepared the report.`;
+  }
+  
+  if (lang === "ru") {
+    if (!kw) return "Сегодня были выполнены ежедневные задачи практики под руководством наставника.";
+    const first = parts[0] ?? "порученные задания";
+    const rest = parts.slice(1).join(", ") || "другие практические обязанности";
+    return `Сегодня под руководством наставника я работал над ${first} и выполнил задачи по ${rest}. Оформил результаты и подготовил отчет.`;
+  }
+  
+  // Default: Uzbek
+  if (!kw) return "Bugungi kunda kunlik topshiriqlar bajarildi va rahbar ko'rsatmalari amalga oshirildi.";
   const first = parts[0] ?? "berilgan topshiriqlar";
   const rest = parts.slice(1).join(", ") || "boshqa amaliy vazifalar";
   return `Bugun men rahbar ko'rsatmalari asosida ${first} ishi ustida ishladim va ${rest} bo'yicha berilgan vazifalarni bajardim. Natijalarni rasmiylashtirib, hisobot tayyorladim.`;
