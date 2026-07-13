@@ -18,60 +18,9 @@ import { generateAIReport } from "@/lib/ims-data";
 import { useIms } from "./store";
 
 export function StudentView() {
-  const { students, currentStudentId } = useIms();
-  const student = students.find((s) => s.id === currentStudentId) ?? students[0];
-  const [authed, setAuthed] = useState(false);
-  if (!authed) return <StudentLogin onLogin={() => setAuthed(true)} studentName={student.name} />;
   return <StudentApp />;
 }
 
-function StudentLogin({ onLogin, studentName }: { onLogin: () => void; studentName: string }) {
-  const [phone, setPhone] = useState("+998 90 123 45 67");
-  const [pw, setPw] = useState("");
-
-  return (
-    <div className="gradient-surface flex min-h-screen items-center justify-center px-4 py-12">
-      <div className="glass w-full max-w-sm rounded-3xl p-6 shadow-2xl shadow-primary/10 animate-fade-up">
-        <div className="mb-6 flex flex-col items-center">
-          <div className="gradient-primary mb-3 grid h-14 w-14 place-items-center rounded-2xl shadow-lg shadow-primary/30">
-            <ClipboardList className="h-7 w-7 text-white" />
-          </div>
-          <h1 className="text-2xl font-bold">Xush kelibsiz</h1>
-          <p className="text-sm text-muted-foreground">Amaliyotni davom ettirish uchun tizimga kiring</p>
-        </div>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            onLogin();
-            toast.success(`Xush kelibsiz, ${studentName}`);
-          }}
-          className="space-y-3"
-        >
-          <div>
-            <label className="text-xs font-medium text-muted-foreground">Telefon raqam</label>
-            <Input value={phone} onChange={(e) => setPhone(e.target.value)} className="mt-1 h-12 rounded-xl" />
-          </div>
-          <div>
-            <label className="text-xs font-medium text-muted-foreground">Parol (KunOyYil, masalan: 12042003)</label>
-            <Input
-              type="password"
-              placeholder="12042003"
-              value={pw}
-              onChange={(e) => setPw(e.target.value)}
-              className="mt-1 h-12 rounded-xl"
-            />
-          </div>
-          <Button type="submit" className="gradient-primary h-12 w-full rounded-xl text-base font-semibold text-white">
-            Kirish
-          </Button>
-          <p className="pt-2 text-center text-xs text-muted-foreground">
-            Eslatma: Tug'ilgan kuningiz sizning dastlabki parolingiz hisoblanadi
-          </p>
-        </form>
-      </div>
-    </div>
-  );
-}
 
 function StudentApp() {
   const { students, currentStudentId, logs, orgs, addLog } = useIms();
