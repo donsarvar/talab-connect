@@ -103,7 +103,7 @@ function StudentApp() {
   };
 
   return (
-    <div className="relative min-h-screen w-full bg-white text-foreground overflow-x-hidden pb-32">
+    <div className="relative min-h-screen w-full bg-white text-foreground overflow-x-hidden pb-8">
       {/* Premium Ambient Background */}
       <div className="absolute inset-0 z-0 opacity-35 pointer-events-none overflow-hidden">
         <div className="absolute top-[-10%] right-[-10%] h-[500px] w-[500px] rounded-full bg-[radial-gradient(circle,rgba(168,85,247,0.1),transparent_70%)] blur-[70px]" />
