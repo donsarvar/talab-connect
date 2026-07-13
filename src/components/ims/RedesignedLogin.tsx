@@ -195,9 +195,9 @@ export function RedesignedLogin({ onLogin }: RedesignedLoginProps) {
       </div>
 
       {/* Main Two-Column Container */}
-      <div className="relative z-10 mx-auto grid min-h-screen lg:h-full max-w-7xl grid-cols-1 gap-8 px-6 lg:grid-cols-12">
+      <div className="relative z-10 mx-auto grid min-h-screen lg:h-full max-w-7xl grid-cols-1 gap-8 px-4 sm:px-6 lg:grid-cols-12 w-full">
         {/* Left Side: Brand Experience */}
-        <div className="flex flex-col justify-between py-12 lg:py-10 lg:h-full lg:col-span-5 lg:pr-8 animate-fade-in">
+        <div className="flex flex-col justify-between py-8 lg:py-10 lg:h-full lg:col-span-5 lg:pr-8 animate-fade-in w-full">
           {/* Logo and System Name */}
           <div className="space-y-5">
             <div className="flex items-center gap-3">
@@ -206,7 +206,7 @@ export function RedesignedLogin({ onLogin }: RedesignedLoginProps) {
               </div>
               <div>
                 <h2 className="text-xl font-bold tracking-tight">{t.brand_name}</h2>
-                <Badge variant="secondary" className="bg-primary/10 text-primary hover:bg-primary/10 font-medium px-2 py-0 rounded-full text-[10px]">
+                <Badge variant="secondary" className="bg-primary/10 text-primary hover:bg-primary/10 font-medium px-2 py-0 rounded-full text-[10px] whitespace-nowrap">
                   {t.brand_subtitle}
                 </Badge>
               </div>
@@ -249,13 +249,13 @@ export function RedesignedLogin({ onLogin }: RedesignedLoginProps) {
         </div>
 
         {/* Right Side: Authentication */}
-        <div className="flex items-center justify-center py-6 lg:h-full lg:col-span-7">
-          <div className="w-full max-w-[520px] animate-fade-up">
+        <div className="flex items-center justify-center py-6 lg:h-full lg:col-span-7 w-full">
+          <div className="w-full max-w-[520px] animate-fade-up min-w-0">
             {/* Auth Card */}
-            <div className="relative overflow-hidden rounded-[28px] border border-slate-100 bg-white/80 p-6 shadow-2xl shadow-slate-100 backdrop-blur-md sm:p-8">
+            <div className="relative overflow-hidden rounded-[28px] border border-slate-100 bg-white/80 p-4 shadow-2xl shadow-slate-100 backdrop-blur-md sm:p-8 w-full">
               
               {/* Top Language Dropdown */}
-              <div className="absolute right-5 top-5 z-20">
+              <div className="absolute right-4 top-4 z-20">
                 <button
                   type="button"
                   onClick={() => setShowLangDropdown(!showLangDropdown)}
@@ -298,7 +298,7 @@ export function RedesignedLogin({ onLogin }: RedesignedLoginProps) {
               </div>
 
               {/* Card Header / Icon */}
-              <div className="mb-4 flex flex-col items-center text-center">
+              <div className="mb-4 flex flex-col items-center text-center mt-6 sm:mt-0">
                 <div className="mb-2 grid h-12 w-12 place-items-center rounded-full bg-primary/5 text-primary ring-6 ring-primary/5">
                   <GraduationCap className="h-6 w-6 text-primary" />
                 </div>
@@ -313,8 +313,8 @@ export function RedesignedLogin({ onLogin }: RedesignedLoginProps) {
                 {/* Telephone input */}
                 <div className="space-y-1.5">
                   <label className="text-[11px] font-semibold text-slate-700">{t.phone_label}</label>
-                  <div className="flex h-11 items-center rounded-[14px] border border-slate-200 bg-white px-3 transition-all focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/10">
-                    <div className="flex items-center pr-2.5 border-r border-slate-150 h-5">
+                  <div className="flex h-11 items-center rounded-[14px] border border-slate-200 bg-white px-3 transition-all focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/10 w-full min-w-0">
+                    <div className="flex items-center pr-2.5 border-r border-slate-150 h-5 shrink-0">
                       <span className="text-sm font-bold text-slate-800 leading-none flex items-center">+998</span>
                     </div>
                     <input
@@ -322,7 +322,7 @@ export function RedesignedLogin({ onLogin }: RedesignedLoginProps) {
                       value={phoneNumber}
                       onChange={(e) => handlePhoneChange(e.target.value)}
                       placeholder="90 123 45 67"
-                      className="h-full w-full pl-3 text-sm font-semibold text-slate-800 placeholder-slate-400 outline-none bg-transparent flex items-center"
+                      className="h-full w-full pl-3 text-sm font-semibold text-slate-800 placeholder-slate-400 outline-none bg-transparent flex items-center min-w-0"
                     />
                     <Phone className="h-4 w-4 text-slate-400 shrink-0" />
                   </div>
@@ -331,18 +331,18 @@ export function RedesignedLogin({ onLogin }: RedesignedLoginProps) {
                 {/* Password input */}
                 <div className="space-y-1">
                   <label className="text-[11px] font-semibold text-slate-700">{t.password_label}</label>
-                  <div className="flex h-11 items-center rounded-[14px] border border-slate-200 bg-white px-3 transition-all focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/10">
+                  <div className="flex h-11 items-center rounded-[14px] border border-slate-200 bg-white px-3 transition-all focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/10 w-full min-w-0">
                     <input
                       type={showPassword ? "text" : "password"}
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="••••••••"
-                      className="h-full w-full text-xs font-semibold text-slate-800 placeholder-slate-400 outline-none"
+                      className="h-full w-full text-xs font-semibold text-slate-800 placeholder-slate-400 outline-none min-w-0"
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="text-slate-400 hover:text-slate-600 focus:outline-none"
+                      className="text-slate-400 hover:text-slate-600 focus:outline-none shrink-0"
                     >
                       {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                     </button>
