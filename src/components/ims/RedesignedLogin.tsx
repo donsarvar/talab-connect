@@ -195,7 +195,7 @@ export function RedesignedLogin({ onLogin }: RedesignedLoginProps) {
       </div>
 
       {/* Main Two-Column Container */}
-      <div className="relative z-10 mx-auto grid min-h-screen lg:h-full max-w-7xl grid-cols-1 gap-8 px-4 sm:px-6 lg:grid-cols-12 w-full min-w-0">
+      <div className="relative z-10 mx-auto grid min-h-0 lg:min-h-screen lg:h-full max-w-7xl grid-cols-1 gap-8 px-4 sm:px-6 lg:grid-cols-12 w-full min-w-0">
         {/* Left Side: Brand Experience */}
         <div className="flex flex-col justify-between py-8 lg:py-10 lg:h-full lg:col-span-5 lg:pr-8 animate-fade-in w-full min-w-0">
           {/* Logo and System Name */}
