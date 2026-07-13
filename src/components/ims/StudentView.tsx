@@ -7,6 +7,7 @@ import {
   QrCode,
   Sparkles,
   X,
+  Camera,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -17,10 +18,17 @@ import { Badge } from "@/components/ui/badge";
 import { generateAIReport } from "@/lib/ims-data";
 import { useIms } from "./store";
 
+const SUGGESTIONS = [
+  "Server sozlash",
+  "Tarmoq tekshirish",
+  "Xavfsizlik devori",
+  "Ma'lumotlar zaxirasi",
+  "Monitoring tekshiruvi"
+];
+
 export function StudentView() {
   return <StudentApp />;
 }
-
 
 function StudentApp() {
   const { students, currentStudentId, logs, orgs, addLog } = useIms();
@@ -64,6 +72,10 @@ function StudentApp() {
   };
 
   const handleGenerate = () => {
+    if (!keywords.trim()) {
+      toast.error("Iltimos, kalit so'zlarni kiriting yoki quyidagi chiplardan tanlang");
+      return;
+    }
     setGenerating(true);
     setTimeout(() => {
       setReport(generateAIReport(keywords));
@@ -76,173 +88,271 @@ function StudentApp() {
       toast.error("Iltimos, avval hisobot yozing yoki AI orqali yarating");
       return;
     }
-    if (todayLog) {
-      // update log status
-    }
     toast.success("Kunlik hisobot topshirildi");
     setKeywords("");
     setReport("");
   };
 
+  const handleSuggestionClick = (suggestion: string) => {
+    setKeywords((prev) => {
+      if (!prev.trim()) return suggestion;
+      const list = prev.split(",").map(k => k.trim());
+      if (list.includes(suggestion.toLowerCase()) || list.includes(suggestion)) return prev;
+      return `${prev}, ${suggestion.toLowerCase()}`;
+    });
+  };
+
   return (
-    <div className="mx-auto min-h-screen w-full max-w-md gradient-surface pb-28">
-      {/* Header */}
-      <header className="sticky top-0 z-10 glass px-5 pt-6 pb-4">
-        <div className="flex items-center gap-3">
-          <div className="gradient-primary grid h-11 w-11 shrink-0 place-items-center rounded-2xl text-sm font-bold text-white">
-            {student.avatar}
-          </div>
-          <div className="min-w-0 flex-1">
-            <p className="truncate text-xs text-muted-foreground">Assalomu alaykum</p>
-            <h1 className="truncate text-lg font-bold">{student.name}</h1>
-          </div>
-          <button className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-secondary text-secondary-foreground">
-            <Bell className="h-4 w-4" />
-          </button>
-        </div>
-        <div className="mt-3 flex items-center gap-2 text-xs">
-          <Badge variant="secondary" className="rounded-full">{student.group}</Badge>
-          <span className="text-muted-foreground">{org?.name} korxonasida</span>
-        </div>
-      </header>
+    <div className="relative min-h-screen w-full bg-white text-foreground overflow-x-hidden pb-32">
+      {/* Premium Ambient Background */}
+      <div className="absolute inset-0 z-0 opacity-30 pointer-events-none overflow-hidden">
+        <div className="absolute top-[-10%] right-[-10%] h-[500px] w-[500px] rounded-full bg-[radial-gradient(circle,rgba(168,85,247,0.1),transparent_70%)] blur-[70px]" />
+        <div className="absolute bottom-[20%] left-[-10%] h-[500px] w-[500px] rounded-full bg-[radial-gradient(circle,rgba(99,102,241,0.06),transparent_70%)] blur-[70px]" />
+      </div>
 
-      <Tabs defaultValue="home" className="px-4 pt-4">
-        <TabsList className="glass grid h-11 w-full grid-cols-2 rounded-full p-1">
-          <TabsTrigger value="home" className="rounded-full">Bosh sahifa</TabsTrigger>
-          <TabsTrigger value="history" className="rounded-full">Amaliyot tarixi</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="home" className="space-y-4 pt-4">
-          {/* Check-in card */}
-          <section className="glass rounded-3xl p-5 shadow-lg shadow-primary/5 animate-fade-up">
-            <div className="mb-3 flex items-center justify-between">
-              <h2 className="text-base font-semibold">Bugungi davomat</h2>
-              {todayLog?.checkIn && (
-                <Badge className="gradient-primary text-white">Kelgan vaqti: {todayLog.checkIn}</Badge>
-              )}
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-6">
+        {/* Header */}
+        <header className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between pb-6 border-b border-slate-100/80">
+          <div className="flex items-center gap-3.5">
+            <div className="gradient-primary flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl text-base font-bold text-white shadow-md shadow-primary/25">
+              {student.avatar}
             </div>
-            <button
-              onClick={handleScan}
-              disabled={scanning}
-              className="group relative flex h-52 w-full flex-col items-center justify-center overflow-hidden rounded-2xl gradient-primary text-white shadow-lg shadow-primary/30 transition active:scale-[0.98]"
-            >
-              {scanning ? (
-                <>
-                  <div className="absolute inset-6 rounded-2xl border-2 border-white/40" />
-                  <div className="absolute inset-6 overflow-hidden rounded-2xl">
-                    <div className="absolute inset-0 origin-center animate-radar">
-                      <div className="mx-auto h-1/2 w-1 origin-bottom bg-gradient-to-t from-white to-transparent" />
-                    </div>
-                  </div>
-                  <QrCode className="relative z-10 h-14 w-14 animate-pulse" />
-                  <p className="relative z-10 mt-3 text-sm font-medium">QR-kod skanerlanmoqda…</p>
-                </>
-              ) : justCheckedIn ? (
-                <>
-                  <div className="animate-check-pop grid h-16 w-16 place-items-center rounded-full bg-white/20 backdrop-blur">
-                    <Check className="h-10 w-10" strokeWidth={3} />
-                  </div>
-                  <p className="mt-3 text-lg font-bold">Davomat belgilandi</p>
-                  <p className="text-sm opacity-90">Vaqt: {justCheckedIn.time}</p>
-                </>
-              ) : (
-                <>
-                  <QrCode className="h-14 w-14 transition-transform group-hover:scale-110" />
-                  <p className="mt-3 text-lg font-bold">QR-kodni skanerlash</p>
-                  <p className="text-sm opacity-90">Davomatni belgilash uchun bosing</p>
-                </>
-              )}
+            <div className="min-w-0">
+              <p className="text-xs text-muted-foreground font-medium">Assalomu alaykum</p>
+              <h1 className="text-xl font-bold text-slate-900 tracking-tight">{student.name}</h1>
+              <div className="flex items-center gap-2 mt-1.5 text-[11px] font-semibold text-slate-500">
+                <Badge variant="secondary" className="bg-primary/10 text-primary hover:bg-primary/10 font-bold px-2 py-0 rounded-full text-[10px]">
+                  {student.group}
+                </Badge>
+                <span>{org?.name} korxonasida</span>
+              </div>
+            </div>
+          </div>
+          <div className="flex items-center gap-2 self-end md:self-auto">
+            <button className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-slate-100 bg-white/80 text-slate-600 shadow-xs hover:bg-slate-50 active:scale-95 transition-all">
+              <Bell className="h-4.5 w-4.5 text-slate-500" />
             </button>
-          </section>
+          </div>
+        </header>
 
-          {/* AI Daily Log */}
-          <section className="glass rounded-3xl p-5 shadow-lg shadow-primary/5 animate-fade-up">
-            <div className="mb-3 flex items-center gap-2">
-              <Sparkles className="h-4 w-4 text-primary" />
-              <h2 className="text-base font-semibold">Kunlik kundalik — AI Yordamchi</h2>
-            </div>
-            <Input
-              placeholder="Kalit so'zlar: server sozlash, tarmoq tekshirish"
-              value={keywords}
-              onChange={(e) => setKeywords(e.target.value)}
-              className="mb-2 rounded-xl"
-            />
-            <Button
-              type="button"
-              onClick={handleGenerate}
-              disabled={generating}
-              variant="secondary"
-              className="w-full rounded-xl"
-            >
-              <Sparkles className="mr-2 h-4 w-4" />
-              {generating ? "Tayyorlanmoqda…" : "AI yordamida yozish"}
-            </Button>
+        {/* Navigation and Content Grid */}
+        <Tabs defaultValue="home" className="w-full pt-6">
+          <div className="flex justify-start mb-6">
+            <TabsList className="bg-slate-50/80 p-1 rounded-xl border border-slate-100/50 grid grid-cols-2 w-full max-w-[320px]">
+              <TabsTrigger
+                value="home"
+                className="rounded-lg py-2 text-xs font-bold data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-xs transition-all"
+              >
+                Bosh sahifa
+              </TabsTrigger>
+              <TabsTrigger
+                value="history"
+                className="rounded-lg py-2 text-xs font-bold data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-xs transition-all"
+              >
+                Amaliyot tarixi
+              </TabsTrigger>
+            </TabsList>
+          </div>
 
-            {generating && (
-              <div className="mt-3 space-y-2">
-                <div className="shimmer h-3 w-full rounded-full bg-secondary" />
-                <div className="shimmer h-3 w-11/12 rounded-full bg-secondary" />
-                <div className="shimmer h-3 w-3/4 rounded-full bg-secondary" />
-              </div>
-            )}
+          <TabsContent value="home" className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start pt-2 outline-none">
+            {/* Left Column: QR Attendance */}
+            <div className="lg:col-span-6 w-full min-w-0">
+              <section className="bg-white/80 border border-slate-150/60 rounded-[28px] p-6 shadow-xl shadow-slate-100/50 backdrop-blur-md animate-fade-up">
+                <div className="mb-4 flex items-center justify-between">
+                  <h2 className="text-base font-bold text-slate-900 tracking-tight">Bugungi davomat</h2>
+                  {todayLog?.checkIn && (
+                    <Badge className="gradient-primary text-white border-0 font-bold px-2.5 py-0.5 rounded-full text-xs">
+                      Kelgan vaqti: {todayLog.checkIn}
+                    </Badge>
+                  )}
+                </div>
 
-            {!generating && report && (
-              <div className="mt-3 animate-fade-up">
-                <Textarea
-                  value={report}
-                  onChange={(e) => setReport(e.target.value)}
-                  className="min-h-[120px] rounded-xl"
-                />
-                <Button onClick={handleSubmit} className="gradient-primary mt-3 w-full rounded-xl text-white">
-                  Kunlik hisobotni jo'natish
-                </Button>
-              </div>
-            )}
-          </section>
-        </TabsContent>
-
-        <TabsContent value="history" className="pt-4">
-          <section className="glass rounded-3xl p-4 animate-fade-up">
-            <div className="mb-3 flex items-center gap-2">
-              <CalendarIcon className="h-4 w-4 text-primary" />
-              <h2 className="text-base font-semibold">Davomat tarixi</h2>
-            </div>
-            <div className="space-y-2">
-              {myLogs.map((l) => (
-                <div key={l.id} className="flex items-center gap-3 rounded-2xl border border-border/60 bg-card/60 p-3">
-                  <div
-                    className={`grid h-10 w-10 shrink-0 place-items-center rounded-full ${
-                      l.attendance === "present"
-                        ? "bg-emerald-500/15 text-emerald-600"
-                        : "bg-destructive/15 text-destructive"
-                    }`}
+                <div className="relative">
+                  <button
+                    onClick={handleScan}
+                    disabled={scanning}
+                    className="group relative flex h-56 w-full flex-col items-center justify-center overflow-hidden rounded-2xl gradient-primary text-white shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/25 active:scale-[0.99] transition-all duration-300 w-full"
                   >
-                    {l.attendance === "present" ? <Check className="h-5 w-5" /> : <X className="h-5 w-5" />}
+                    {scanning ? (
+                      <>
+                        <div className="absolute inset-5 rounded-xl border-2 border-white/20" />
+                        <div className="absolute inset-5 overflow-hidden rounded-xl">
+                          <div className="absolute inset-0 origin-center animate-radar">
+                            <div className="mx-auto h-1/2 w-0.5 origin-bottom bg-gradient-to-t from-white to-transparent" />
+                          </div>
+                        </div>
+                        <QrCode className="relative z-10 h-16 w-16 animate-pulse" />
+                        <p className="relative z-10 mt-4 text-xs font-semibold tracking-wide">QR-kod skanerlanmoqda…</p>
+                      </>
+                    ) : justCheckedIn ? (
+                      <>
+                        <div className="animate-check-pop grid h-16 w-16 place-items-center rounded-full bg-white/20 backdrop-blur-md border border-white/10">
+                          <Check className="h-9 w-9 text-white" strokeWidth={3} />
+                        </div>
+                        <p className="mt-4 text-lg font-extrabold tracking-tight">Davomat belgilandi</p>
+                        <p className="text-xs font-semibold opacity-90 mt-1">Vaqt: {justCheckedIn.time}</p>
+                      </>
+                    ) : (
+                      <>
+                        <QrCode className="h-16 w-16 transition-transform duration-300 group-hover:scale-105" />
+                        <p className="mt-4 text-lg font-extrabold tracking-tight">QR-kodni skanerlash</p>
+                        <p className="text-xs font-semibold opacity-90 mt-1">Davomatni belgilash uchun bosing</p>
+                      </>
+                    )}
+                  </button>
+
+                  {!scanning && !justCheckedIn && !todayLog?.checkIn && (
+                    <div className="absolute bottom-4 right-4 z-20">
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleScan();
+                        }}
+                        className="flex items-center gap-1.5 rounded-xl bg-white/15 backdrop-blur-md border border-white/20 px-3 py-1.5 text-[11px] font-bold text-white hover:bg-white/25 active:scale-95 transition-all shadow-sm"
+                      >
+                        <Camera className="h-3.5 w-3.5" />
+                        <span>Kamera orqali</span>
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </section>
+            </div>
+
+            {/* Right Column: AI Log Helper */}
+            <div className="lg:col-span-6 w-full min-w-0">
+              <section className="bg-white/80 border border-slate-150/60 rounded-[28px] p-6 shadow-xl shadow-slate-100/50 backdrop-blur-md animate-fade-up">
+                <div className="mb-3 flex items-center gap-2">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/5 text-primary">
+                    <Sparkles className="h-4.5 w-4.5" />
                   </div>
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-semibold">{l.date}</p>
-                    <p className="truncate text-xs text-muted-foreground">
-                      {l.checkIn ? `${l.checkIn} – ${l.checkOut ?? "…"}` : "Kelmagan"}
+                  <div>
+                    <h2 className="text-base font-bold text-slate-900 tracking-tight">Kunlik kundalik — AI Yordamchi</h2>
+                    <p className="text-xs text-muted-foreground mt-0.5">
+                      Kalit so'zlar orqali AI sizga tez va aniq hisobot yozib beradi.
                     </p>
                   </div>
-                  <Badge
-                    variant="outline"
-                    className={
-                      l.status === "approved"
-                        ? "border-emerald-500/40 text-emerald-600 font-medium"
-                        : l.status === "rejected"
-                          ? "border-destructive/40 text-destructive font-medium"
-                          : "border-amber-500/40 text-amber-600 font-medium"
-                    }
-                  >
-                    {l.status === "approved" ? "Tasdiqlangan" : l.status === "rejected" ? "Rad etilgan" : "Kutilmoqda"}
-                  </Badge>
                 </div>
-              ))}
+
+                <div className="space-y-4 pt-3">
+                  {/* Input and generate row */}
+                  <div className="flex flex-col sm:flex-row gap-2 w-full">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex h-11 items-center rounded-[14px] border border-slate-200 bg-white px-3 transition-all focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/10 w-full">
+                        <input
+                          type="text"
+                          value={keywords}
+                          onChange={(e) => setKeywords(e.target.value)}
+                          placeholder="Kalit so'zlar: server sozlash, tarmoq tekshirish"
+                          className="h-full w-full text-xs font-semibold text-slate-800 placeholder-slate-400 outline-none bg-transparent min-w-0"
+                        />
+                      </div>
+                    </div>
+                    <Button
+                      type="button"
+                      onClick={handleGenerate}
+                      disabled={generating}
+                      className="gradient-primary h-11 px-5 rounded-[14px] text-xs font-bold text-white shadow-md shadow-primary/20 hover:shadow-lg active:scale-[0.99] transition-all shrink-0"
+                    >
+                      <Sparkles className="mr-1.5 h-3.5 w-3.5" />
+                      {generating ? "Tayyorlanmoqda…" : "AI yordamida yozish"}
+                    </Button>
+                  </div>
+
+                  {/* Suggestion Chips */}
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Mavzular bo'yicha shablonlar</label>
+                    <div className="flex flex-wrap gap-1.5">
+                      {SUGGESTIONS.map((suggestion) => (
+                        <button
+                          key={suggestion}
+                          type="button"
+                          onClick={() => handleSuggestionClick(suggestion)}
+                          className="text-[11px] px-3 py-1.5 rounded-xl border border-slate-100 bg-slate-50/80 text-slate-600 hover:bg-primary/5 hover:border-primary/20 hover:text-primary active:scale-95 transition-all font-semibold"
+                        >
+                          {suggestion}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {generating && (
+                    <div className="mt-3 space-y-2 pt-2 animate-pulse">
+                      <div className="h-3 w-full rounded-full bg-slate-100" />
+                      <div className="h-3 w-11/12 rounded-full bg-slate-100" />
+                      <div className="h-3 w-3/4 rounded-full bg-slate-100" />
+                    </div>
+                  )}
+
+                  {!generating && report && (
+                    <div className="pt-2 space-y-3 animate-fade-up">
+                      <Textarea
+                        value={report}
+                        onChange={(e) => setReport(e.target.value)}
+                        placeholder="AI yaratgan hisobot bu yerda ko'rinadi..."
+                        className="min-h-[140px] rounded-2xl border-slate-200 text-xs font-semibold leading-relaxed focus-visible:ring-primary focus-visible:border-primary p-4"
+                      />
+                      <Button 
+                        onClick={handleSubmit} 
+                        className="gradient-primary h-11 w-full rounded-[14px] text-xs font-bold text-white shadow-md shadow-primary/20 hover:shadow-lg active:scale-[0.99] transition-all"
+                      >
+                        Kunlik hisobotni jo'natish
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              </section>
             </div>
-          </section>
-        </TabsContent>
-      </Tabs>
+          </TabsContent>
+
+          {/* History Tab */}
+          <TabsContent value="history" className="pt-2 outline-none">
+            <section className="bg-white/80 border border-slate-150/60 rounded-[28px] p-6 shadow-xl shadow-slate-100/50 backdrop-blur-md animate-fade-up max-w-3xl mx-auto">
+              <div className="mb-4 flex items-center gap-2">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/5 text-primary">
+                  <CalendarIcon className="h-4.5 w-4.5" />
+                </div>
+                <h2 className="text-base font-bold text-slate-900 tracking-tight">Davomat tarixi</h2>
+              </div>
+
+              <div className="space-y-2.5">
+                {myLogs.map((l) => (
+                  <div key={l.id} className="flex items-center gap-3.5 rounded-2xl border border-slate-100 bg-white/70 p-4 shadow-xs transition-all hover:bg-white hover:shadow-md hover:shadow-slate-100/80">
+                    <div
+                      className={`grid h-10 w-10 shrink-0 place-items-center rounded-xl border ${
+                        l.attendance === "present"
+                          ? "bg-emerald-50/50 border-emerald-100 text-emerald-600"
+                          : "bg-rose-50/50 border-rose-100 text-rose-600"
+                      }`}
+                    >
+                      {l.attendance === "present" ? <Check className="h-5 w-5" strokeWidth={2.5} /> : <X className="h-5 w-5" strokeWidth={2.5} />}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-xs font-bold text-slate-800">{l.date}</p>
+                      <p className="text-[11px] font-semibold text-slate-500 mt-0.5">
+                        {l.checkIn ? `${l.checkIn} – ${l.checkOut ?? "…"}` : "Kelmagan"}
+                      </p>
+                    </div>
+                    <Badge
+                      variant="outline"
+                      className={`font-bold text-[10px] px-2.5 py-0.5 rounded-full ${
+                        l.status === "approved"
+                          ? "bg-emerald-50 border-emerald-150 text-emerald-700"
+                          : l.status === "rejected"
+                            ? "bg-rose-50 border-rose-150 text-rose-700"
+                            : "bg-amber-50 border-amber-150 text-amber-700"
+                      }`}
+                    >
+                      {l.status === "approved" ? "Tasdiqlangan" : l.status === "rejected" ? "Rad etilgan" : "Kutilmoqda"}
+                    </Badge>
+                  </div>
+                ))}
+              </div>
+            </section>
+          </TabsContent>
+        </Tabs>
+      </div>
     </div>
   );
 }

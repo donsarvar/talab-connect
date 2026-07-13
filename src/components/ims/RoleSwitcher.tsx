@@ -12,20 +12,20 @@ export function RoleSwitcher() {
   const { role, setRole } = useIms();
   return (
     <div className="fixed bottom-4 left-1/2 z-50 -translate-x-1/2 sm:bottom-6 sm:left-auto sm:right-6 sm:translate-x-0">
-      <div className="glass flex items-center gap-1 rounded-full p-1 shadow-2xl shadow-primary/10">
+      <div className="bg-white/80 backdrop-blur-md border border-slate-150/50 flex items-center gap-1 rounded-2xl p-1.5 shadow-2xl shadow-slate-200/50">
         {ROLES.map(({ id, label, Icon }) => {
           const active = role === id;
           return (
             <button
               key={id}
               onClick={() => setRole(id)}
-              className={`flex items-center gap-1.5 rounded-full px-3 py-2 text-xs font-semibold transition-all sm:px-4 sm:text-sm ${
+              className={`flex items-center gap-1.5 rounded-xl px-3 py-2 text-xs font-semibold transition-all ${
                 active
-                  ? "gradient-primary text-white shadow-lg shadow-primary/30"
-                  : "text-muted-foreground hover:text-foreground"
+                  ? "bg-white text-primary shadow-xs font-bold scale-[1.02]"
+                  : "text-muted-foreground hover:text-foreground hover:bg-slate-50/50"
               }`}
             >
-              <Icon className="h-4 w-4" />
+              <Icon className="h-4.5 w-4.5" />
               <span>{label}</span>
             </button>
           );
@@ -33,4 +33,4 @@ export function RoleSwitcher() {
       </div>
     </div>
   );
-}
+}
