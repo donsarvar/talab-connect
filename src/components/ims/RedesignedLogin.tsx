@@ -186,7 +186,7 @@ export function RedesignedLogin({ onLogin }: RedesignedLoginProps) {
   };
 
   return (
-    <div className="relative min-h-screen lg:h-screen lg:overflow-hidden w-full bg-white text-foreground">
+    <div className="relative min-h-screen lg:h-screen lg:overflow-hidden w-full overflow-x-hidden bg-white text-foreground">
       {/* Premium Ambient Background */}
       <div className="absolute inset-0 z-0 opacity-40 pointer-events-none">
         <div className="absolute top-[-10%] right-[-10%] h-[600px] w-[600px] rounded-full bg-[radial-gradient(circle,rgba(168,85,247,0.12),transparent_70%)] blur-[80px]" />
@@ -195,25 +195,25 @@ export function RedesignedLogin({ onLogin }: RedesignedLoginProps) {
       </div>
 
       {/* Main Two-Column Container */}
-      <div className="relative z-10 mx-auto grid min-h-screen lg:h-full max-w-7xl grid-cols-1 gap-8 px-4 sm:px-6 lg:grid-cols-12 w-full">
+      <div className="relative z-10 mx-auto grid min-h-screen lg:h-full max-w-7xl grid-cols-1 gap-8 px-4 sm:px-6 lg:grid-cols-12 w-full min-w-0">
         {/* Left Side: Brand Experience */}
-        <div className="flex flex-col justify-between py-8 lg:py-10 lg:h-full lg:col-span-5 lg:pr-8 animate-fade-in w-full">
+        <div className="flex flex-col justify-between py-8 lg:py-10 lg:h-full lg:col-span-5 lg:pr-8 animate-fade-in w-full min-w-0">
           {/* Logo and System Name */}
-          <div className="space-y-5">
-            <div className="flex items-center gap-3">
+          <div className="space-y-5 min-w-0">
+            <div className="flex items-center gap-3 min-w-0">
               <div className="gradient-primary grid h-11 w-11 shrink-0 place-items-center rounded-2xl text-white shadow-md shadow-primary/25">
                 <GraduationCap className="h-5.5 w-5.5" />
               </div>
-              <div>
+              <div className="min-w-0">
                 <h2 className="text-xl font-bold tracking-tight">{t.brand_name}</h2>
-                <Badge variant="secondary" className="bg-primary/10 text-primary hover:bg-primary/10 font-medium px-2 py-0 rounded-full text-[10px] whitespace-nowrap">
+                <Badge variant="secondary" className="bg-primary/10 text-primary hover:bg-primary/10 font-medium px-2 py-0 rounded-full text-[10px]">
                   {t.brand_subtitle}
                 </Badge>
               </div>
             </div>
 
             {/* Headline & Desc */}
-            <div className="space-y-3 pt-2">
+            <div className="space-y-3 pt-2 min-w-0">
               <h1 className="text-2xl font-extrabold tracking-tight sm:text-3xl text-slate-900 leading-tight">
                 {t.headline_1} <br />
                 <span className="text-transparent bg-clip-text gradient-primary font-black">{t.headline_2}</span>
@@ -224,15 +224,15 @@ export function RedesignedLogin({ onLogin }: RedesignedLoginProps) {
             </div>
 
             {/* Premium Feature Items */}
-            <div className="space-y-4 pt-4">
+            <div className="space-y-4 pt-4 min-w-0">
               {featureItems.map((item, idx) => {
                 const Icon = item.icon;
                 return (
-                  <div key={idx} className="flex gap-3 items-start group">
+                  <div key={idx} className="flex gap-3 items-start group min-w-0">
                     <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-slate-50 border border-slate-100 text-primary shadow-sm group-hover:bg-primary/5 group-hover:border-primary/25 transition-all duration-300">
                       <Icon className="h-4.5 w-4.5" />
                     </div>
-                    <div className="space-y-0.5">
+                    <div className="space-y-0.5 min-w-0">
                       <h4 className="text-xs font-semibold text-slate-800">{item.title}</h4>
                       <p className="text-[11px] text-muted-foreground leading-relaxed">{item.desc}</p>
                     </div>
@@ -249,7 +249,7 @@ export function RedesignedLogin({ onLogin }: RedesignedLoginProps) {
         </div>
 
         {/* Right Side: Authentication */}
-        <div className="flex items-center justify-center py-6 lg:h-full lg:col-span-7 w-full">
+        <div className="flex items-center justify-center py-6 lg:h-full lg:col-span-7 w-full min-w-0">
           <div className="w-full max-w-[520px] animate-fade-up min-w-0">
             {/* Auth Card */}
             <div className="relative overflow-hidden rounded-[28px] border border-slate-100 bg-white/80 p-4 shadow-2xl shadow-slate-100 backdrop-blur-md sm:p-8 w-full">
