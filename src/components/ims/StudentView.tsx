@@ -111,27 +111,46 @@ function StudentApp() {
       </div>
 
       <div className="relative z-10 w-full px-4 pt-4 sm:px-6 sm:pt-6 lg:px-8 lg:pt-8">
-        {/* Header */}
-        <header className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between pb-6 border-b border-slate-100/80">
-          <div className="flex items-center gap-3.5">
-            <div className="gradient-primary flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl text-base font-bold text-white shadow-md shadow-primary/25">
+        {/* Header Card Frame */}
+        <header className="bg-white/80 border border-slate-150/60 rounded-3xl p-4 shadow-xl shadow-slate-100/50 backdrop-blur-md flex items-center justify-between w-full mb-6">
+          {/* Left Side: Brand & Welcome */}
+          <div className="flex items-center gap-3">
+            <div className="gradient-primary flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-xs font-bold text-white shadow-md shadow-primary/25">
               {student.avatar}
             </div>
             <div className="min-w-0">
-              <p className="text-xs text-muted-foreground font-medium">Assalomu alaykum</p>
-              <h1 className="text-xl font-bold text-slate-900 tracking-tight">{student.name}</h1>
-              <div className="flex items-center gap-2 mt-1.5 text-[11px] font-semibold text-slate-500">
-                <Badge variant="secondary" className="bg-primary/10 text-primary hover:bg-primary/10 font-bold px-2 py-0 rounded-full text-[10px]">
+              <h1 className="text-sm font-extrabold text-slate-900 tracking-tight leading-none">
+                Xush kelibsiz, {student.name}!
+              </h1>
+              <div className="flex items-center gap-1.5 mt-1.5 text-[10px] font-bold text-slate-500">
+                <Badge variant="secondary" className="bg-primary/5 text-primary hover:bg-primary/5 font-bold px-1.5 py-0 rounded text-[9px] border border-primary/10">
                   {student.group}
                 </Badge>
                 <span>{org?.name} korxonasida</span>
               </div>
             </div>
           </div>
-          <div className="flex items-center gap-2 self-end md:self-auto">
-            <button className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-slate-100 bg-white/80 text-slate-600 shadow-xs hover:bg-slate-50 active:scale-95 transition-all">
-              <Bell className="h-4.5 w-4.5 text-slate-500" />
+
+          {/* Right Side: Bell & Profile Dropdown Frame */}
+          <div className="flex items-center gap-3">
+            {/* Bell Notification */}
+            <button className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-slate-150 bg-white text-slate-500 shadow-xs hover:bg-slate-50 active:scale-95 transition-all">
+              <Bell className="h-4 w-4" />
             </button>
+
+            {/* Separate Profile Frame */}
+            <div className="flex items-center gap-2.5 px-3 py-1.5 border border-slate-150 bg-white rounded-xl shadow-xs hover:border-slate-200 transition-all cursor-pointer">
+              <img 
+                src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=256&auto=format&fit=crop" 
+                alt={student.name}
+                className="h-6.5 w-6.5 rounded-full object-cover border border-slate-100 shadow-xs"
+              />
+              <div className="hidden sm:block text-left">
+                <p className="text-[11px] font-extrabold text-slate-800 leading-none">{student.name}</p>
+                <p className="text-[9px] font-semibold text-slate-400 mt-0.5">Talaba</p>
+              </div>
+              <span className="text-slate-400 text-[8px] ml-0.5">▼</span>
+            </div>
           </div>
         </header>
 
