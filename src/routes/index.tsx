@@ -25,10 +25,7 @@ function Index() {
   return (
     <ImsProvider>
       {authed ? (
-        <>
-          <ActiveView />
-          <RoleSwitcher />
-        </>
+        <ActiveView />
       ) : (
         <RedesignedLogin onLogin={() => setAuthed(true)} />
       )}
