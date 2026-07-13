@@ -27,6 +27,8 @@ interface RedesignedLoginProps {
 
 const DICTIONARY: Record<Language, Record<string, string>> = {
   UZ: {
+    brand_name: "Talaba",
+    brand_subtitle: "Talabalarni boshqarish platformasi",
     headline_1: "Tizimli boshqaruv,",
     headline_2: "ishonchli natijalar.",
     desc: "Talabalar, mentorlar va koordinatorlar uchun maxsus loyihalashtirilgan zamonaviy amaliyot boshqaruvi platformasi.",
@@ -54,6 +56,8 @@ const DICTIONARY: Record<Language, Record<string, string>> = {
     support_link: "Qo'llab-quvvatlash xizmati",
   },
   RU: {
+    brand_name: "Студент",
+    brand_subtitle: "Платформа управления студентами",
     headline_1: "Системное управление,",
     headline_2: "надежные результаты.",
     desc: "Современная платформа управления стажировками, разработанная специально для студентов, менторов и координаторов.",
@@ -81,6 +85,8 @@ const DICTIONARY: Record<Language, Record<string, string>> = {
     support_link: "Служба поддержки",
   },
   EN: {
+    brand_name: "Student",
+    brand_subtitle: "Student Management Platform",
     headline_1: "Systemic management,",
     headline_2: "reliable results.",
     desc: "Modern internship management platform specifically designed for students, mentors, and coordinators.",
@@ -119,6 +125,7 @@ export function RedesignedLogin({ onLogin }: RedesignedLoginProps) {
   const [showLangDropdown, setShowLangDropdown] = useState(false);
 
   const t = DICTIONARY[language];
+
 
   const featureItems = [
     {
@@ -198,9 +205,9 @@ export function RedesignedLogin({ onLogin }: RedesignedLoginProps) {
                 <GraduationCap className="h-5.5 w-5.5" />
               </div>
               <div>
-                <h2 className="text-xl font-bold tracking-tight">Talaba</h2>
+                <h2 className="text-xl font-bold tracking-tight">{t.brand_name}</h2>
                 <Badge variant="secondary" className="bg-primary/10 text-primary hover:bg-primary/10 font-medium px-2 py-0 rounded-full text-[10px]">
-                  Student Management Platform
+                  {t.brand_subtitle}
                 </Badge>
               </div>
             </div>
