@@ -249,7 +249,7 @@ export function RedesignedLogin({ onLogin }: RedesignedLoginProps) {
         </div>
 
         {/* Right Side: Authentication */}
-        <div className="flex items-center justify-center pt-6 pb-[120px] lg:py-6 lg:h-full lg:col-span-7 w-full min-w-0">
+        <div className="flex items-start justify-center pt-2 pb-8 lg:items-center lg:py-6 lg:h-full lg:col-span-7 w-full min-w-0">
           <div className="w-full max-w-[520px] animate-fade-up min-w-0">
             {/* Auth Card */}
             <div className="relative overflow-hidden rounded-[28px] border border-slate-100 bg-white/80 p-4 shadow-2xl shadow-slate-100 backdrop-blur-md sm:p-8 w-full">
