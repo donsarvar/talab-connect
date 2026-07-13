@@ -188,7 +188,7 @@ export function RedesignedLogin({ onLogin }: RedesignedLoginProps) {
   return (
     <div className="relative min-h-screen lg:h-screen lg:overflow-hidden w-full overflow-x-hidden bg-white text-foreground">
       {/* Premium Ambient Background */}
-      <div className="absolute inset-0 z-0 opacity-40 pointer-events-none">
+      <div className="absolute inset-0 z-0 opacity-40 pointer-events-none overflow-hidden">
         <div className="absolute top-[-10%] right-[-10%] h-[600px] w-[600px] rounded-full bg-[radial-gradient(circle,rgba(168,85,247,0.12),transparent_70%)] blur-[80px]" />
         <div className="absolute bottom-[-10%] left-[-10%] h-[600px] w-[600px] rounded-full bg-[radial-gradient(circle,rgba(99,102,241,0.08),transparent_70%)] blur-[80px]" />
         <div className="absolute top-[30%] left-[20%] h-[400px] w-[400px] rounded-full bg-[radial-gradient(circle,rgba(192,132,252,0.06),transparent_60%)] blur-[60px]" />
