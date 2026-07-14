@@ -8,6 +8,7 @@ import {
   Sparkles,
   X,
   Camera,
+  RefreshCw,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -50,6 +51,13 @@ const DICTIONARY = {
     toast_warn_report: "Iltimos, avval hisobot yozing yoki AI orqali yarating",
     toast_submitted: "Kunlik hisobot topshirildi",
     toast_input_warn: "Iltimos, kalit so'zlarni kiriting yoki quyidagi chiplardan tanlang",
+    step2_selfie: "2-qadam: Jonli selfi tushish",
+    selfie_desc: "Real-vaqt kamerasi. Gallereyadan yuklash taqiqlangan",
+    capture_btn: "Rasmga tushish",
+    selfie_marked: "Selfi tasdiqlandi",
+    switch_camera: "Kamerani almashtirish",
+    camera_front: "Old kamera (Selfi)",
+    camera_back: "Orqa kamera (Asosiy)",
     suggestions: [
       "Kod yozish va xatolarni tuzatish",
       "Tizimni test qilish va tekshirish",
@@ -89,6 +97,13 @@ const DICTIONARY = {
     toast_warn_report: "Пожалуйста, сначала напишите отчет или создайте его с помощью ИИ",
     toast_submitted: "Ежедневный отчет отправлен",
     toast_input_warn: "Пожалуйста, введите ключевые слова или выберите шаблоны ниже",
+    step2_selfie: "Шаг 2: Живое селфи",
+    selfie_desc: "Камера реального времени. Загрузка из галереи запрещена",
+    capture_btn: "Сделать снимок",
+    selfie_marked: "Селфи подтверждено",
+    switch_camera: "Переключить камеру",
+    camera_front: "Передняя камера (Селфи)",
+    camera_back: "Задняя камера (Основная)",
     suggestions: [
       "Написание кода и исправление ошибок",
       "Тестирование и проверка системы",
@@ -128,6 +143,13 @@ const DICTIONARY = {
     toast_warn_report: "Please write a report or generate it with AI first",
     toast_submitted: "Daily report submitted",
     toast_input_warn: "Please enter keywords or select chips below",
+    step2_selfie: "Step 2: Live Selfie Check",
+    selfie_desc: "Real-time camera only. Gallery upload is restricted",
+    capture_btn: "Capture Photo",
+    selfie_marked: "Selfie verified",
+    switch_camera: "Switch Camera",
+    camera_front: "Front Camera (Selfie)",
+    camera_back: "Back Camera (Main)",
     suggestions: [
       "Coding and bug fixing",
       "System testing and verification",
@@ -156,21 +178,41 @@ function StudentApp({ onLogout }: { onLogout?: () => void }) {
   const todayISO = new Date().toISOString().slice(0, 10);
   const todayLog = myLogs.find((l) => l.date === todayISO);
 
-  const [scanning, setScanning] = useState(false);
+  const [checkInStep, setCheckInStep] = useState<"idle" | "scanning_qr" | "taking_selfie" | "success">("idle");
+  const [shutterFlash, setShutterFlash] = useState(false);
+  const [cameraFacing, setCameraFacing] = useState<"user" | "environment">("user");
+  const [capturedSelfie, setCapturedSelfie] = useState<string | null>(null);
   const [justCheckedIn, setJustCheckedIn] = useState<{ time: string } | null>(null);
   const [keywords, setKeywords] = useState("");
   const [generating, setGenerating] = useState(false);
   const [report, setReport] = useState("");
   const [profileOpen, setProfileOpen] = useState(false);
 
-  const handleScan = () => {
+  const handleStartScan = () => {
     if (todayLog?.checkIn) {
       toast.info(t.toast_already);
       return;
     }
-    setScanning(true);
+    setCheckInStep("scanning_qr");
     setTimeout(() => {
-      setScanning(false);
+      setCheckInStep("taking_selfie");
+    }, 1800);
+  };
+
+  const toggleCameraFacing = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setCameraFacing((prev) => (prev === "user" ? "environment" : "user"));
+    toast.success(
+      cameraFacing === "user"
+        ? t.camera_back
+        : t.camera_front
+    );
+  };
+
+  const handleCaptureSelfie = () => {
+    setShutterFlash(true);
+    setTimeout(() => {
+      setShutterFlash(false);
       const now = new Date();
       const time = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
       addLog({
@@ -181,9 +223,11 @@ function StudentApp({ onLogout }: { onLogout?: () => void }) {
         attendance: "present",
         status: "pending",
       });
+      setCapturedSelfie("https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=256&auto=format&fit=crop");
       setJustCheckedIn({ time });
+      setCheckInStep("success");
       toast.success(`${t.toast_success}: ${time}`);
-    }, 1800);
+    }, 200);
   };
 
   const handleGenerate = () => {
@@ -321,65 +365,126 @@ function StudentApp({ onLogout }: { onLogout?: () => void }) {
               </div>
 
               <div className="relative">
-                <button
-                  onClick={handleScan}
-                  disabled={scanning || !!todayLog?.checkIn}
-                  className="group relative flex h-56 w-full flex-col items-center justify-center overflow-hidden rounded-2xl bg-slate-900 border border-slate-800 text-white shadow-lg active:scale-[0.99] transition-all duration-300"
-                >
-                  {scanning ? (
-                    <>
-                      {/* Simulated Camera Viewport */}
-                      <div className="absolute inset-0 bg-slate-950 opacity-40" />
+                {/* Camera Shutter Flash effect */}
+                {shutterFlash && (
+                  <div className="absolute inset-0 bg-white opacity-100 z-50 transition-all duration-75 rounded-2xl animate-fade-out" />
+                )}
+
+                {todayLog?.checkIn ? (
+                  /* Already Checked in for today */
+                  <div className="relative flex h-60 w-full flex-col items-center justify-center overflow-hidden rounded-2xl bg-slate-50 border border-slate-200 p-4 text-center">
+                    <div className="flex gap-4 items-center">
+                      <div className="relative h-24 w-24 rounded-xl overflow-hidden border-2 border-emerald-500 shadow-md">
+                        <img 
+                          src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=256&auto=format&fit=crop" 
+                          alt="Selfie"
+                          className="h-full w-full object-cover"
+                        />
+                        <div className="absolute bottom-0 inset-x-0 bg-emerald-500 text-white font-extrabold text-[8px] py-0.5 uppercase tracking-wider text-center">
+                          {t.selfie_marked}
+                        </div>
+                      </div>
+                      <div className="text-left">
+                        <div className="flex items-center gap-1.5 text-emerald-600">
+                          <Check className="h-5 w-5" strokeWidth={3} />
+                          <span className="text-base font-extrabold tracking-tight">{t.marked}</span>
+                        </div>
+                        <p className="text-xs font-bold text-slate-700 mt-1">{t.checkin_time}: {todayLog.checkIn}</p>
+                        <div className="flex flex-wrap gap-1 mt-2">
+                          <Badge variant="outline" className="bg-emerald-50/50 border-emerald-100 text-emerald-700 font-extrabold text-[10px] py-0">
+                            ✓ QR Match
+                          </Badge>
+                          <Badge variant="outline" className="bg-emerald-50/50 border-emerald-100 text-emerald-700 font-extrabold text-[10px] py-0">
+                            ✓ Live Selfie
+                          </Badge>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ) : checkInStep === "scanning_qr" ? (
+                  /* STEP 1: Scanning QR Code */
+                  <div className="group relative flex h-60 w-full flex-col items-center justify-center overflow-hidden rounded-2xl bg-slate-950 border border-slate-900 text-white shadow-lg">
+                    {/* Simulated Camera Viewport */}
+                    <div className="absolute inset-0 bg-slate-950 opacity-40" />
+                    
+                    {/* Viewfinder Target frame */}
+                    <div className="absolute h-36 w-36 border border-white/20 rounded-2xl flex items-center justify-center">
+                      {/* Glowing corners */}
+                      <span className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-emerald-400 rounded-tl-md" />
+                      <span className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-emerald-400 rounded-tr-md" />
+                      <span className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-emerald-400 rounded-bl-md" />
+                      <span className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-emerald-400 rounded-br-md" />
                       
-                      {/* Viewfinder Target frame */}
-                      <div className="absolute h-36 w-36 border border-white/20 rounded-2xl flex items-center justify-center">
-                        {/* Glowing corners */}
-                        <span className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-emerald-400 rounded-tl-md" />
-                        <span className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-emerald-400 rounded-tr-md" />
-                        <span className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-emerald-400 rounded-bl-md" />
-                        <span className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-emerald-400 rounded-br-md" />
-                        
-                        {/* Laser scan line */}
-                        <div className="absolute left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-emerald-400 to-transparent shadow-[0_0_8px_rgba(52,211,153,0.8)] animate-laser" />
-                        
-                        {/* Faded QR Code inside target */}
-                        <QrCode className="h-20 w-20 text-white/10" />
+                      {/* Laser scan line */}
+                      <div className="absolute left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-emerald-400 to-transparent shadow-[0_0_8px_rgba(52,211,153,0.8)] animate-laser" />
+                      
+                      {/* Faded QR Code inside target */}
+                      <QrCode className="h-20 w-20 text-white/10" />
+                    </div>
+                    
+                    <p className="relative z-10 mt-40 text-xs font-bold tracking-wide text-emerald-400 animate-pulse">{t.scanning}</p>
+                  </div>
+                ) : checkInStep === "taking_selfie" ? (
+                  /* STEP 2: Capture Selfie Camera Viewport */
+                  <div className="group relative flex h-60 w-full flex-col items-center justify-center overflow-hidden rounded-2xl bg-slate-900 border border-slate-800 text-white shadow-lg">
+                    {/* Mock Camera Viewfinder Overlay (Dim outside oval face template) */}
+                    <div className="absolute inset-0 bg-slate-950 opacity-30 z-0" />
+                    
+                    {/* Oval Silhouette Mask for Face Guide */}
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
+                      <div className="w-32 h-40 border-2 border-dashed border-white/60 rounded-[50%] shadow-[0_0_0_9999px_rgba(15,23,42,0.65)]" />
+                    </div>
+
+                    {/* Camera Instructions Overlay */}
+                    <div className="absolute top-3 left-3 right-3 z-20 flex items-center justify-between bg-slate-900/80 backdrop-blur-xs p-2 rounded-xl border border-white/10 w-[calc(100%-24px)]">
+                      <div className="flex flex-col items-start min-w-0">
+                        <span className="text-[10px] font-extrabold text-emerald-400 uppercase tracking-widest leading-none">{t.step2_selfie}</span>
+                        <span className="text-[9px] font-semibold text-white/70 mt-1 truncate max-w-[170px] sm:max-w-xs">{cameraFacing === "user" ? t.camera_front : t.camera_back}</span>
                       </div>
                       
-                      <p className="relative z-10 mt-40 text-xs font-bold tracking-wide text-emerald-400 animate-pulse">{t.scanning}</p>
-                    </>
-                  ) : justCheckedIn ? (
-                    <>
-                      {/* Checked in success view */}
-                      <div className="absolute inset-0 bg-gradient-to-br from-emerald-500 to-teal-600 opacity-95" />
-                      <div className="relative z-10 animate-check-pop grid h-16 w-16 place-items-center rounded-full bg-white/20 backdrop-blur-md border border-white/10 shadow-inner">
-                        <Check className="h-9 w-9 text-white" strokeWidth={3} />
-                      </div>
-                      <p className="relative z-10 mt-4 text-lg font-extrabold tracking-tight">{t.marked}</p>
-                      <p className="relative z-10 text-xs font-bold opacity-90 mt-1">{t.time}: {justCheckedIn.time}</p>
-                    </>
-                  ) : todayLog?.checkIn ? (
-                    <>
-                      {/* Already Checked in for today */}
-                      <div className="absolute inset-0 bg-slate-50/50" />
-                      <div className="grid h-16 w-16 place-items-center rounded-full bg-emerald-50 border border-emerald-100 text-emerald-600 shadow-xs">
-                        <Check className="h-8 w-8" strokeWidth={2.5} />
-                      </div>
-                      <p className="mt-4 text-base font-extrabold text-slate-800 tracking-tight">{t.marked}</p>
-                      <p className="text-xs font-semibold text-slate-500 mt-1">{t.checkin_time}: {todayLog.checkIn}</p>
-                    </>
-                  ) : (
-                    <>
-                      {/* Active click to scan camera view */}
-                      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900" />
-                      <div className="relative z-10 grid h-16 w-16 place-items-center rounded-2xl bg-white/10 border border-white/10 backdrop-blur-md shadow-inner transition-transform duration-300 group-hover:scale-105">
-                        <Camera className="h-8 w-8 text-white" />
-                      </div>
-                      <p className="relative z-10 mt-4 text-base font-extrabold tracking-tight text-white">{t.scan_qr}</p>
-                      <p className="relative z-10 text-xs font-semibold text-white/70 mt-1.5">{t.click_to_mark}</p>
-                    </>
-                  )}
-                </button>
+                      {/* Toggle Camera button (front/back camera fallback) */}
+                      <button
+                        onClick={toggleCameraFacing}
+                        className="flex h-7 w-7 items-center justify-center rounded-lg border border-white/15 bg-white/5 text-white shadow-xs hover:bg-white/10 active:scale-90 transition-all ml-2"
+                        title={t.switch_camera}
+                      >
+                        <RefreshCw className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
+
+                    {/* Capturing Trigger button */}
+                    <button
+                      onClick={handleCaptureSelfie}
+                      className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-white font-extrabold text-xs px-4 py-2.5 rounded-full shadow-lg transition-all"
+                    >
+                      <Camera className="h-4 w-4" />
+                      <span>{t.capture_btn}</span>
+                    </button>
+
+                    {/* Simulated live video grid lines */}
+                    <div className="absolute inset-0 grid grid-cols-3 grid-rows-3 pointer-events-none opacity-10">
+                      <div className="border-r border-b border-white" />
+                      <div className="border-r border-b border-white" />
+                      <div className="border-b border-white" />
+                      <div className="border-r border-b border-white" />
+                      <div className="border-r border-b border-white" />
+                      <div className="border-b border-white" />
+                    </div>
+                  </div>
+                ) : (
+                  /* IDLE: Initial state */
+                  <button
+                    onClick={handleStartScan}
+                    className="group relative flex h-60 w-full flex-col items-center justify-center overflow-hidden rounded-2xl bg-slate-900 border border-slate-800 text-white shadow-lg active:scale-[0.99] transition-all duration-300"
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900" />
+                    <div className="relative z-10 grid h-16 w-16 place-items-center rounded-2xl bg-white/10 border border-white/10 backdrop-blur-md shadow-inner transition-transform duration-300 group-hover:scale-105">
+                      <Camera className="h-8 w-8 text-white" />
+                    </div>
+                    <p className="relative z-10 mt-4 text-base font-extrabold tracking-tight text-white">{t.scan_qr}</p>
+                    <p className="relative z-10 text-xs font-semibold text-white/70 mt-1.5">{t.click_to_mark}</p>
+                  </button>
+                )}
               </div>
             </section>
 
