@@ -52,9 +52,10 @@ export interface FraudAlert {
 }
 
 export const ORGS: Organization[] = [
-  { id: "org-1", name: "Nova Systems", industry: "AKT va Tarmoqlar", performance: 94 },
-  { id: "org-2", name: "Meridian Health", industry: "Tibbiyot va Sog'liqni saqlash", performance: 88 },
-  { id: "org-3", name: "Atlas Logistics", industry: "Logistika va Yuk tashish", performance: 79 },
+  { id: "org-1", name: "Realsoft academy", industry: "AKT va Dasturlash", performance: 94 },
+  { id: "org-2", name: "IT time academy", industry: "AKT va Robototexnika", performance: 88 },
+  { id: "org-3", name: "Milliy universiteti", industry: "Ta'lim va Fan", performance: 82 },
+  { id: "org-4", name: "Robototexnika markazi", industry: "Muhandislik va Robototexnika", performance: 79 },
 ];
 
 export const MENTORS: Mentor[] = [
@@ -62,24 +63,38 @@ export const MENTORS: Mentor[] = [
     id: "m-1",
     name: "Dilnoza Karimova",
     organizationId: "org-1",
-    studentIds: ["s-1", "s-2", "s-3"],
+    studentIds: ["s-1", "s-5"],
     avatar: "DK",
   },
   {
     id: "m-2",
     name: "Bekzod Rakhimov",
     organizationId: "org-2",
-    studentIds: ["s-4", "s-5"],
+    studentIds: ["s-2"],
     avatar: "BR",
+  },
+  {
+    id: "m-3",
+    name: "Shohruh Mirzo",
+    organizationId: "org-3",
+    studentIds: ["s-3"],
+    avatar: "SM",
+  },
+  {
+    id: "m-4",
+    name: "Alisher Navoiy",
+    organizationId: "org-4",
+    studentIds: ["s-4"],
+    avatar: "AN",
   },
 ];
 
 export const STUDENTS: Student[] = [
-  { id: "s-1", name: "Aziz Yusupov", phone: "+998 90 123 45 67", dob: "12042003", group: "IT-21A", organizationId: "org-1", mentorId: "m-1", avatar: "AY" },
-  { id: "s-2", name: "Malika Tashkentova", phone: "+998 91 222 33 44", dob: "05092003", group: "IT-21A", organizationId: "org-1", mentorId: "m-1", avatar: "MT" },
-  { id: "s-3", name: "Rustam Ergashev", phone: "+998 93 555 66 77", dob: "22112002", group: "IT-21B", organizationId: "org-1", mentorId: "m-1", avatar: "RE" },
-  { id: "s-4", name: "Sitora Nazarova", phone: "+998 97 888 99 00", dob: "18072003", group: "MED-21", organizationId: "org-2", mentorId: "m-2", avatar: "SN" },
-  { id: "s-5", name: "Jasur Alimov", phone: "+998 94 111 22 33", dob: "30012003", group: "MED-21", organizationId: "org-2", mentorId: "m-2", avatar: "JA" },
+  { id: "s-1", name: "Aziz Yusupov", phone: "+998 90 123 45 67", dob: "12042003", group: "KMI 01", organizationId: "org-1", mentorId: "m-1", avatar: "AY" },
+  { id: "s-2", name: "Malika Tashkentova", phone: "+998 91 222 33 44", dob: "05092003", group: "KAX 01", organizationId: "org-2", mentorId: "m-2", avatar: "MT" },
+  { id: "s-3", name: "Rustam Ergashev", phone: "+998 93 555 66 77", dob: "22112002", group: "KAX 02", organizationId: "org-3", mentorId: "m-3", avatar: "RE" },
+  { id: "s-4", name: "Sitora Nazarova", phone: "+998 97 888 99 00", dob: "18072003", group: "KAX 03", organizationId: "org-4", mentorId: "m-4", avatar: "SN" },
+  { id: "s-5", name: "Jasur Alimov", phone: "+998 94 111 22 33", dob: "30012003", group: "KMI 01", organizationId: "org-1", mentorId: "m-1", avatar: "JA" },
 ];
 
 function daysAgo(n: number): string {
@@ -102,7 +117,7 @@ export const INITIAL_LOGS: DailyLog[] = [
 export const INITIAL_ALERTS: FraudAlert[] = [
   { id: "a-1", severity: "high", title: "Qurilma imzosi mos kelishi", detail: "Aziz Yusupov va Malika Tashkentova uchun bitta qurilmadan check-in amalga oshirilganligi aniqlandi." },
   { id: "a-2", severity: "medium", title: "Hisobotlarning 90% o'xshashligi", detail: "Shu haftada Rustam Ergashev va Jasur Alimovning hisobotlari o'rtasida juda yuqori matnli o'xshashlik aniqlandi." },
-  { id: "a-3", severity: "low", title: "GPS mos kelmasligi", detail: "Sitora Nazarova belgilangan amaliyot binosidan 1.4 km uzoqlikda turib check-in qildi." },
+  { id: "a-3", severity: "low", title: "Noma'lum tarmoqdan ulanish", detail: "Sitora Nazarova amaliyot joyidan boshqa noma'lum tarmoq orqali check-in qildi." },
 ];
 
 export function generateAIReport(keywords: string, lang: "uz" | "ru" | "en" = "uz"): string {

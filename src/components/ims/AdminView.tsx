@@ -572,10 +572,10 @@ function MetricCard({
 }
 
 const DUMMY_IMPORT: Omit<Student, "id">[] = [
-  { name: "Nodira Umarova", phone: "+998 90 445 12 33", dob: "14082003", group: "IT-21A", organizationId: "org-1", mentorId: "m-1", avatar: "NU" },
-  { name: "Sherzod Karimov", phone: "+998 93 776 54 21", dob: "02052003", group: "IT-21B", organizationId: "org-1", mentorId: "m-1", avatar: "SK" },
-  { name: "Zilola Ismoilova", phone: "+998 97 332 90 11", dob: "27102003", group: "MED-21", organizationId: "org-2", mentorId: "m-2", avatar: "ZI" },
-  { name: "Otabek Yuldashev", phone: "+998 94 118 22 77", dob: "09062003", group: "LOG-21", organizationId: "org-3", mentorId: "m-1", avatar: "OY" },
+  { name: "Nodira Umarova", phone: "+998 90 445 12 33", dob: "14082003", group: "KMI 01", organizationId: "org-1", mentorId: "m-1", avatar: "NU" },
+  { name: "Sherzod Karimov", phone: "+998 93 776 54 21", dob: "02052003", group: "KAX 01", organizationId: "org-1", mentorId: "m-1", avatar: "SK" },
+  { name: "Zilola Ismoilova", phone: "+998 97 332 90 11", dob: "27102003", group: "KAX 02", organizationId: "org-2", mentorId: "m-2", avatar: "ZI" },
+  { name: "Otabek Yuldashev", phone: "+998 94 118 22 77", dob: "09062003", group: "KAX 03", organizationId: "org-3", mentorId: "m-1", avatar: "OY" },
 ];
 
 function ImportTab({
