@@ -26,12 +26,12 @@ const DICTIONARY = {
     history_tab: "Amaliyot tarixi",
     today_attendance: "Bugungi davomat",
     checkin_time: "Kelgan vaqti",
-    scan_qr: "QR-kodni skanerlash",
-    click_to_mark: "Davomatni belgilash uchun bosing",
-    scanning: "QR-kod skanerlanmoqda…",
+    scan_qr: "Ishxonadagi QR-kodni skanerlash",
+    click_to_mark: "Kamerani devordagi QR-kodga qarating",
+    scanning: "Kamera skanerlamoqda (takrorlanmas ID)…",
     marked: "Davomat belgilandi",
     time: "Vaqt",
-    via_camera: "Kamera orqali",
+    via_camera: "Kamerani ochish",
     ai_title: "Kunlik kundalik — AI Yordamchi",
     ai_desc: "Kalit so'zlar orqali AI sizga tez va aniq hisobot yozib beradi.",
     placeholder: "Masalan: kod yozdim, xatolarni to'g'riladim",
@@ -40,7 +40,7 @@ const DICTIONARY = {
     templates_label: "Mavzular bo'yicha shablonlar",
     send_report: "Kunlik hisobotni jo'natish",
     attendance_history: "Davomat tarixi",
-    absent: "Kelmagan",
+    absent: "Kelganlar orasida yo'q",
     approved: "Tasdiqlangan",
     rejected: "Rad etilgan",
     pending: "Kutilmoqda",
@@ -65,12 +65,12 @@ const DICTIONARY = {
     history_tab: "История практики",
     today_attendance: "Сегодняшняя посещаемость",
     checkin_time: "Время прихода",
-    scan_qr: "Сканировать QR-код",
-    click_to_mark: "Нажмите, чтобы отметить посещаемость",
-    scanning: "Сканирование QR-кода…",
+    scan_qr: "Сканировать QR-код на работе",
+    click_to_mark: "Наведите камеру на QR-код на стене",
+    scanning: "Камера сканирует (уникальный ID)…",
     marked: "Посещаемость отмечена",
     time: "Время",
-    via_camera: "Через камеру",
+    via_camera: "Открыть камеру",
     ai_title: "Дневник практики — AI Помощник",
     ai_desc: "ИИ быстро и точно напишет отчет по ключевым словам.",
     placeholder: "Например: писал код, исправлял ошибки",
@@ -79,7 +79,7 @@ const DICTIONARY = {
     templates_label: "Шаблоны по темам",
     send_report: "Отправить ежедневный отчет",
     attendance_history: "История посещаемости",
-    absent: "Не пришел",
+    absent: "Отсутствует",
     approved: "Подтверждено",
     rejected: "Отклонено",
     pending: "В ожидании",
@@ -104,12 +104,12 @@ const DICTIONARY = {
     history_tab: "Internship History",
     today_attendance: "Today's Attendance",
     checkin_time: "Check-in time",
-    scan_qr: "Scan QR Code",
-    click_to_mark: "Click to mark attendance",
-    scanning: "Scanning QR code…",
+    scan_qr: "Scan Workplace QR Code",
+    click_to_mark: "Point camera at the printed QR code",
+    scanning: "Camera scanning (unique ID)…",
     marked: "Attendance marked",
     time: "Time",
-    via_camera: "Via camera",
+    via_camera: "Open Camera",
     ai_title: "Daily Diary — AI Assistant",
     ai_desc: "AI will write a fast and accurate report using keywords.",
     placeholder: "Example: wrote code, fixed bugs",
@@ -323,52 +323,63 @@ function StudentApp({ onLogout }: { onLogout?: () => void }) {
               <div className="relative">
                 <button
                   onClick={handleScan}
-                  disabled={scanning}
-                  className="group relative flex h-56 w-full flex-col items-center justify-center overflow-hidden rounded-2xl gradient-primary text-white shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/25 active:scale-[0.99] transition-all duration-300"
+                  disabled={scanning || !!todayLog?.checkIn}
+                  className="group relative flex h-56 w-full flex-col items-center justify-center overflow-hidden rounded-2xl bg-slate-900 border border-slate-800 text-white shadow-lg active:scale-[0.99] transition-all duration-300"
                 >
                   {scanning ? (
                     <>
-                      <div className="absolute inset-5 rounded-xl border-2 border-white/20" />
-                      <div className="absolute inset-5 overflow-hidden rounded-xl">
-                        <div className="absolute inset-0 origin-center animate-radar">
-                          <div className="mx-auto h-1/2 w-0.5 origin-bottom bg-gradient-to-t from-white to-transparent" />
-                        </div>
+                      {/* Simulated Camera Viewport */}
+                      <div className="absolute inset-0 bg-slate-950 opacity-40" />
+                      
+                      {/* Viewfinder Target frame */}
+                      <div className="absolute h-36 w-36 border border-white/20 rounded-2xl flex items-center justify-center">
+                        {/* Glowing corners */}
+                        <span className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-emerald-400 rounded-tl-md" />
+                        <span className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-emerald-400 rounded-tr-md" />
+                        <span className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-emerald-400 rounded-bl-md" />
+                        <span className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-emerald-400 rounded-br-md" />
+                        
+                        {/* Laser scan line */}
+                        <div className="absolute left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-emerald-400 to-transparent shadow-[0_0_8px_rgba(52,211,153,0.8)] animate-laser" />
+                        
+                        {/* Faded QR Code inside target */}
+                        <QrCode className="h-20 w-20 text-white/10" />
                       </div>
-                      <QrCode className="relative z-10 h-16 w-16 animate-pulse" />
-                      <p className="relative z-10 mt-4 text-xs font-semibold tracking-wide">{t.scanning}</p>
+                      
+                      <p className="relative z-10 mt-40 text-xs font-bold tracking-wide text-emerald-400 animate-pulse">{t.scanning}</p>
                     </>
                   ) : justCheckedIn ? (
                     <>
-                      <div className="animate-check-pop grid h-16 w-16 place-items-center rounded-full bg-white/20 backdrop-blur-md border border-white/10">
+                      {/* Checked in success view */}
+                      <div className="absolute inset-0 bg-gradient-to-br from-emerald-500 to-teal-600 opacity-95" />
+                      <div className="relative z-10 animate-check-pop grid h-16 w-16 place-items-center rounded-full bg-white/20 backdrop-blur-md border border-white/10 shadow-inner">
                         <Check className="h-9 w-9 text-white" strokeWidth={3} />
                       </div>
-                      <p className="mt-4 text-lg font-extrabold tracking-tight">{t.marked}</p>
-                      <p className="text-xs font-semibold opacity-90 mt-1">{t.time}: {justCheckedIn.time}</p>
+                      <p className="relative z-10 mt-4 text-lg font-extrabold tracking-tight">{t.marked}</p>
+                      <p className="relative z-10 text-xs font-bold opacity-90 mt-1">{t.time}: {justCheckedIn.time}</p>
+                    </>
+                  ) : todayLog?.checkIn ? (
+                    <>
+                      {/* Already Checked in for today */}
+                      <div className="absolute inset-0 bg-slate-50/50" />
+                      <div className="grid h-16 w-16 place-items-center rounded-full bg-emerald-50 border border-emerald-100 text-emerald-600 shadow-xs">
+                        <Check className="h-8 w-8" strokeWidth={2.5} />
+                      </div>
+                      <p className="mt-4 text-base font-extrabold text-slate-800 tracking-tight">{t.marked}</p>
+                      <p className="text-xs font-semibold text-slate-500 mt-1">{t.checkin_time}: {todayLog.checkIn}</p>
                     </>
                   ) : (
                     <>
-                      <QrCode className="h-16 w-16 transition-transform duration-300 group-hover:scale-105" />
-                      <p className="mt-4 text-lg font-extrabold tracking-tight">{t.scan_qr}</p>
-                      <p className="text-xs font-semibold opacity-90 mt-1">{t.click_to_mark}</p>
+                      {/* Active click to scan camera view */}
+                      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900" />
+                      <div className="relative z-10 grid h-16 w-16 place-items-center rounded-2xl bg-white/10 border border-white/10 backdrop-blur-md shadow-inner transition-transform duration-300 group-hover:scale-105">
+                        <Camera className="h-8 w-8 text-white" />
+                      </div>
+                      <p className="relative z-10 mt-4 text-base font-extrabold tracking-tight text-white">{t.scan_qr}</p>
+                      <p className="relative z-10 text-xs font-semibold text-white/70 mt-1.5">{t.click_to_mark}</p>
                     </>
                   )}
                 </button>
-
-                {!scanning && !justCheckedIn && !todayLog?.checkIn && (
-                  <div className="absolute bottom-4 right-4 z-20">
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleScan();
-                      }}
-                      className="flex items-center gap-1.5 rounded-xl bg-white/15 backdrop-blur-md border border-white/20 px-3 py-1.5 text-xs font-bold text-white hover:bg-white/25 active:scale-95 transition-all shadow-sm"
-                    >
-                      <Camera className="h-3.5 w-3.5" />
-                      <span>{t.via_camera}</span>
-                    </button>
-                  </div>
-                )}
               </div>
             </section>
 
