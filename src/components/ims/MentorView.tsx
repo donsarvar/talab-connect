@@ -8,6 +8,105 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "
 import { Slider } from "@/components/ui/slider";
 import { useIms } from "./store";
 
+const DICTIONARY = {
+  uz: {
+    role: "Rahbar (Mentor)",
+    org_leader: "Tashkilot rahbari",
+    total_students: "Jami talabalar",
+    present_today: "Bugun kelganlar",
+    pending_approval: "Tasdiqlash kutilmoqda",
+    assigned_students: "Biriktirilgan talabalar",
+    student: "Talaba",
+    absent: "Kelmagan",
+    approved: "Tasdiqlangan",
+    rejected: "Rad etilgan",
+    pending: "Kutilmoqda",
+    approve_weekly: "Haftalik hisobotni tasdiqlash",
+    rejection_reason: "Rad etilganlik sababi",
+    approve: "Tasdiqlash",
+    reject: "Rad etish",
+    final_evaluation: "Yakuniy baholash",
+    rating: "Baho (Reyting)",
+    feedback_placeholder: "Talaba haqida taqriz/fikr-mulohaza yozing…",
+    save_evaluation: "Bahoni saqlash",
+    reject_report_title: "Kunlik hisobotni rad etish",
+    reject_reason_placeholder: "Rad etish sababini kiriting…",
+    cancel: "Bekor qilish",
+    confirm_rejection: "Rad etishni tasdiqlash",
+    logout: "Chiqish",
+    toast_weekly_approved: "Haftalik hisobot tasdiqlandi",
+    toast_daily_approved: "Kunlik hisobot tasdiqlandi",
+    toast_daily_rejected: "Hisobot rad etildi",
+    toast_evaluation_saved: "Baholash muvaffaqiyatli saqlandi",
+    toast_enter_reason: "Iltimos, rad etish sababini kiriting",
+    logout_success: "Tizimdan chiqdingiz"
+  },
+  ru: {
+    role: "Руководитель (Ментор)",
+    org_leader: "Руководитель организации",
+    total_students: "Всего студентов",
+    present_today: "Пришли сегодня",
+    pending_approval: "Ожидают подтверждения",
+    assigned_students: "Прикрепленные студенты",
+    student: "Студент",
+    absent: "Не пришел",
+    approved: "Подтверждено",
+    rejected: "Отклонено",
+    pending: "В ожидании",
+    approve_weekly: "Подтвердить еженедельный отчет",
+    rejection_reason: "Причина отклонения",
+    approve: "Подтвердить",
+    reject: "Отклонить",
+    final_evaluation: "Итоговая оценка",
+    rating: "Оценка (Рейтинг)",
+    feedback_placeholder: "Напишите отзыв о студенте…",
+    save_evaluation: "Сохранить оценку",
+    reject_report_title: "Отклонение отчета",
+    reject_reason_placeholder: "Введите причину отклонения…",
+    cancel: "Отмена",
+    confirm_rejection: "Подтвердить отклонение",
+    logout: "Выйти",
+    toast_weekly_approved: "Еженедельный отчет подтвержден",
+    toast_daily_approved: "Отчет подтвержден",
+    toast_daily_rejected: "Отчет отклонен",
+    toast_evaluation_saved: "Оценка успешно сохранена",
+    toast_enter_reason: "Пожалуйста, введите причину отклонения",
+    logout_success: "Вы вышли из системы"
+  },
+  en: {
+    role: "Mentor",
+    org_leader: "Organization Mentor",
+    total_students: "Total Students",
+    present_today: "Present Today",
+    pending_approval: "Pending Approval",
+    assigned_students: "Assigned Students",
+    student: "Student",
+    absent: "Absent",
+    approved: "Approved",
+    rejected: "Rejected",
+    pending: "Pending",
+    approve_weekly: "Approve Weekly Report",
+    rejection_reason: "Rejection reason",
+    approve: "Approve",
+    reject: "Reject",
+    final_evaluation: "Final Evaluation",
+    rating: "Rating",
+    feedback_placeholder: "Write feedback about the student...",
+    save_evaluation: "Save Evaluation",
+    reject_report_title: "Reject Daily Report",
+    reject_reason_placeholder: "Enter rejection reason...",
+    cancel: "Cancel",
+    confirm_rejection: "Confirm Rejection",
+    logout: "Logout",
+    toast_weekly_approved: "Weekly report approved",
+    toast_daily_approved: "Daily report approved",
+    toast_daily_rejected: "Report rejected",
+    toast_evaluation_saved: "Evaluation saved successfully",
+    toast_enter_reason: "Please enter rejection reason",
+    logout_success: "Logged out successfully"
+  }
+};
+
 export function MentorView({ onLogout }: { onLogout?: () => void }) {
   const { mentors, currentMentorId, students, logs, orgs, updateLog, setStudentEvaluation, lang } = useIms();
   const mentor = mentors.find((m) => m.id === currentMentorId) ?? mentors[0];
@@ -24,6 +123,8 @@ export function MentorView({ onLogout }: { onLogout?: () => void }) {
     [logs, selectedId],
   );
 
+  const t = DICTIONARY[lang];
+
   const todayISO = new Date().toISOString().slice(0, 10);
   const presentToday = myStudents.filter((s) =>
     logs.some((l) => l.studentId === s.id && l.date === todayISO && l.attendance === "present"),
@@ -38,12 +139,6 @@ export function MentorView({ onLogout }: { onLogout?: () => void }) {
     const s = myStudents.find((x) => x.id === id);
     setRating([s?.rating ?? 4]);
     setFeedback(s?.feedback ?? "");
-  };
-
-  const getRoleLabel = () => {
-    if (lang === "ru") return "Руководитель";
-    if (lang === "en") return "Mentor";
-    return "Rahbar (Mentor)";
   };
 
   return (
@@ -67,7 +162,7 @@ export function MentorView({ onLogout }: { onLogout?: () => void }) {
                 {mentor.name}
               </h1>
               <div className="flex items-center gap-1.5 mt-1.5 text-xs font-bold text-slate-500">
-                <span>{lang === "uz" ? "Tashkilot rahbari" : lang === "ru" ? "Руководитель организации" : "Organization Mentor"} · {org?.name}</span>
+                <span>{t.org_leader} · {org?.name}</span>
               </div>
             </div>
           </div>
@@ -92,9 +187,9 @@ export function MentorView({ onLogout }: { onLogout?: () => void }) {
                 />
                 <div className="hidden sm:block text-left">
                   <p className="text-xs font-extrabold text-slate-800 leading-none">{mentor.name}</p>
-                  <p className="text-xs font-semibold text-slate-400 mt-0.5">{getRoleLabel()}</p>
+                  <p className="text-xs font-semibold text-slate-400 mt-0.5">{t.role}</p>
                 </div>
-                <span className="text-slate-400 text-[8px] ml-0.5">▼</span>
+                <span className="text-slate-400 text-xs ml-0.5">▼</span>
               </div>
 
               {profileOpen && (
@@ -102,12 +197,12 @@ export function MentorView({ onLogout }: { onLogout?: () => void }) {
                   <button
                     onClick={() => {
                       if (onLogout) onLogout();
-                      toast.success(lang === "uz" ? "Tizimdan chiqdingiz" : lang === "ru" ? "Вы вышли из системы" : "Logged out successfully");
+                      toast.success(t.logout_success);
                     }}
                     className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-xs font-bold text-rose-600 hover:bg-rose-50/50 active:scale-95 transition-all"
                   >
                     <IconsaxLogout className="h-4 w-4 text-rose-600 shrink-0" />
-                    <span>{lang === "uz" ? "Chiqish" : lang === "ru" ? "Выйти" : "Logout"}</span>
+                    <span>{t.logout}</span>
                   </button>
                 </div>
               )}
@@ -117,16 +212,16 @@ export function MentorView({ onLogout }: { onLogout?: () => void }) {
 
         {/* Stat cards */}
         <section className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-          <StatCard label={lang === "uz" ? "Jami talabalar" : lang === "ru" ? "Всего студентов" : "Total Students"} value={myStudents.length} Icon={Users} tint="primary" />
-          <StatCard label={lang === "uz" ? "Bugun kelganlar" : lang === "ru" ? "Пришли сегодня" : "Present Today"} value={presentToday} Icon={ClipboardCheck} tint="emerald" />
-          <StatCard label={lang === "uz" ? "Tasdiqlash kutilmoqda" : lang === "ru" ? "Ожидают подтверждения" : "Pending Approval"} value={pending} Icon={Clock} tint="amber" />
+          <StatCard label={t.total_students} value={myStudents.length} Icon={Users} tint="primary" />
+          <StatCard label={t.present_today} value={presentToday} Icon={ClipboardCheck} tint="emerald" />
+          <StatCard label={t.pending_approval} value={pending} Icon={Clock} tint="amber" />
         </section>
 
         {/* Content grid */}
         <section className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,320px)_minmax(0,1fr)]">
           {/* Student list */}
           <div className="bg-white/80 border border-slate-150/60 rounded-[28px] p-4 shadow-xl shadow-slate-100/50 backdrop-blur-md">
-            <h2 className="mb-3 px-2 text-xs font-bold text-slate-500 uppercase tracking-wider">{lang === "uz" ? "Biriktirilgan talabalar" : lang === "ru" ? "Прикрепленные студенты" : "Assigned Students"}</h2>
+            <h2 className="mb-3 px-2 text-xs font-bold text-slate-500 uppercase tracking-wider">{t.assigned_students}</h2>
             <div className="space-y-1.5">
               {myStudents.map((s) => {
                 const present = logs.some(
@@ -185,11 +280,11 @@ export function MentorView({ onLogout }: { onLogout?: () => void }) {
                         selectedLogs
                           .filter((l) => l.status === "pending")
                           .forEach((l) => updateLog(l.id, { status: "approved" }));
-                        toast.success(lang === "uz" ? "Haftalik hisobot tasdiqlandi" : lang === "ru" ? "Еженедельный отчет подтвержден" : "Weekly report approved");
+                        toast.success(t.toast_weekly_approved);
                       }}
                       className="gradient-primary text-white text-xs font-bold rounded-[14px] h-10 shadow-md shadow-primary/20 hover:shadow-lg active:scale-95 transition-all"
                     >
-                      <Check className="mr-1.5 h-4 w-4" /> {lang === "uz" ? "Haftalik hisobotni tasdiqlash" : lang === "ru" ? "Подтвердить еженедельный отчет" : "Approve Weekly Report"}
+                      <Check className="mr-1.5 h-4 w-4" /> {t.approve_weekly}
                     </Button>
                   </div>
 
@@ -205,7 +300,7 @@ export function MentorView({ onLogout }: { onLogout?: () => void }) {
                               </span>
                             ) : (
                               <Badge variant="outline" className="bg-rose-50 border-rose-100 text-rose-700 font-bold text-xs rounded-lg px-2 py-0.5">
-                                {lang === "uz" ? "Kelmagan" : lang === "ru" ? "Не пришел" : "Absent"}
+                                {t.absent}
                               </Badge>
                             )}
                           </div>
@@ -220,16 +315,16 @@ export function MentorView({ onLogout }: { onLogout?: () => void }) {
                             }`}
                           >
                             {l.status === "approved"
-                              ? (lang === "uz" ? "Tasdiqlangan" : lang === "ru" ? "Подтверждено" : "Approved")
+                              ? t.approved
                               : l.status === "rejected"
-                                ? (lang === "uz" ? "Rad etilgan" : lang === "ru" ? "Отклонено" : "Rejected")
-                                : (lang === "uz" ? "Kutilmoqda" : lang === "ru" ? "В ожидании" : "Pending")}
+                                ? t.rejected
+                                : t.pending}
                           </Badge>
                         </div>
                         {l.report && <p className="mt-2 text-xs font-semibold text-slate-800 leading-relaxed bg-slate-50/50 p-2.5 rounded-xl border border-slate-100/50">{l.report}</p>}
                         {l.rejectionReason && (
                           <p className="mt-2 text-xs font-bold text-rose-600 bg-rose-50/30 p-2 rounded-lg border border-rose-100/40">
-                            {lang === "uz" ? "Rad etilganlik sababi" : lang === "ru" ? "Причина отклонения" : "Rejection reason"}: {l.rejectionReason}
+                            {t.rejection_reason}: {l.rejectionReason}
                           </p>
                         )}
                         {l.status === "pending" && l.report && (
@@ -239,10 +334,10 @@ export function MentorView({ onLogout }: { onLogout?: () => void }) {
                               className="bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold rounded-xl px-3 py-1.5 shadow-sm active:scale-95 transition-all"
                               onClick={() => {
                                 updateLog(l.id, { status: "approved" });
-                                toast.success(lang === "uz" ? "Kunlik hisobot tasdiqlandi" : lang === "ru" ? "Отчет подтвержден" : "Daily report approved");
+                                toast.success(t.toast_daily_approved);
                               }}
                             >
-                              <Check className="mr-1 h-3.5 w-3.5" /> {lang === "uz" ? "Tasdiqlash" : lang === "ru" ? "Подтвердить" : "Approve"}
+                              <Check className="mr-1 h-3.5 w-3.5" /> {t.approve}
                             </Button>
                             <Button
                               size="sm"
@@ -253,7 +348,7 @@ export function MentorView({ onLogout }: { onLogout?: () => void }) {
                                 setRejectReason("");
                               }}
                             >
-                              <X className="mr-1 h-3.5 w-3.5" /> {lang === "uz" ? "Rad etish" : lang === "ru" ? "Отклонить" : "Reject"}
+                              <X className="mr-1 h-3.5 w-3.5" /> {t.reject}
                             </Button>
                           </div>
                         )}
@@ -264,10 +359,10 @@ export function MentorView({ onLogout }: { onLogout?: () => void }) {
 
                 {/* Evaluation */}
                 <div className="bg-white/80 border border-slate-150/60 rounded-[28px] p-6 shadow-xl shadow-slate-100/50 backdrop-blur-md animate-fade-up">
-                  <h3 className="mb-4 text-sm font-bold text-slate-800 tracking-tight">{lang === "uz" ? "Yakuniy baholash" : lang === "ru" ? "Итоговая оценка" : "Final Evaluation"}</h3>
+                  <h3 className="mb-4 text-sm font-bold text-slate-800 tracking-tight">{t.final_evaluation}</h3>
                   <div className="mb-4">
                     <div className="mb-3 flex items-center justify-between">
-                      <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">{lang === "uz" ? "Baho (Reyting)" : lang === "ru" ? "Оценка (Рейтинг)" : "Rating"}</span>
+                      <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">{t.rating}</span>
                       <div className="flex items-center gap-1">
                         {[1, 2, 3, 4, 5].map((n) => (
                           <Star
@@ -283,7 +378,7 @@ export function MentorView({ onLogout }: { onLogout?: () => void }) {
                     <Slider min={1} max={5} step={1} value={rating} onValueChange={setRating} className="py-2" />
                   </div>
                   <Textarea
-                    placeholder={lang === "uz" ? "Talaba haqida taqriz/fikr-mulohaza yozing…" : lang === "ru" ? "Напишите отзыв о студенте…" : "Write feedback about the student..."}
+                    placeholder={t.feedback_placeholder}
                     value={feedback}
                     onChange={(e) => setFeedback(e.target.value)}
                     className="min-h-[100px] rounded-2xl border-slate-200 text-xs font-semibold focus-visible:ring-primary focus-visible:border-primary p-4"
@@ -292,10 +387,10 @@ export function MentorView({ onLogout }: { onLogout?: () => void }) {
                     className="gradient-primary mt-3 h-11 w-full text-white text-xs font-bold rounded-[14px] shadow-md shadow-primary/20 hover:shadow-lg active:scale-95 transition-all"
                     onClick={() => {
                       setStudentEvaluation(selected.id, rating[0], feedback);
-                      toast.success(lang === "uz" ? "Baholash muvaffaqiyatli saqlandi" : lang === "ru" ? "Оценка успешно сохранена" : "Evaluation saved successfully");
+                      toast.success(t.toast_evaluation_saved);
                     }}
                   >
-                    {lang === "uz" ? "Bahoni saqlash" : lang === "ru" ? "Сохранить оценку" : "Save Evaluation"}
+                    {t.save_evaluation}
                   </Button>
                 </div>
               </>
@@ -307,29 +402,29 @@ export function MentorView({ onLogout }: { onLogout?: () => void }) {
       <Dialog open={!!rejectLog} onOpenChange={(o) => !o && setRejectLog(null)}>
         <DialogContent className="rounded-3xl border border-slate-150 bg-white p-6 shadow-2xl">
           <DialogHeader>
-            <DialogTitle className="text-base font-bold text-slate-800">{lang === "uz" ? "Kunlik hisobotni rad etish" : lang === "ru" ? "Отклонение отчета" : "Reject Daily Report"}</DialogTitle>
+            <DialogTitle className="text-base font-bold text-slate-800">{t.reject_report_title}</DialogTitle>
           </DialogHeader>
           <Textarea
-            placeholder={lang === "uz" ? "Rad etish sababini kiriting…" : lang === "ru" ? "Введите причину отклонения…" : "Enter rejection reason..."}
+            placeholder={t.reject_reason_placeholder}
             value={rejectReason}
             onChange={(e) => setRejectReason(e.target.value)}
             className="min-h-[120px] rounded-2xl border-slate-200 text-xs font-semibold focus-visible:ring-primary p-4"
           />
           <DialogFooter className="flex gap-2">
             <Button variant="outline" onClick={() => setRejectLog(null)} className="rounded-xl font-bold text-xs">
-              {lang === "uz" ? "Bekor qilish" : lang === "ru" ? "Отмена" : "Cancel"}
+              {t.cancel}
             </Button>
             <Button
               variant="destructive"
               className="bg-rose-500 hover:bg-rose-600 text-white rounded-xl font-bold text-xs shadow-sm"
               onClick={() => {
-                if (!rejectReason.trim()) return toast.error(lang === "uz" ? "Iltimos, rad etish sababini kiriting" : lang === "ru" ? "Пожалуйста, введите причину" : "Please enter reason");
+                if (!rejectReason.trim()) return toast.error(t.toast_enter_reason);
                 updateLog(rejectLog!, { status: "rejected", rejectionReason: rejectReason });
                 setRejectLog(null);
-                toast.success(lang === "uz" ? "Hisobot rad etildi" : lang === "ru" ? "Отчет отклонен" : "Report rejected");
+                toast.success(t.toast_daily_rejected);
               }}
             >
-              {lang === "uz" ? "Rad etishni tasdiqlash" : lang === "ru" ? "Подтвердить отклонение" : "Confirm Rejection"}
+              {t.confirm_rejection}
             </Button>
           </DialogFooter>
         </DialogContent>

@@ -33,6 +33,159 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { useIms } from "./store";
 import type { Student } from "@/lib/ims-data";
 
+const DICTIONARY = {
+  uz: {
+    role: "Koordinator (Admin)",
+    subtitle: "Talabalar Amaliyoti Platformasi",
+    attendance_rate: "Davomat ko'rsatkichi",
+    active_students: "Faol talabalar",
+    partner_orgs: "Hamkor tashkilotlar",
+    fraud_situations: "Shubhali vaziyatlar",
+    attendance_chart_title: "Davomat — oxirgi 7 kun",
+    present_chart: "Kelgan",
+    absent_chart: "Kelmagan",
+    students_by_org: "Tashkilotlar bo'yicha talabalar",
+    best_orgs: "Eng yaxshi ko'rsatkichga ega tashkilotlar",
+    assign_title: "Talabalarni tashkilot va mentorlarga biriktirish",
+    student_col: "Talaba",
+    group_col: "Guruh",
+    org_col: "Amaliyot joyi (Tashkilot)",
+    mentor_col: "Tashkilot mentori (Rahbar)",
+    rating_col: "Baho (Reyting)",
+    no_fraud: "Hozircha hech qanday shubhali holat aniqlanmadi.",
+    dismiss: "Yopish",
+    toast_assigned: "yangi tashkilotga o'tkazildi",
+    toast_mentor_updated: "Mentor yangilandi",
+    toast_alert_dismissed: "Ogohlantirish yopildi",
+    logout_success: "Tizimdan chiqdingiz",
+    logout: "Chiqish",
+    import_drag_drop: "Excel yoki CSV formatidagi talabalar ro'yxatini shu yerga yuklang",
+    import_click_sim: "yoki kompyuterdan tanlash uchun bosing (simulyatsiya qilish uchun)",
+    import_supported: "Qo'llab-quvvatlanadi: .xlsx, .csv",
+    import_loading: "Talabalar ro'yxati yuklanmoqda (students.xlsx)…",
+    import_uploaded: "Muvaffaqiyatli yuklandi",
+    import_list_title: "Yuklangan talabalar ro'yxati",
+    import_total_count: "Jami talabalar soni",
+    import_credentials_info: "Boshlang'ich hisob ma'lumotlari: Login = telefon raqami, Parol = tug'ilgan kuni (KUNOYIL formatida)",
+    import_name: "Ism-familiya",
+    import_login: "Login (Telefon)",
+    import_pwd: "Boshlang'ich parol",
+    toast_imported: "talabalar yuklandi",
+    filters_title: "Filtrlar",
+    filter_group: "Guruh",
+    filter_org: "Tashkilot",
+    all_groups: "Barcha guruhlar",
+    all_orgs: "Barcha tashkilotlar",
+    download_report: "Hisobotni yuklab olish",
+    toast_report_exported: "Hisobot eksport qilindi",
+    report_preview: "Hisobot ko'rinishi",
+    report_system_title: "Talabalar amaliyoti monitoring tizimi",
+    report_doc_title: "Davomat va natijalar hisoboti",
+    report_created_at: "Yaratilgan vaqti",
+    no_report_data: "Filtrga mos keladigan ma'lumot topilmadi."
+  },
+  ru: {
+    role: "Координатор (Админ)",
+    subtitle: "Платформа практики студентов",
+    attendance_rate: "Показатель посещаемости",
+    active_students: "Активные студенты",
+    partner_orgs: "Партнерские организации",
+    fraud_situations: "Подозрительные ситуации",
+    attendance_chart_title: "Посещаемость — последние 7 дней",
+    present_chart: "Присутствовали",
+    absent_chart: "Отсутствовали",
+    students_by_org: "Студенты по организациям",
+    best_orgs: "Организации с лучшими показателями",
+    assign_title: "Распределение студентов по организациям и менторам",
+    student_col: "Студент",
+    group_col: "Группа",
+    org_col: "Место практики (Организация)",
+    mentor_col: "Ментор организации (Руководитель)",
+    rating_col: "Оценка (Рейтинг)",
+    no_fraud: "Подозрительных ситуаций пока не обнаружено.",
+    dismiss: "Закрыть",
+    toast_assigned: "переведен в новую организацию",
+    toast_mentor_updated: "Ментор обновлен",
+    toast_alert_dismissed: "Предупреждение закрыто",
+    logout_success: "Вы вышли из системы",
+    logout: "Выйти",
+    import_drag_drop: "Перетащите список студентов в формате Excel или CSV сюда",
+    import_click_sim: "или нажмите для выбора с компьютера (для симуляции)",
+    import_supported: "Поддерживается: .xlsx, .csv",
+    import_loading: "Загрузка списка студентов (students.xlsx)…",
+    import_uploaded: "Успешно загружено",
+    import_list_title: "Загруженный список студентов",
+    import_total_count: "Общее количество студентов",
+    import_credentials_info: "Первоначальные данные: Логин = номер телефона, Пароль = дата рождения (в формате ДДММГГГГ)",
+    import_name: "Имя и фамилия",
+    import_login: "Логин (Телефон)",
+    import_pwd: "Первоначальный пароль",
+    toast_imported: "студентов импортировано",
+    filters_title: "Фильтры",
+    filter_group: "Группа",
+    filter_org: "Организация",
+    all_groups: "Все группы",
+    all_orgs: "Все организации",
+    download_report: "Скачать отчет",
+    toast_report_exported: "Отчет экспортирован",
+    report_preview: "Просмотр отчета",
+    report_system_title: "Система мониторинга студенческой практики",
+    report_doc_title: "Отчет о посещаемости и результатах",
+    report_created_at: "Время создания",
+    no_report_data: "Данные, соответствующие фильтру, не найдены."
+  },
+  en: {
+    role: "Coordinator (Admin)",
+    subtitle: "Student Internship Platform",
+    attendance_rate: "Attendance Rate",
+    active_students: "Active Students",
+    partner_orgs: "Partner Organizations",
+    fraud_situations: "Suspicious Situations",
+    attendance_chart_title: "Attendance — Last 7 Days",
+    present_chart: "Present",
+    absent_chart: "Absent",
+    students_by_org: "Students by Organization",
+    best_orgs: "Organizations with Best Performance",
+    assign_title: "Assign Students to Organizations & Mentors",
+    student_col: "Student",
+    group_col: "Group",
+    org_col: "Internship Place (Organization)",
+    mentor_col: "Organization Mentor (Leader)",
+    rating_col: "Rating",
+    no_fraud: "No suspicious situations detected yet.",
+    dismiss: "Dismiss",
+    toast_assigned: "assigned to new organization",
+    toast_mentor_updated: "Mentor updated",
+    toast_alert_dismissed: "Alert dismissed",
+    logout_success: "Logged out successfully",
+    logout: "Logout",
+    import_drag_drop: "Upload student list in Excel or CSV format here",
+    import_click_sim: "or click to select from computer (for simulation)",
+    import_supported: "Supported: .xlsx, .csv",
+    import_loading: "Uploading student list (students.xlsx)…",
+    import_uploaded: "Uploaded successfully",
+    import_list_title: "Uploaded Student List",
+    import_total_count: "Total students",
+    import_credentials_info: "Initial credentials: Login = phone number, Password = date of birth (DDMMYYYY format)",
+    import_name: "Full Name",
+    import_login: "Login (Phone)",
+    import_pwd: "Initial Password",
+    toast_imported: "students imported",
+    filters_title: "Filters",
+    filter_group: "Group",
+    filter_org: "Organization",
+    all_groups: "All Groups",
+    all_orgs: "All Organizations",
+    download_report: "Download Report",
+    toast_report_exported: "Report exported",
+    report_preview: "Report Preview",
+    report_system_title: "Student Internship Monitoring System",
+    report_doc_title: "Attendance and Results Report",
+    report_created_at: "Created at",
+    no_report_data: "No data matching the filter was found."
+  }
+};
+
 export function AdminView({ onLogout }: { onLogout?: () => void }) {
   const { students, orgs, mentors, logs, alerts, addStudents, assignStudent, dismissAlert, lang } = useIms();
 
@@ -70,11 +223,7 @@ export function AdminView({ onLogout }: { onLogout?: () => void }) {
 
   const [profileOpen, setProfileOpen] = useState(false);
 
-  const getRoleLabel = () => {
-    if (lang === "ru") return "Администратор";
-    if (lang === "en") return "Administrator";
-    return "Koordinator (Admin)";
-  };
+  const t = DICTIONARY[lang];
 
   return (
     <div className="relative min-h-screen w-full bg-white text-foreground overflow-x-hidden pb-8">
@@ -97,7 +246,7 @@ export function AdminView({ onLogout }: { onLogout?: () => void }) {
                 {lang === "uz" ? "Platforma koordinatori" : lang === "ru" ? "Координатор платформы" : "Platform Coordinator"}
               </h1>
               <div className="flex items-center gap-1.5 mt-1.5 text-xs font-bold text-slate-500">
-                <span>{lang === "uz" ? "Talabalar Amaliyoti Platformasi" : lang === "ru" ? "Платформа практики студентов" : "Student Internship Platform"}</span>
+                <span>{t.subtitle}</span>
               </div>
             </div>
           </div>
@@ -120,7 +269,7 @@ export function AdminView({ onLogout }: { onLogout?: () => void }) {
                 </div>
                 <div className="hidden sm:block text-left">
                   <p className="text-xs font-extrabold text-slate-800 leading-none">Admin</p>
-                  <p className="text-xs font-semibold text-slate-400 mt-0.5">{getRoleLabel()}</p>
+                  <p className="text-xs font-semibold text-slate-400 mt-0.5">{t.role}</p>
                 </div>
                 <span className="text-slate-400 text-xs ml-0.5">▼</span>
               </div>
@@ -130,12 +279,12 @@ export function AdminView({ onLogout }: { onLogout?: () => void }) {
                   <button
                     onClick={() => {
                       if (onLogout) onLogout();
-                      toast.success(lang === "uz" ? "Tizimdan chiqdingiz" : lang === "ru" ? "Вы вышли из системы" : "Logged out successfully");
+                      toast.success(t.logout_success);
                     }}
                     className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-xs font-bold text-rose-600 hover:bg-rose-50/50 active:scale-95 transition-all"
                   >
                     <IconsaxLogout className="h-4 w-4 text-rose-600 shrink-0" />
-                    <span>{lang === "uz" ? "Chiqish" : lang === "ru" ? "Выйти" : "Logout"}</span>
+                    <span>{t.logout}</span>
                   </button>
                 </div>
               )}
@@ -155,230 +304,231 @@ export function AdminView({ onLogout }: { onLogout?: () => void }) {
               </TabsList>
             </div>
 
-          {/* OVERVIEW */}
-          <TabsContent value="overview" className="space-y-6">
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              <MetricCard label="Davomat ko'rsatkichi" value={`${rate}%`} Icon={GaugeCircle} tint="primary" progress={rate} />
-              <MetricCard label="Faol talabalar" value={students.length} Icon={Users} tint="emerald" />
-              <MetricCard label="Hamkor tashkilotlar" value={orgs.length} Icon={Building2} tint="amber" />
-              <MetricCard label="Shubhali vaziyatlar" value={alerts.length} Icon={AlertTriangle} tint="rose" />
-            </div>
-
-            <div className="grid gap-6 lg:grid-cols-3">
-              <div className="glass rounded-3xl p-6 lg:col-span-2 animate-fade-up">
-                <h3 className="mb-4 text-sm font-semibold text-muted-foreground">Davomat — oxirgi 7 kun</h3>
-                <div className="h-64">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={attendanceData}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" opacity={0.4} />
-                      <XAxis dataKey="day" stroke="var(--color-muted-foreground)" fontSize={12} />
-                      <YAxis stroke="var(--color-muted-foreground)" fontSize={12} />
-                      <Tooltip
-                        contentStyle={{
-                          background: "var(--color-card)",
-                          border: "1px solid var(--color-border)",
-                          borderRadius: "12px",
-                        }}
-                      />
-                      <Bar dataKey="present" fill="oklch(0.55 0.19 275)" name="Kelgan" radius={[6, 6, 0, 0]} />
-                      <Bar dataKey="absent" fill="oklch(0.7 0.2 25)" name="Kelmagan" radius={[6, 6, 0, 0]} />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
+            {/* OVERVIEW */}
+            <TabsContent value="overview" className="space-y-6">
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                <MetricCard label={t.attendance_rate} value={`${rate}%`} Icon={GaugeCircle} tint="primary" progress={rate} />
+                <MetricCard label={t.active_students} value={students.length} Icon={Users} tint="emerald" />
+                <MetricCard label={t.partner_orgs} value={orgs.length} Icon={Building2} tint="amber" />
+                <MetricCard label={t.fraud_situations} value={alerts.length} Icon={AlertTriangle} tint="rose" />
               </div>
-              <div className="glass rounded-3xl p-6 animate-fade-up">
-                <h3 className="mb-4 text-sm font-semibold text-muted-foreground">Tashkilotlar bo'yicha talabalar</h3>
-                <div className="h-64">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie data={pieData} dataKey="value" nameKey="name" innerRadius={45} outerRadius={80} paddingAngle={3}>
-                        {pieData.map((_, i) => (
-                          <Cell key={i} fill={pieColors[i % pieColors.length]} />
-                        ))}
-                      </Pie>
-                      <Tooltip
-                        contentStyle={{
-                          background: "var(--color-card)",
-                          border: "1px solid var(--color-border)",
-                          borderRadius: "12px",
-                        }}
-                      />
-                    </PieChart>
-                  </ResponsiveContainer>
-                </div>
-                <div className="mt-2 space-y-1">
-                  {pieData.map((p, i) => (
-                    <div key={p.name} className="flex items-center justify-between text-xs">
-                      <div className="flex min-w-0 items-center gap-2">
-                        <span className="h-2 w-2 shrink-0 rounded-full" style={{ background: pieColors[i] }} />
-                        <span className="truncate">{p.name}</span>
-                      </div>
-                      <span className="font-semibold">{p.value}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
 
-            <div className="glass rounded-3xl p-6 animate-fade-up">
-              <h3 className="mb-4 text-sm font-semibold text-muted-foreground">Eng yaxshi ko'rsatkichga ega tashkilotlar</h3>
-              <div className="space-y-3">
-                {orgData
-                  .sort((a, b) => b.performance - a.performance)
-                  .map((o) => (
-                    <div key={o.name} className="flex items-center gap-4">
-                      <div className="w-32 shrink-0 truncate text-sm font-medium">{o.name}</div>
-                      <div className="min-w-0 flex-1">
-                        <Progress value={o.performance} />
-                      </div>
-                      <div className="w-14 shrink-0 text-right text-sm font-bold">{o.performance}%</div>
-                    </div>
-                  ))}
-              </div>
-            </div>
-          </TabsContent>
-
-          {/* IMPORT */}
-          <TabsContent value="import">
-            <ImportTab
-              onImport={(newOnes) => {
-                addStudents(newOnes);
-                toast.success(`${newOnes.length} students imported`);
-              }}
-              students={students}
-            />
-          </TabsContent>
-
-          {/* ASSIGNMENTS */}
-          <TabsContent value="assign">
-            <div className="glass rounded-3xl p-6">
-              <h3 className="mb-4 text-base font-semibold">Talabalarni tashkilot va mentorlarga biriktirish</h3>
-              <div className="overflow-x-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Talaba</TableHead>
-                      <TableHead>Guruh</TableHead>
-                      <TableHead>Amaliyot joyi (Tashkilot)</TableHead>
-                      <TableHead>Tashkilot mentori (Rahbar)</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {students.map((s) => (
-                      <TableRow key={s.id}>
-                        <TableCell className="font-medium">
-                          <div className="flex items-center gap-2">
-                            <div className="grid h-8 w-8 place-items-center rounded-full bg-secondary text-xs font-bold">
-                              {s.avatar}
-                            </div>
-                            {s.name}
-                          </div>
-                        </TableCell>
-                        <TableCell>{s.group}</TableCell>
-                        <TableCell>
-                          <Select
-                            value={s.organizationId}
-                            onValueChange={(orgId) => {
-                              const firstMentor = mentors.find((m) => m.organizationId === orgId);
-                              assignStudent(s.id, orgId, firstMentor?.id ?? s.mentorId);
-                              toast.success(`${s.name} yangi tashkilotga o'tkazildi`);
-                            }}
-                          >
-                            <SelectTrigger className="w-[180px]">
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {orgs.map((o) => (
-                                <SelectItem key={o.id} value={o.id}>{o.name}</SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </TableCell>
-                        <TableCell>
-                          <Select
-                            value={s.mentorId}
-                            onValueChange={(mid) => {
-                              assignStudent(s.id, s.organizationId, mid);
-                              toast.success("Mentor yangilandi");
-                            }}
-                          >
-                            <SelectTrigger className="w-[200px]">
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {mentors
-                                .filter((m) => m.organizationId === s.organizationId)
-                                .map((m) => (
-                                  <SelectItem key={m.id} value={m.id}>{m.name}</SelectItem>
-                                ))}
-                            </SelectContent>
-                          </Select>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-            </div>
-          </TabsContent>
-
-          {/* FRAUD */}
-          <TabsContent value="fraud">
-            <div className="space-y-3">
-              {alerts.length === 0 && (
-                <div className="glass rounded-3xl p-10 text-center text-muted-foreground">
-                  Hozircha hech qanday shubhali holat aniqlanmadi.
-                </div>
-              )}
-              {alerts.map((a) => {
-                const severityStyle =
-                  a.severity === "high"
-                    ? "border-destructive/40 bg-destructive/5"
-                    : a.severity === "medium"
-                      ? "border-amber-500/40 bg-amber-500/5"
-                      : "border-primary/30 bg-primary/5";
-                return (
-                  <div key={a.id} className={`glass flex flex-wrap items-start gap-4 rounded-3xl border p-5 ${severityStyle}`}>
-                    <div className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-card">
-                      <AlertTriangle
-                        className={
-                          a.severity === "high"
-                            ? "h-5 w-5 text-destructive"
-                            : a.severity === "medium"
-                              ? "h-5 w-5 text-amber-600"
-                              : "h-5 w-5 text-primary"
-                        }
-                      />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <h4 className="text-sm font-semibold">{a.title}</h4>
-                        <Badge variant="outline" className="uppercase">{a.severity}</Badge>
-                      </div>
-                      <p className="mt-1 text-sm text-muted-foreground">{a.detail}</p>
-                    </div>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => {
-                        dismissAlert(a.id);
-                        toast.success("Ogohlantirish yopildi");
-                      }}
-                    >
-                      Yopish
-                    </Button>
+              <div className="grid gap-6 lg:grid-cols-3">
+                <div className="glass rounded-3xl p-6 lg:col-span-2 animate-fade-up">
+                  <h3 className="mb-4 text-sm font-semibold text-muted-foreground">{t.attendance_chart_title}</h3>
+                  <div className="h-64">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart data={attendanceData}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" opacity={0.4} />
+                        <XAxis dataKey="day" stroke="var(--color-muted-foreground)" fontSize={12} />
+                        <YAxis stroke="var(--color-muted-foreground)" fontSize={12} />
+                        <Tooltip
+                          contentStyle={{
+                            background: "var(--color-card)",
+                            border: "1px solid var(--color-border)",
+                            borderRadius: "12px",
+                          }}
+                        />
+                        <Bar dataKey="present" fill="oklch(0.55 0.19 275)" name={t.present_chart} radius={[6, 6, 0, 0]} />
+                        <Bar dataKey="absent" fill="oklch(0.7 0.2 25)" name={t.absent_chart} radius={[6, 6, 0, 0]} />
+                      </BarChart>
+                    </ResponsiveContainer>
                   </div>
-                );
-              })}
-            </div>
-          </TabsContent>
+                </div>
+                <div className="glass rounded-3xl p-6 animate-fade-up">
+                  <h3 className="mb-4 text-sm font-semibold text-muted-foreground">{t.students_by_org}</h3>
+                  <div className="h-64">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <PieChart>
+                        <Pie data={pieData} dataKey="value" nameKey="name" innerRadius={45} outerRadius={80} paddingAngle={3}>
+                          {pieData.map((_, i) => (
+                            <Cell key={i} fill={pieColors[i % pieColors.length]} />
+                          ))}
+                        </Pie>
+                        <Tooltip
+                          contentStyle={{
+                            background: "var(--color-card)",
+                            border: "1px solid var(--color-border)",
+                            borderRadius: "12px",
+                          }}
+                        />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  </div>
+                  <div className="mt-2 space-y-1">
+                    {pieData.map((p, i) => (
+                      <div key={p.name} className="flex items-center justify-between text-xs">
+                        <div className="flex min-w-0 items-center gap-2">
+                          <span className="h-2 w-2 shrink-0 rounded-full" style={{ background: pieColors[i] }} />
+                          <span className="truncate">{p.name}</span>
+                        </div>
+                        <span className="font-semibold">{p.value}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
 
-          {/* REPORTS */}
-          <TabsContent value="reports">
-            <ReportsTab />
-          </TabsContent>
-        </Tabs>
-      </main>
+              <div className="glass rounded-3xl p-6 animate-fade-up">
+                <h3 className="mb-4 text-sm font-semibold text-muted-foreground">{t.best_orgs}</h3>
+                <div className="space-y-3">
+                  {orgData
+                    .sort((a, b) => b.performance - a.performance)
+                    .map((o) => (
+                      <div key={o.name} className="flex items-center gap-4">
+                        <div className="w-32 shrink-0 truncate text-sm font-medium">{o.name}</div>
+                        <div className="min-w-0 flex-1">
+                          <Progress value={o.performance} />
+                        </div>
+                        <div className="w-14 shrink-0 text-right text-sm font-bold">{o.performance}%</div>
+                      </div>
+                    ))}
+                </div>
+              </div>
+            </TabsContent>
+
+            {/* IMPORT */}
+            <TabsContent value="import">
+              <ImportTab
+                onImport={(newOnes) => {
+                  addStudents(newOnes);
+                  toast.success(`${newOnes.length} ${t.toast_imported}`);
+                }}
+                students={students}
+                dictionary={t}
+              />
+            </TabsContent>
+
+            {/* ASSIGNMENTS */}
+            <TabsContent value="assign">
+              <div className="glass rounded-3xl p-6">
+                <h3 className="mb-4 text-base font-semibold">{t.assign_title}</h3>
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>{t.student_col}</TableHead>
+                        <TableHead>{t.group_col}</TableHead>
+                        <TableHead>{t.org_col}</TableHead>
+                        <TableHead>{t.mentor_col}</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {students.map((s) => (
+                        <TableRow key={s.id}>
+                          <TableCell className="font-medium">
+                            <div className="flex items-center gap-2">
+                              <div className="grid h-8 w-8 place-items-center rounded-full bg-secondary text-xs font-bold">
+                                {s.avatar}
+                              </div>
+                              {s.name}
+                            </div>
+                          </TableCell>
+                          <TableCell>{s.group}</TableCell>
+                          <TableCell>
+                            <Select
+                              value={s.organizationId}
+                              onValueChange={(orgId) => {
+                                const firstMentor = mentors.find((m) => m.organizationId === orgId);
+                                assignStudent(s.id, orgId, firstMentor?.id ?? s.mentorId);
+                                toast.success(`${s.name} ${t.toast_assigned}`);
+                              }}
+                            >
+                              <SelectTrigger className="w-[180px]">
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {orgs.map((o) => (
+                                  <SelectItem key={o.id} value={o.id}>{o.name}</SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </TableCell>
+                          <TableCell>
+                            <Select
+                              value={s.mentorId}
+                              onValueChange={(mid) => {
+                                assignStudent(s.id, s.organizationId, mid);
+                                toast.success(t.toast_mentor_updated);
+                              }}
+                            >
+                              <SelectTrigger className="w-[200px]">
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {mentors
+                                  .filter((m) => m.organizationId === s.organizationId)
+                                  .map((m) => (
+                                    <SelectItem key={m.id} value={m.id}>{m.name}</SelectItem>
+                                  ))}
+                              </SelectContent>
+                            </Select>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              </div>
+            </TabsContent>
+
+            {/* FRAUD */}
+            <TabsContent value="fraud">
+              <div className="space-y-3">
+                {alerts.length === 0 && (
+                  <div className="glass rounded-3xl p-10 text-center text-muted-foreground">
+                    {t.no_fraud}
+                  </div>
+                )}
+                {alerts.map((a) => {
+                  const severityStyle =
+                    a.severity === "high"
+                      ? "border-destructive/40 bg-destructive/5"
+                      : a.severity === "medium"
+                        ? "border-amber-500/40 bg-amber-500/5"
+                        : "border-primary/30 bg-primary/5";
+                  return (
+                    <div key={a.id} className={`glass flex flex-wrap items-start gap-4 rounded-3xl border p-5 ${severityStyle}`}>
+                      <div className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-card">
+                        <AlertTriangle
+                          className={
+                            a.severity === "high"
+                              ? "h-5 w-5 text-destructive"
+                              : a.severity === "medium"
+                                ? "h-5 w-5 text-amber-600"
+                                : "h-5 w-5 text-primary"
+                          }
+                        />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <h4 className="text-sm font-semibold">{a.title}</h4>
+                          <Badge variant="outline" className="uppercase">{a.severity}</Badge>
+                        </div>
+                        <p className="mt-1 text-sm text-muted-foreground">{a.detail}</p>
+                      </div>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          dismissAlert(a.id);
+                          toast.success(t.toast_alert_dismissed);
+                        }}
+                      >
+                        {t.dismiss}
+                      </Button>
+                    </div>
+                  );
+                })}
+              </div>
+            </TabsContent>
+
+            {/* REPORTS */}
+            <TabsContent value="reports">
+              <ReportsTab dictionary={t} />
+            </TabsContent>
+          </Tabs>
+        </main>
       </div>
     </div>
   );
@@ -431,9 +581,11 @@ const DUMMY_IMPORT: Omit<Student, "id">[] = [
 function ImportTab({
   onImport,
   students,
+  dictionary: t,
 }: {
   onImport: (s: Student[]) => void;
   students: Student[];
+  dictionary: any;
 }) {
   const [progress, setProgress] = useState(0);
   const [uploading, setUploading] = useState(false);
@@ -484,18 +636,18 @@ function ImportTab({
           <Upload className="h-6 w-6 text-white" />
         </div>
         <div>
-          <p className="text-base font-semibold">Excel yoki CSV formatidagi talabalar ro'yxatini shu yerga yuklang</p>
-          <p className="text-sm text-muted-foreground">yoki kompyuterdan tanlash uchun bosing (simulyatsiya qilish uchun)</p>
+          <p className="text-base font-semibold">{t.import_drag_drop}</p>
+          <p className="text-sm text-muted-foreground">{t.import_click_sim}</p>
         </div>
         <div className="flex items-center gap-2 text-xs text-muted-foreground">
-          <FileSpreadsheet className="h-4 w-4" /> Qo'llab-quvvatlanadi: .xlsx, .csv
+          <FileSpreadsheet className="h-4 w-4" /> {t.import_supported}
         </div>
       </div>
 
       {(uploading || progress > 0) && (
         <div className="glass rounded-3xl p-5 animate-fade-up">
           <div className="mb-2 flex items-center justify-between text-sm">
-            <span className="font-medium">{uploading ? "Talabalar ro'yxati yuklanmoqda (students.xlsx)…" : "Muvaffaqiyatli yuklandi"}</span>
+            <span className="font-medium">{uploading ? t.import_loading : t.import_uploaded}</span>
             <span className="text-muted-foreground">{progress}%</span>
           </div>
           <Progress value={progress} />
@@ -506,20 +658,20 @@ function ImportTab({
         <div className="glass rounded-3xl p-6 animate-fade-up">
           <div className="mb-3 flex items-center gap-2">
             <UserPlus className="h-4 w-4 text-primary" />
-            <h3 className="text-base font-semibold">Yuklangan talabalar ro'yxati ({imported.length})</h3>
-            <Badge variant="outline" className="ml-auto">Jami talabalar soni: {students.length}</Badge>
+            <h3 className="text-base font-semibold">{t.import_list_title} ({imported.length})</h3>
+            <Badge variant="outline" className="ml-auto">{t.import_total_count}: {students.length}</Badge>
           </div>
           <p className="mb-3 text-xs text-muted-foreground">
-            Boshlang'ich hisob ma'lumotlari: <strong>Login</strong> = telefon raqami, <strong>Parol</strong> = tug'ilgan kuni (KUNOYIL formatida)
+            {t.import_credentials_info}
           </p>
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Ism-familiya</TableHead>
-                  <TableHead>Guruh</TableHead>
-                  <TableHead>Login (Telefon)</TableHead>
-                  <TableHead>Boshlang'ich parol</TableHead>
+                  <TableHead>{t.import_name}</TableHead>
+                  <TableHead>{t.group_col}</TableHead>
+                  <TableHead>{t.import_login}</TableHead>
+                  <TableHead>{t.import_pwd}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -542,7 +694,7 @@ function ImportTab({
   );
 }
 
-function ReportsTab() {
+function ReportsTab({ dictionary: t }: { dictionary: any }) {
   const { students, orgs } = useIms();
   const [group, setGroup] = useState<string>("all");
   const [org, setOrg] = useState<string>("all");
@@ -554,56 +706,56 @@ function ReportsTab() {
   return (
     <div className="grid gap-6 lg:grid-cols-[minmax(0,320px)_minmax(0,1fr)]">
       <div className="glass rounded-3xl p-6">
-        <h3 className="mb-4 text-base font-semibold">Filtrlar</h3>
+        <h3 className="mb-4 text-base font-semibold">{t.filters_title}</h3>
         <div className="space-y-3">
           <div>
-            <label className="text-xs text-muted-foreground">Guruh</label>
+            <label className="text-xs text-muted-foreground">{t.filter_group}</label>
             <Select value={group} onValueChange={setGroup}>
               <SelectTrigger className="mt-1"><SelectValue /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">Barcha guruhlar</SelectItem>
+                <SelectItem value="all">{t.all_groups}</SelectItem>
                 {groups.map((g) => <SelectItem key={g} value={g}>{g}</SelectItem>)}
               </SelectContent>
             </Select>
           </div>
           <div>
-            <label className="text-xs text-muted-foreground">Tashkilot</label>
+            <label className="text-xs text-muted-foreground">{t.filter_org}</label>
             <Select value={org} onValueChange={setOrg}>
               <SelectTrigger className="mt-1"><SelectValue /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">Barcha tashkilotlar</SelectItem>
+                <SelectItem value="all">{t.all_orgs}</SelectItem>
                 {orgs.map((o) => <SelectItem key={o.id} value={o.id}>{o.name}</SelectItem>)}
               </SelectContent>
             </Select>
           </div>
           <Button
             className="gradient-primary mt-2 w-full text-white"
-            onClick={() => toast.success(`Hisobot eksport qilindi (${filtered.length} talaba)`)}
+            onClick={() => toast.success(`${t.toast_report_exported} (${filtered.length} ${t.student_col})`)}
           >
-            <Download className="mr-2 h-4 w-4" /> Hisobotni yuklab olish
+            <Download className="mr-2 h-4 w-4" /> {t.download_report}
           </Button>
         </div>
       </div>
 
       <div className="glass rounded-3xl p-6">
         <div className="mb-4 flex items-center justify-between">
-          <h3 className="text-base font-semibold">Hisobot ko'rinishi</h3>
+          <h3 className="text-base font-semibold">{t.report_preview}</h3>
           <Badge variant="outline">PDF / XLSX</Badge>
         </div>
         <div className="rounded-2xl bg-white p-6 text-slate-900 shadow-inner">
           <div className="mb-4 border-b pb-3">
-            <p className="text-xs uppercase tracking-widest text-slate-500">Talabalar amaliyoti monitoring tizimi</p>
-            <h2 className="text-xl font-bold">Davomat va natijalar hisoboti</h2>
-            <p className="text-xs text-slate-500">Yaratilgan vaqti: {new Date().toLocaleDateString()}</p>
+            <p className="text-xs uppercase tracking-widest text-slate-500">{t.report_system_title}</p>
+            <h2 className="text-xl font-bold">{t.report_doc_title}</h2>
+            <p className="text-xs text-slate-500">{t.report_created_at}: {new Date().toLocaleDateString()}</p>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead className="border-b text-left text-xs uppercase text-slate-500">
                 <tr>
-                  <th className="pb-2">Talaba</th>
-                  <th className="pb-2">Guruh</th>
-                  <th className="pb-2">Tashkilot</th>
-                  <th className="pb-2">Baho (Reyting)</th>
+                  <th className="pb-2">{t.student_col}</th>
+                  <th className="pb-2">{t.group_col}</th>
+                  <th className="pb-2">{t.org_col}</th>
+                  <th className="pb-2">{t.rating_col}</th>
                 </tr>
               </thead>
               <tbody>
@@ -619,7 +771,7 @@ function ReportsTab() {
             </table>
           </div>
           {filtered.length === 0 && (
-            <p className="py-8 text-center text-sm text-slate-500">Filtrga mos keladigan ma'lumot topilmadi.</p>
+            <p className="py-8 text-center text-sm text-slate-500">{t.no_report_data}</p>
           )}
         </div>
       </div>
