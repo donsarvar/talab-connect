@@ -244,14 +244,14 @@ export function RedesignedLogin({ onLogin }: RedesignedLoginProps) {
             </div>
           </div>
 
-          {/* Footer Copyright */}
-          <div className="pt-6 text-xs text-muted-foreground border-t border-slate-100 lg:border-t-0">
+          {/* Footer Copyright (Desktop Only) */}
+          <div className="hidden lg:block pt-6 text-xs text-muted-foreground border-t border-slate-100 lg:border-t-0">
             {t.copyright}
           </div>
         </div>
 
         {/* Right Side: Authentication */}
-        <div className="flex items-start justify-center pt-2 pb-8 lg:items-center lg:py-6 lg:h-full lg:col-span-7 w-full min-w-0">
+        <div className="flex flex-col items-center justify-start lg:justify-center pt-2 pb-8 lg:items-center lg:py-6 lg:h-full lg:col-span-7 w-full min-w-0">
           <div className="w-full max-w-[520px] animate-fade-up min-w-0">
             {/* Auth Card */}
             <div className="relative overflow-hidden rounded-[28px] border border-slate-100 bg-white/80 p-4 shadow-2xl shadow-slate-100 backdrop-blur-md sm:p-8 w-full">
@@ -441,6 +441,11 @@ export function RedesignedLogin({ onLogin }: RedesignedLoginProps) {
 
 
             </div>
+          </div>
+
+          {/* Mobile-only Footer Copyright */}
+          <div className="mt-8 text-center text-xs text-muted-foreground lg:hidden w-full px-4">
+            {t.copyright}
           </div>
         </div>
       </div>
