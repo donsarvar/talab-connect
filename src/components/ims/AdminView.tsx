@@ -32,8 +32,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { useIms } from "./store";
 import type { Student } from "@/lib/ims-data";
 
-export function AdminView() {
-  const { students, orgs, mentors, logs, alerts, addStudents, assignStudent, dismissAlert } = useIms();
+export function AdminView({ onLogout }: { onLogout?: () => void }) {
+  const { students, orgs, mentors, logs, alerts, addStudents, assignStudent, dismissAlert, lang } = useIms();
 
   const todayISO = new Date().toISOString().slice(0, 10);
   const presentToday = logs.filter((l) => l.date === todayISO && l.attendance === "present").length;
@@ -67,29 +67,92 @@ export function AdminView() {
   }));
   const pieColors = ["oklch(0.55 0.19 275)", "oklch(0.62 0.17 305)", "oklch(0.68 0.15 200)"];
 
-  return (
-    <div className="min-h-screen gradient-surface">
-      <header className="border-b border-border/60 bg-card/60 backdrop-blur">
-        <div className="mx-auto flex max-w-7xl items-center gap-4 px-6 py-4">
-          <div className="gradient-primary grid h-11 w-11 shrink-0 place-items-center rounded-2xl text-white">
-            <ShieldAlert className="h-5 w-5" />
-          </div>
-          <div className="min-w-0 flex-1">
-            <p className="text-xs text-muted-foreground">Koordinator nazorat paneli</p>
-            <h1 className="truncate text-lg font-bold">Talabalar Amaliyoti Platformasi</h1>
-          </div>
-        </div>
-      </header>
+  const [profileOpen, setProfileOpen] = useState(false);
 
-      <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-        <Tabs defaultValue="overview">
-          <TabsList className="glass mb-6 h-11 rounded-full p-1">
-            <TabsTrigger value="overview" className="rounded-full">Umumiy ma'lumotlar</TabsTrigger>
-            <TabsTrigger value="import" className="rounded-full">Ommaviy yuklash</TabsTrigger>
-            <TabsTrigger value="assign" className="rounded-full">Biriktirish</TabsTrigger>
-            <TabsTrigger value="fraud" className="rounded-full">Shubhali holatlar</TabsTrigger>
-            <TabsTrigger value="reports" className="rounded-full">Hisobotlar</TabsTrigger>
-          </TabsList>
+  const getRoleLabel = () => {
+    if (lang === "ru") return "Администратор";
+    if (lang === "en") return "Administrator";
+    return "Koordinator (Admin)";
+  };
+
+  return (
+    <div className="relative min-h-screen w-full bg-white text-foreground overflow-x-hidden pb-8">
+      {/* Premium Ambient Background */}
+      <div className="absolute inset-0 z-0 opacity-30 pointer-events-none overflow-hidden">
+        <div className="absolute top-[-10%] right-[-10%] h-[500px] w-[500px] rounded-full bg-[radial-gradient(circle,rgba(168,85,247,0.1),transparent_70%)] blur-[70px]" />
+        <div className="absolute bottom-[20%] left-[-10%] h-[500px] w-[500px] rounded-full bg-[radial-gradient(circle,rgba(99,102,241,0.06),transparent_70%)] blur-[70px]" />
+      </div>
+
+      <div className="relative z-10 w-full px-4 pt-4 sm:px-6 sm:pt-6 lg:px-8 lg:pt-8">
+        {/* Header Card Frame */}
+        <header className="bg-white/80 border border-slate-150/60 rounded-3xl p-4 shadow-xl shadow-slate-100/50 backdrop-blur-md flex items-center justify-between w-full mb-6">
+          {/* Left Side: Brand & Welcome */}
+          <div className="flex items-center gap-3">
+            <div className="gradient-primary flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-xs font-bold text-white shadow-md shadow-primary/25">
+              <ShieldAlert className="h-4.5 w-4.5" />
+            </div>
+            <div className="min-w-0">
+              <h1 className="text-sm font-extrabold text-slate-900 tracking-tight leading-none">
+                {lang === "uz" ? "Platforma koordinatori" : lang === "ru" ? "Координатор платформы" : "Platform Coordinator"}
+              </h1>
+              <div className="flex items-center gap-1.5 mt-1.5 text-[10px] font-bold text-slate-500">
+                <span>{lang === "uz" ? "Talabalar Amaliyoti Platformasi" : lang === "ru" ? "Платформа практики студентов" : "Student Internship Platform"}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Side: Bell & Profile Dropdown Frame */}
+          <div className="flex items-center gap-3">
+            {/* Bell Notification */}
+            <button className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-slate-150 bg-white text-slate-500 shadow-xs hover:bg-slate-50 active:scale-95 transition-all">
+              <Bell className="h-4 w-4 text-slate-500" />
+            </button>
+
+            {/* Separate Profile Frame Dropdown */}
+            <div className="relative">
+              <div 
+                onClick={() => setProfileOpen(!profileOpen)}
+                className="flex items-center gap-2.5 px-3 py-1.5 border border-slate-150 bg-white rounded-xl shadow-xs hover:border-slate-200 transition-all cursor-pointer select-none"
+              >
+                <div className="h-6.5 w-6.5 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-[10px] font-bold text-slate-600 shadow-xs">
+                  AD
+                </div>
+                <div className="hidden sm:block text-left">
+                  <p className="text-[11px] font-extrabold text-slate-800 leading-none">Admin</p>
+                  <p className="text-[9px] font-semibold text-slate-400 mt-0.5">{getRoleLabel()}</p>
+                </div>
+                <span className="text-slate-400 text-[8px] ml-0.5">▼</span>
+              </div>
+
+              {profileOpen && (
+                <div className="absolute right-0 top-full mt-2 w-44 rounded-2xl border border-slate-150/80 bg-white p-1.5 shadow-xl shadow-slate-200/50 z-30 animate-fade-in">
+                  <button
+                    onClick={() => {
+                      if (onLogout) onLogout();
+                      toast.success(lang === "uz" ? "Tizimdan chiqdingiz" : lang === "ru" ? "Вы вышли из системы" : "Logged out successfully");
+                    }}
+                    className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-xs font-bold text-rose-600 hover:bg-rose-50/50 active:scale-95 transition-all"
+                  >
+                    <span className="text-sm">🚪</span>
+                    <span>{lang === "uz" ? "Chiqish" : lang === "ru" ? "Выйти" : "Logout"}</span>
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        </header>
+
+        <main className="w-full">
+          <Tabs defaultValue="overview">
+            <div className="flex justify-start mb-6">
+              <TabsList className="bg-slate-50/80 p-1 rounded-xl border border-slate-100/50 flex gap-1 w-full max-w-3xl overflow-x-auto">
+                <TabsTrigger value="overview" className="rounded-lg py-2 px-4 text-xs font-bold data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-xs transition-all">{lang === "uz" ? "Umumiy ma'lumotlar" : lang === "ru" ? "Общая информация" : "Overview"}</TabsTrigger>
+                <TabsTrigger value="import" className="rounded-lg py-2 px-4 text-xs font-bold data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-xs transition-all">{lang === "uz" ? "Ommaviy yuklash" : lang === "ru" ? "Массовый импорт" : "Bulk Upload"}</TabsTrigger>
+                <TabsTrigger value="assign" className="rounded-lg py-2 px-4 text-xs font-bold data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-xs transition-all">{lang === "uz" ? "Biriktirish" : lang === "ru" ? "Распределение" : "Assign"}</TabsTrigger>
+                <TabsTrigger value="fraud" className="rounded-lg py-2 px-4 text-xs font-bold data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-xs transition-all">{lang === "uz" ? "Shubhali holatlar" : lang === "ru" ? "Подозрительные ситуации" : "Fraud Alerts"}</TabsTrigger>
+                <TabsTrigger value="reports" className="rounded-lg py-2 px-4 text-xs font-bold data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-xs transition-all">{lang === "uz" ? "Hisobotlar" : lang === "ru" ? "Отчеты" : "Reports"}</TabsTrigger>
+              </TabsList>
+            </div>
 
           {/* OVERVIEW */}
           <TabsContent value="overview" className="space-y-6">
@@ -315,6 +378,7 @@ export function AdminView() {
           </TabsContent>
         </Tabs>
       </main>
+      </div>
     </div>
   );
 }
@@ -334,21 +398,21 @@ function MetricCard({
 }) {
   const tintClass =
     tint === "primary"
-      ? "bg-primary/15 text-primary"
+      ? "bg-primary/5 text-primary border border-primary/10"
       : tint === "emerald"
-        ? "bg-emerald-500/15 text-emerald-600"
+        ? "bg-emerald-50 text-emerald-600 border border-emerald-100"
         : tint === "amber"
-          ? "bg-amber-500/15 text-amber-600"
-          : "bg-rose-500/15 text-rose-600";
+          ? "bg-amber-50 text-amber-600 border border-amber-100"
+          : "bg-rose-50 text-rose-600 border border-rose-100";
   return (
-    <div className="glass rounded-3xl p-5 animate-fade-up">
+    <div className="bg-white/80 border border-slate-150/60 rounded-3xl p-5 shadow-xl shadow-slate-100/50 backdrop-blur-md animate-fade-up">
       <div className="flex items-center gap-3">
         <div className={`grid h-11 w-11 shrink-0 place-items-center rounded-2xl ${tintClass}`}>
           <Icon className="h-5 w-5" />
         </div>
         <div className="min-w-0">
-          <p className="truncate text-xs text-muted-foreground">{label}</p>
-          <p className="text-2xl font-bold">{value}</p>
+          <p className="truncate text-xs font-bold text-slate-500 uppercase tracking-wider">{label}</p>
+          <p className="text-2xl font-extrabold text-slate-800 mt-1">{value}</p>
         </div>
       </div>
       {progress !== undefined && <Progress className="mt-3" value={progress} />}

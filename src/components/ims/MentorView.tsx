@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Check, Star, Users, X, ClipboardCheck, Clock } from "lucide-react";
+import { Check, Star, Users, X, ClipboardCheck, Clock, Bell } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -8,14 +8,15 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "
 import { Slider } from "@/components/ui/slider";
 import { useIms } from "./store";
 
-export function MentorView() {
-  const { mentors, currentMentorId, students, logs, orgs, updateLog, setStudentEvaluation } = useIms();
+export function MentorView({ onLogout }: { onLogout?: () => void }) {
+  const { mentors, currentMentorId, students, logs, orgs, updateLog, setStudentEvaluation, lang } = useIms();
   const mentor = mentors.find((m) => m.id === currentMentorId) ?? mentors[0];
   const org = orgs.find((o) => o.id === mentor.organizationId);
   const myStudents = students.filter((s) => mentor.studentIds.includes(s.id));
   const [selectedId, setSelectedId] = useState<string>(myStudents[0]?.id ?? "");
   const [rejectLog, setRejectLog] = useState<string | null>(null);
   const [rejectReason, setRejectReason] = useState("");
+  const [profileOpen, setProfileOpen] = useState(false);
 
   const selected = myStudents.find((s) => s.id === selectedId);
   const selectedLogs = useMemo(
@@ -39,33 +40,93 @@ export function MentorView() {
     setFeedback(s?.feedback ?? "");
   };
 
-  return (
-    <div className="min-h-screen gradient-surface">
-      <header className="border-b border-border/60 bg-card/60 backdrop-blur">
-        <div className="mx-auto flex max-w-7xl items-center gap-4 px-6 py-4">
-          <div className="gradient-primary grid h-11 w-11 shrink-0 place-items-center rounded-2xl text-sm font-bold text-white">
-            {mentor.avatar}
-          </div>
-          <div className="min-w-0 flex-1">
-            <p className="text-xs text-muted-foreground">Tashkilot rahbari · {org?.name}</p>
-            <h1 className="truncate text-lg font-bold">{mentor.name}</h1>
-          </div>
-        </div>
-      </header>
+  const getRoleLabel = () => {
+    if (lang === "ru") return "Руководитель";
+    if (lang === "en") return "Mentor";
+    return "Rahbar (Mentor)";
+  };
 
-      <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+  return (
+    <div className="relative min-h-screen w-full bg-white text-foreground overflow-x-hidden pb-8">
+      {/* Premium Ambient Background */}
+      <div className="absolute inset-0 z-0 opacity-30 pointer-events-none overflow-hidden">
+        <div className="absolute top-[-10%] right-[-10%] h-[500px] w-[500px] rounded-full bg-[radial-gradient(circle,rgba(168,85,247,0.1),transparent_70%)] blur-[70px]" />
+        <div className="absolute bottom-[20%] left-[-10%] h-[500px] w-[500px] rounded-full bg-[radial-gradient(circle,rgba(99,102,241,0.06),transparent_70%)] blur-[70px]" />
+      </div>
+
+      <div className="relative z-10 w-full px-4 pt-4 sm:px-6 sm:pt-6 lg:px-8 lg:pt-8">
+        {/* Header Card Frame */}
+        <header className="bg-white/80 border border-slate-150/60 rounded-3xl p-4 shadow-xl shadow-slate-100/50 backdrop-blur-md flex items-center justify-between w-full mb-6">
+          {/* Left Side: Brand & Welcome */}
+          <div className="flex items-center gap-3">
+            <div className="gradient-primary flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-xs font-bold text-white shadow-md shadow-primary/25">
+              {mentor.avatar}
+            </div>
+            <div className="min-w-0">
+              <h1 className="text-sm font-extrabold text-slate-900 tracking-tight leading-none">
+                {mentor.name}
+              </h1>
+              <div className="flex items-center gap-1.5 mt-1.5 text-[10px] font-bold text-slate-500">
+                <span>{lang === "uz" ? "Tashkilot rahbari" : lang === "ru" ? "Руководитель организации" : "Organization Mentor"} · {org?.name}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Side: Bell & Profile Dropdown Frame */}
+          <div className="flex items-center gap-3">
+            {/* Bell Notification */}
+            <button className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-slate-150 bg-white text-slate-500 shadow-xs hover:bg-slate-50 active:scale-95 transition-all">
+              <Bell className="h-4 w-4" />
+            </button>
+
+            {/* Separate Profile Frame Dropdown */}
+            <div className="relative">
+              <div 
+                onClick={() => setProfileOpen(!profileOpen)}
+                className="flex items-center gap-2.5 px-3 py-1.5 border border-slate-150 bg-white rounded-xl shadow-xs hover:border-slate-200 transition-all cursor-pointer select-none"
+              >
+                <img 
+                  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=256&auto=format&fit=crop" 
+                  alt={mentor.name}
+                  className="h-6.5 w-6.5 rounded-full object-cover border border-slate-100 shadow-xs"
+                />
+                <div className="hidden sm:block text-left">
+                  <p className="text-[11px] font-extrabold text-slate-800 leading-none">{mentor.name}</p>
+                  <p className="text-[9px] font-semibold text-slate-400 mt-0.5">{getRoleLabel()}</p>
+                </div>
+                <span className="text-slate-400 text-[8px] ml-0.5">▼</span>
+              </div>
+
+              {profileOpen && (
+                <div className="absolute right-0 top-full mt-2 w-44 rounded-2xl border border-slate-150/80 bg-white p-1.5 shadow-xl shadow-slate-200/50 z-30 animate-fade-in">
+                  <button
+                    onClick={() => {
+                      if (onLogout) onLogout();
+                      toast.success(lang === "uz" ? "Tizimdan chiqdingiz" : lang === "ru" ? "Вы вышли из системы" : "Logged out successfully");
+                    }}
+                    className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-xs font-bold text-rose-600 hover:bg-rose-50/50 active:scale-95 transition-all"
+                  >
+                    <span className="text-sm">🚪</span>
+                    <span>{lang === "uz" ? "Chiqish" : lang === "ru" ? "Выйти" : "Logout"}</span>
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        </header>
+
         {/* Stat cards */}
         <section className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-          <StatCard label="Jami talabalar" value={myStudents.length} Icon={Users} tint="primary" />
-          <StatCard label="Bugun kelganlar" value={presentToday} Icon={ClipboardCheck} tint="emerald" />
-          <StatCard label="Tasdiqlash kutilmoqda" value={pending} Icon={Clock} tint="amber" />
+          <StatCard label={lang === "uz" ? "Jami talabalar" : lang === "ru" ? "Всего студентов" : "Total Students"} value={myStudents.length} Icon={Users} tint="primary" />
+          <StatCard label={lang === "uz" ? "Bugun kelganlar" : lang === "ru" ? "Пришли сегодня" : "Present Today"} value={presentToday} Icon={ClipboardCheck} tint="emerald" />
+          <StatCard label={lang === "uz" ? "Tasdiqlash kutilmoqda" : lang === "ru" ? "Ожидают подтверждения" : "Pending Approval"} value={pending} Icon={Clock} tint="amber" />
         </section>
 
         {/* Content grid */}
         <section className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,320px)_minmax(0,1fr)]">
           {/* Student list */}
-          <div className="glass rounded-3xl p-4">
-            <h2 className="mb-3 px-2 text-sm font-semibold text-muted-foreground">Biriktirilgan talabalar</h2>
+          <div className="bg-white/80 border border-slate-150/60 rounded-[28px] p-4 shadow-xl shadow-slate-100/50 backdrop-blur-md">
+            <h2 className="mb-3 px-2 text-xs font-bold text-slate-500 uppercase tracking-wider">{lang === "uz" ? "Biriktirilgan talabalar" : lang === "ru" ? "Прикрепленные студенты" : "Assigned Students"}</h2>
             <div className="space-y-1.5">
               {myStudents.map((s) => {
                 const present = logs.some(
@@ -77,21 +138,21 @@ export function MentorView() {
                   <button
                     key={s.id}
                     onClick={() => selectStudent(s.id)}
-                    className={`flex w-full items-center gap-3 rounded-2xl p-3 text-left transition ${
-                      active ? "bg-primary/10 ring-1 ring-primary/30" : "hover:bg-secondary"
+                    className={`flex w-full items-center gap-3 rounded-2xl p-3 text-left transition-all duration-200 ${
+                      active ? "bg-primary/10 border border-primary/15 shadow-sm" : "hover:bg-slate-50 border border-transparent"
                     }`}
                   >
-                    <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-secondary text-xs font-bold text-secondary-foreground">
+                    <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-slate-50 border border-slate-100 text-xs font-bold text-slate-600">
                       {s.avatar}
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="truncate text-sm font-semibold">{s.name}</p>
-                      <p className="truncate text-xs text-muted-foreground">{s.group}</p>
+                      <p className="truncate text-sm font-bold text-slate-800">{s.name}</p>
+                      <p className="truncate text-xs font-semibold text-slate-500 mt-0.5">{s.group}</p>
                     </div>
                     <div className="flex shrink-0 flex-col items-end gap-1">
-                      <span className={`h-2 w-2 rounded-full ${present ? "bg-emerald-500" : "bg-muted-foreground/40"}`} />
+                      <span className={`h-2 w-2 rounded-full ${present ? "bg-emerald-500 animate-pulse" : "bg-slate-300"}`} />
                       {pendingCount > 0 && (
-                        <Badge variant="outline" className="border-amber-500/40 px-1.5 py-0 text-[10px] text-amber-600">
+                        <Badge variant="outline" className="bg-amber-50 border-amber-200 px-1.5 py-0 text-[10px] text-amber-700 font-bold rounded-full">
                           {pendingCount}
                         </Badge>
                       )}
@@ -106,15 +167,15 @@ export function MentorView() {
           <div className="space-y-6">
             {selected && (
               <>
-                <div className="glass rounded-3xl p-6 animate-fade-up">
+                <div className="bg-white/80 border border-slate-150/60 rounded-[28px] p-6 shadow-xl shadow-slate-100/50 backdrop-blur-md animate-fade-up">
                   <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
                     <div className="flex min-w-0 items-center gap-3">
-                      <div className="gradient-primary grid h-12 w-12 shrink-0 place-items-center rounded-2xl text-sm font-bold text-white">
+                      <div className="gradient-primary grid h-12 w-12 shrink-0 place-items-center rounded-2xl text-sm font-bold text-white shadow-md shadow-primary/20">
                         {selected.avatar}
                       </div>
                       <div className="min-w-0">
-                        <h3 className="truncate text-lg font-bold">{selected.name}</h3>
-                        <p className="truncate text-xs text-muted-foreground">
+                        <h3 className="truncate text-base font-extrabold text-slate-800 leading-tight">{selected.name}</h3>
+                        <p className="truncate text-xs font-semibold text-slate-500 mt-1">
                           {selected.group} · {selected.phone}
                         </p>
                       </div>
@@ -124,71 +185,75 @@ export function MentorView() {
                         selectedLogs
                           .filter((l) => l.status === "pending")
                           .forEach((l) => updateLog(l.id, { status: "approved" }));
-                        toast.success("Haftalik hisobot tasdiqlandi");
+                        toast.success(lang === "uz" ? "Haftalik hisobot tasdiqlandi" : lang === "ru" ? "Еженедельный отчет подтвержден" : "Weekly report approved");
                       }}
-                      className="gradient-primary text-white"
+                      className="gradient-primary text-white text-xs font-bold rounded-[14px] h-10 shadow-md shadow-primary/20 hover:shadow-lg active:scale-95 transition-all"
                     >
-                      <Check className="mr-1.5 h-4 w-4" /> Haftalik hisobotni tasdiqlash
+                      <Check className="mr-1.5 h-4 w-4" /> {lang === "uz" ? "Haftalik hisobotni tasdiqlash" : lang === "ru" ? "Подтвердить еженедельный отчет" : "Approve Weekly Report"}
                     </Button>
                   </div>
 
-                  <div className="space-y-2">
+                  <div className="space-y-2.5">
                     {selectedLogs.slice(0, 7).map((l) => (
-                      <div key={l.id} className="rounded-2xl border border-border/60 bg-card/60 p-4">
+                      <div key={l.id} className="rounded-2xl border border-slate-100 bg-white/70 p-4 shadow-xs transition-all hover:bg-white hover:shadow-sm">
                         <div className="flex flex-wrap items-center justify-between gap-2">
                           <div className="flex items-center gap-2">
-                            <Badge variant="outline">{l.date}</Badge>
+                            <Badge variant="outline" className="bg-slate-50 border-slate-200 text-slate-700 font-bold text-[10px] rounded-lg px-2 py-0.5">{l.date}</Badge>
                             {l.checkIn ? (
-                              <span className="text-xs text-muted-foreground">
+                              <span className="text-xs font-semibold text-slate-500">
                                 {l.checkIn} – {l.checkOut ?? "…"}
                               </span>
                             ) : (
-                              <Badge variant="outline" className="border-destructive/40 text-destructive">
-                                Kelmagan
+                              <Badge variant="outline" className="bg-rose-50 border-rose-100 text-rose-700 font-bold text-[10px] rounded-lg px-2 py-0.5">
+                                {lang === "uz" ? "Kelmagan" : lang === "ru" ? "Не пришел" : "Absent"}
                               </Badge>
                             )}
                           </div>
                           <Badge
-                            className={
+                            variant="outline"
+                            className={`font-bold text-[10px] px-2.5 py-0.5 rounded-full ${
                               l.status === "approved"
-                                ? "bg-emerald-500/15 text-emerald-600 hover:bg-emerald-500/15 font-medium"
+                                ? "bg-emerald-50 border-emerald-150 text-emerald-700"
                                 : l.status === "rejected"
-                                  ? "bg-destructive/15 text-destructive hover:bg-destructive/15 font-medium"
-                                  : "bg-amber-500/15 text-amber-600 hover:bg-amber-500/15 font-medium"
-                            }
+                                  ? "bg-rose-50 border-rose-150 text-rose-700"
+                                  : "bg-amber-50 border-amber-150 text-amber-700"
+                            }`}
                           >
                             {l.status === "approved"
-                              ? "Tasdiqlangan"
+                              ? (lang === "uz" ? "Tasdiqlangan" : lang === "ru" ? "Подтверждено" : "Approved")
                               : l.status === "rejected"
-                                ? "Rad etilgan"
-                                : "Kutilmoqda"}
+                                ? (lang === "uz" ? "Rad etilgan" : lang === "ru" ? "Отклонено" : "Rejected")
+                                : (lang === "uz" ? "Kutilmoqda" : lang === "ru" ? "В ожидании" : "Pending")}
                           </Badge>
                         </div>
-                        {l.report && <p className="mt-2 text-sm text-foreground/90">{l.report}</p>}
+                        {l.report && <p className="mt-2 text-xs font-semibold text-slate-800 leading-relaxed bg-slate-50/50 p-2.5 rounded-xl border border-slate-100/50">{l.report}</p>}
                         {l.rejectionReason && (
-                          <p className="mt-1 text-xs text-destructive">Rad etilganlik sababi: {l.rejectionReason}</p>
+                          <p className="mt-2 text-[11px] font-bold text-rose-600 bg-rose-50/30 p-2 rounded-lg border border-rose-100/40">
+                            {lang === "uz" ? "Rad etilganlik sababi" : lang === "ru" ? "Причина отклонения" : "Rejection reason"}: {l.rejectionReason}
+                          </p>
                         )}
                         {l.status === "pending" && l.report && (
                           <div className="mt-3 flex gap-2">
                             <Button
                               size="sm"
-                              className="bg-emerald-500 text-white hover:bg-emerald-600"
+                              className="bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold rounded-xl px-3 py-1.5 shadow-sm active:scale-95 transition-all"
                               onClick={() => {
                                 updateLog(l.id, { status: "approved" });
-                                toast.success("Kunlik hisobot tasdiqlandi");
+                                toast.success(lang === "uz" ? "Kunlik hisobot tasdiqlandi" : lang === "ru" ? "Отчет подтвержден" : "Daily report approved");
                               }}
                             >
-                              <Check className="mr-1 h-3.5 w-3.5" /> Tasdiqlash
+                              <Check className="mr-1 h-3.5 w-3.5" /> {lang === "uz" ? "Tasdiqlash" : lang === "ru" ? "Подтвердить" : "Approve"}
                             </Button>
                             <Button
                               size="sm"
                               variant="destructive"
+                              className="bg-rose-500 hover:bg-rose-600 text-white text-xs font-bold rounded-xl px-3 py-1.5 shadow-sm active:scale-95 transition-all"
                               onClick={() => {
                                 setRejectLog(l.id);
                                 setRejectReason("");
                               }}
                             >
-                              <X className="mr-1 h-3.5 w-3.5" /> Rad etish
+                              <X className="mr-1 h-3.5 w-3.5" /> {lang === "uz" ? "Rad etish" : lang === "ru" ? "Отклонить" : "Reject"}
                             </Button>
                           </div>
                         )}
@@ -198,72 +263,73 @@ export function MentorView() {
                 </div>
 
                 {/* Evaluation */}
-                <div className="glass rounded-3xl p-6 animate-fade-up">
-                  <h3 className="mb-4 text-base font-semibold">Yakuniy baholash</h3>
+                <div className="bg-white/80 border border-slate-150/60 rounded-[28px] p-6 shadow-xl shadow-slate-100/50 backdrop-blur-md animate-fade-up">
+                  <h3 className="mb-4 text-sm font-bold text-slate-800 tracking-tight">{lang === "uz" ? "Yakuniy baholash" : lang === "ru" ? "Итоговая оценка" : "Final Evaluation"}</h3>
                   <div className="mb-4">
-                    <div className="mb-2 flex items-center justify-between">
-                      <span className="text-xs text-muted-foreground">Baho (Reyting)</span>
+                    <div className="mb-3 flex items-center justify-between">
+                      <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">{lang === "uz" ? "Baho (Reyting)" : lang === "ru" ? "Оценка (Рейтинг)" : "Rating"}</span>
                       <div className="flex items-center gap-1">
                         {[1, 2, 3, 4, 5].map((n) => (
                           <Star
                             key={n}
                             className={`h-4 w-4 ${
-                              n <= rating[0] ? "fill-amber-400 text-amber-400" : "text-muted-foreground/40"
+                              n <= rating[0] ? "fill-amber-400 text-amber-400" : "text-slate-350"
                             }`}
                           />
                         ))}
-                        <span className="ml-2 text-sm font-bold">{rating[0]}/5</span>
+                        <span className="ml-2 text-sm font-bold text-slate-700">{rating[0]}/5</span>
                       </div>
                     </div>
-                    <Slider min={1} max={5} step={1} value={rating} onValueChange={setRating} />
+                    <Slider min={1} max={5} step={1} value={rating} onValueChange={setRating} className="py-2" />
                   </div>
                   <Textarea
-                    placeholder="Talaba haqida taqriz/fikr-mulohaza yozing…"
+                    placeholder={lang === "uz" ? "Talaba haqida taqriz/fikr-mulohaza yozing…" : lang === "ru" ? "Напишите отзыв о студенте…" : "Write feedback about the student..."}
                     value={feedback}
                     onChange={(e) => setFeedback(e.target.value)}
-                    className="min-h-[100px] rounded-xl"
+                    className="min-h-[100px] rounded-2xl border-slate-200 text-xs font-semibold focus-visible:ring-primary focus-visible:border-primary p-4"
                   />
                   <Button
-                    className="gradient-primary mt-3 w-full text-white"
+                    className="gradient-primary mt-3 h-11 w-full text-white text-xs font-bold rounded-[14px] shadow-md shadow-primary/20 hover:shadow-lg active:scale-95 transition-all"
                     onClick={() => {
                       setStudentEvaluation(selected.id, rating[0], feedback);
-                      toast.success("Baholash muvaffaqiyatli saqlandi");
+                      toast.success(lang === "uz" ? "Baholash muvaffaqiyatli saqlandi" : lang === "ru" ? "Оценка успешно сохранена" : "Evaluation saved successfully");
                     }}
                   >
-                    Bahoni saqlash
+                    {lang === "uz" ? "Bahoni saqlash" : lang === "ru" ? "Сохранить оценку" : "Save Evaluation"}
                   </Button>
                 </div>
               </>
             )}
           </div>
         </section>
-      </main>
+      </div>
 
       <Dialog open={!!rejectLog} onOpenChange={(o) => !o && setRejectLog(null)}>
-        <DialogContent>
+        <DialogContent className="rounded-3xl border border-slate-150 bg-white p-6 shadow-2xl">
           <DialogHeader>
-            <DialogTitle>Kunlik hisobotni rad etish</DialogTitle>
+            <DialogTitle className="text-base font-bold text-slate-800">{lang === "uz" ? "Kunlik hisobotni rad etish" : lang === "ru" ? "Отклонение отчета" : "Reject Daily Report"}</DialogTitle>
           </DialogHeader>
           <Textarea
-            placeholder="Rad etish sababini kiriting…"
+            placeholder={lang === "uz" ? "Rad etish sababini kiriting…" : lang === "ru" ? "Введите причину отклонения…" : "Enter rejection reason..."}
             value={rejectReason}
             onChange={(e) => setRejectReason(e.target.value)}
-            className="min-h-[120px]"
+            className="min-h-[120px] rounded-2xl border-slate-200 text-xs font-semibold focus-visible:ring-primary p-4"
           />
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setRejectLog(null)}>
-              Bekor qilish
+          <DialogFooter className="flex gap-2">
+            <Button variant="outline" onClick={() => setRejectLog(null)} className="rounded-xl font-bold text-xs">
+              {lang === "uz" ? "Bekor qilish" : lang === "ru" ? "Отмена" : "Cancel"}
             </Button>
             <Button
               variant="destructive"
+              className="bg-rose-500 hover:bg-rose-600 text-white rounded-xl font-bold text-xs shadow-sm"
               onClick={() => {
-                if (!rejectReason.trim()) return toast.error("Iltimos, rad etish sababini kiriting");
+                if (!rejectReason.trim()) return toast.error(lang === "uz" ? "Iltimos, rad etish sababini kiriting" : lang === "ru" ? "Пожалуйста, введите причину" : "Please enter reason");
                 updateLog(rejectLog!, { status: "rejected", rejectionReason: rejectReason });
                 setRejectLog(null);
-                toast.success("Hisobot rad etildi");
+                toast.success(lang === "uz" ? "Hisobot rad etildi" : lang === "ru" ? "Отчет отклонен" : "Report rejected");
               }}
             >
-              Rad etishni tasdiqlash
+              {lang === "uz" ? "Rad etishni tasdiqlash" : lang === "ru" ? "Подтвердить отклонение" : "Confirm Rejection"}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -285,18 +351,18 @@ function StatCard({
 }) {
   const tintClass =
     tint === "primary"
-      ? "bg-primary/15 text-primary"
+      ? "bg-primary/5 text-primary border border-primary/10"
       : tint === "emerald"
-        ? "bg-emerald-500/15 text-emerald-600"
-        : "bg-amber-500/15 text-amber-600";
+        ? "bg-emerald-50 text-emerald-600 border border-emerald-100"
+        : "bg-amber-50 text-amber-600 border border-amber-100";
   return (
-    <div className="glass flex items-center gap-4 rounded-3xl p-5 animate-fade-up">
+    <div className="bg-white/80 border border-slate-150/60 flex items-center gap-4 rounded-3xl p-5 shadow-xl shadow-slate-100/50 backdrop-blur-md animate-fade-up">
       <div className={`grid h-12 w-12 shrink-0 place-items-center rounded-2xl ${tintClass}`}>
-        <Icon className="h-6 w-6" />
+        <Icon className="h-5 w-5" />
       </div>
       <div className="min-w-0">
-        <p className="truncate text-xs text-muted-foreground">{label}</p>
-        <p className="text-2xl font-bold">{value}</p>
+        <p className="truncate text-xs font-bold text-slate-500 uppercase tracking-wider">{label}</p>
+        <p className="text-2xl font-extrabold text-slate-800 mt-1">{value}</p>
       </div>
     </div>
   );
