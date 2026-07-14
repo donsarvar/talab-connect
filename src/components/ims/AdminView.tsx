@@ -146,7 +146,7 @@ export function AdminView({ onLogout }: { onLogout?: () => void }) {
         <main className="w-full">
           <Tabs defaultValue="overview">
             <div className="flex justify-start mb-6">
-              <TabsList className="bg-slate-50/80 p-1 rounded-xl border border-slate-100/50 flex gap-1 w-full max-w-3xl overflow-x-auto">
+              <TabsList className="bg-slate-50/80 p-1 rounded-xl border border-slate-100/50 flex gap-1 w-full max-w-3xl overflow-x-auto no-scrollbar">
                 <TabsTrigger value="overview" className="rounded-lg py-2 px-4 text-xs font-bold data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-xs transition-all">{lang === "uz" ? "Umumiy ma'lumotlar" : lang === "ru" ? "Общая информация" : "Overview"}</TabsTrigger>
                 <TabsTrigger value="import" className="rounded-lg py-2 px-4 text-xs font-bold data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-xs transition-all">{lang === "uz" ? "Ommaviy yuklash" : lang === "ru" ? "Массовый импорт" : "Bulk Upload"}</TabsTrigger>
                 <TabsTrigger value="assign" className="rounded-lg py-2 px-4 text-xs font-bold data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-xs transition-all">{lang === "uz" ? "Biriktirish" : lang === "ru" ? "Распределение" : "Assign"}</TabsTrigger>
