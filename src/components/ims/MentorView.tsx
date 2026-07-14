@@ -106,7 +106,7 @@ export function MentorView({ onLogout }: { onLogout?: () => void }) {
                     }}
                     className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-xs font-bold text-rose-600 hover:bg-rose-50/50 active:scale-95 transition-all"
                   >
-                    <span className="text-sm">🚪</span>
+                    <IconsaxLogout className="h-4 w-4 text-rose-600 shrink-0" />
                     <span>{lang === "uz" ? "Chiqish" : lang === "ru" ? "Выйти" : "Logout"}</span>
                   </button>
                 </div>
@@ -365,5 +365,25 @@ function StatCard({
         <p className="text-2xl font-extrabold text-slate-800 mt-1">{value}</p>
       </div>
     </div>
+  );
+}
+
+function IconsaxLogout({ className = "h-4 w-4" }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+    >
+      <path
+        d="M17.44 15.37C17.25 15.37 17.06 15.3 16.91 15.15C16.62 14.86 16.62 14.38 16.91 14.09L18.75 12.25H9.75C9.34 12.25 9 11.91 9 11.5C9 11.09 9.34 10.75 9.75 10.75H18.75L16.91 8.91C16.62 8.62 16.62 8.14 16.91 7.85C17.2 7.56 17.68 7.56 17.97 7.85L20.81 10.69C21.26 11.14 21.26 11.86 20.81 12.31L17.97 15.15C17.82 15.3 17.63 15.37 17.44 15.37Z"
+        fill="currentColor"
+      />
+      <path
+        d="M12 21.75H6.75C4.68 21.75 3 20.07 3 18V6C3 3.93 4.68 2.25 6.75 2.25H12C12.41 2.25 12.75 2.59 12.75 3C12.75 3.41 12.41 3.75 12 3.75H6.75C5.51 3.75 4.5 4.76 4.5 6V18C4.5 19.24 5.51 20.25 6.75 20.25H12C12.41 20.25 12.75 20.59 12.75 21C12.75 21.41 12.41 21.75 12 21.75Z"
+        fill="currentColor"
+      />
+    </svg>
   );
 }
