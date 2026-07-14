@@ -9,6 +9,11 @@ import {
   X,
   Camera,
   RefreshCw,
+  User,
+  GraduationCap,
+  Award,
+  Building,
+  Phone,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -58,6 +63,13 @@ const DICTIONARY = {
     switch_camera: "Kamerani almashtirish",
     camera_front: "Old kamera (Selfi)",
     camera_back: "Orqa kamera (Asosiy)",
+    my_profile: "Mening profilim",
+    univ_label: "Universitet",
+    group_label: "Guruh",
+    course_label: "Kurs",
+    org_label: "Amaliyot joyi",
+    phone_label: "Telefon raqami",
+    dob_label: "Tug'ilgan sana",
     suggestions: [
       "Kod yozish va xatolarni tuzatish",
       "Tizimni test qilish va tekshirish",
@@ -104,6 +116,13 @@ const DICTIONARY = {
     switch_camera: "Переключить камеру",
     camera_front: "Передняя камера (Селфи)",
     camera_back: "Задняя камера (Основная)",
+    my_profile: "Мой профиль",
+    univ_label: "Университет",
+    group_label: "Группа",
+    course_label: "Курс",
+    org_label: "Место практики",
+    phone_label: "Номер телефона",
+    dob_label: "Дата рождения",
     suggestions: [
       "Написание кода и исправление ошибок",
       "Тестирование и проверка системы",
@@ -150,6 +169,13 @@ const DICTIONARY = {
     switch_camera: "Switch Camera",
     camera_front: "Front Camera (Selfie)",
     camera_back: "Back Camera (Main)",
+    my_profile: "My Profile",
+    univ_label: "University",
+    group_label: "Group",
+    course_label: "Course",
+    org_label: "Internship Organization",
+    phone_label: "Phone Number",
+    dob_label: "Date of Birth",
     suggestions: [
       "Coding and bug fixing",
       "System testing and verification",
@@ -187,6 +213,7 @@ function StudentApp({ onLogout }: { onLogout?: () => void }) {
   const [generating, setGenerating] = useState(false);
   const [report, setReport] = useState("");
   const [profileOpen, setProfileOpen] = useState(false);
+  const [detailsOpen, setDetailsOpen] = useState(false);
 
   const handleStartScan = () => {
     if (todayLog?.checkIn) {
@@ -316,7 +343,20 @@ function StudentApp({ onLogout }: { onLogout?: () => void }) {
               </div>
 
               {profileOpen && (
-                <div className="absolute right-0 top-full mt-2 w-44 rounded-2xl border border-slate-150/80 bg-white p-1.5 shadow-xl shadow-slate-200/50 z-30 animate-fade-in">
+                <div className="absolute right-0 top-full mt-2 w-48 rounded-2xl border border-slate-150/80 bg-white p-1.5 shadow-xl shadow-slate-200/50 z-30 animate-fade-in space-y-0.5">
+                  <button
+                    onClick={() => {
+                      setDetailsOpen(true);
+                      setProfileOpen(false);
+                    }}
+                    className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-xs font-bold text-slate-700 hover:bg-slate-50 active:scale-95 transition-all"
+                  >
+                    <User className="h-4 w-4 text-slate-500 shrink-0" />
+                    <span>{t.my_profile}</span>
+                  </button>
+
+                  <div className="h-px bg-slate-100 my-1 mx-2" />
+
                   <button
                     onClick={() => {
                       if (onLogout) onLogout();
@@ -619,6 +659,95 @@ function StudentApp({ onLogout }: { onLogout?: () => void }) {
           </TabsContent>
         </Tabs>
       </div>
+
+      {/* Profile Details Modal Dialog */}
+      {detailsOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-fade-in">
+          <div className="relative w-full max-w-lg rounded-3xl border border-slate-150 bg-white p-6 shadow-2xl animate-scale-up">
+            {/* Close button */}
+            <button
+              onClick={() => setDetailsOpen(false)}
+              className="absolute top-4 right-4 flex h-8 w-8 items-center justify-center rounded-xl border border-slate-150 bg-white text-slate-500 hover:bg-slate-50 active:scale-95 transition-all"
+            >
+              <X className="h-4 w-4" />
+            </button>
+
+            {/* Header */}
+            <div className="flex flex-col items-center text-center pb-6 border-b border-slate-100">
+              <div className="relative">
+                <img 
+                  src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=256&auto=format&fit=crop" 
+                  alt={student.name}
+                  className="h-20 w-20 rounded-full object-cover border-4 border-primary/10 shadow-lg"
+                />
+                <div className="absolute -bottom-1 -right-1 bg-primary text-white p-1 rounded-full border-2 border-white shadow-md">
+                  <User className="h-4.5 w-4.5" />
+                </div>
+              </div>
+              <h3 className="text-lg font-extrabold text-slate-900 mt-4 leading-none">{student.name}</h3>
+              <p className="text-xs font-bold text-slate-400 mt-1.5 uppercase tracking-wider">{lang === "uz" ? "TALABA" : lang === "ru" ? "СТУДЕНТ" : "STUDENT"}</p>
+            </div>
+
+            {/* Details Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-6">
+              {/* Universitet */}
+              <div className="flex items-center gap-3 p-3.5 rounded-2xl border border-slate-100 bg-slate-50/50">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-indigo-50 border border-indigo-100 text-indigo-600">
+                  <GraduationCap className="h-5 w-5" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider leading-none">{t.univ_label}</p>
+                  <p className="text-xs font-bold text-slate-800 mt-1.5 leading-snug">{student.university || "Toshkent axborot texnologiyalari universiteti"}</p>
+                </div>
+              </div>
+
+              {/* Guruh */}
+              <div className="flex items-center gap-3 p-3.5 rounded-2xl border border-slate-100 bg-slate-50/50">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50 border border-emerald-100 text-emerald-600">
+                  <ClipboardList className="h-5 w-5" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider leading-none">{t.group_label}</p>
+                  <p className="text-xs font-bold text-slate-800 mt-1.5 leading-none">{student.group}</p>
+                </div>
+              </div>
+
+              {/* Kurs */}
+              <div className="flex items-center gap-3 p-3.5 rounded-2xl border border-slate-100 bg-slate-50/50">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-50 border border-amber-100 text-amber-600">
+                  <Award className="h-5 w-5" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider leading-none">{t.course_label}</p>
+                  <p className="text-xs font-bold text-slate-800 mt-1.5 leading-none">{student.course ? `${student.course}-kurs` : "3-kurs"}</p>
+                </div>
+              </div>
+
+              {/* Amaliyot joyi */}
+              <div className="flex items-center gap-3 p-3.5 rounded-2xl border border-slate-100 bg-slate-50/50">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-sky-50 border border-sky-100 text-sky-600">
+                  <Building className="h-5 w-5" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider leading-none">{t.org_label}</p>
+                  <p className="text-xs font-bold text-slate-800 mt-1.5 leading-snug">{org?.name || "Realsoft academy"}</p>
+                </div>
+              </div>
+
+              {/* Telefon */}
+              <div className="flex items-center gap-3 p-3.5 rounded-2xl border border-slate-100 bg-slate-50/50 sm:col-span-2">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-rose-50 border border-rose-100 text-rose-600">
+                  <Phone className="h-5 w-5" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider leading-none">{t.phone_label}</p>
+                  <p className="text-xs font-bold text-slate-800 mt-1.5 leading-none">{student.phone}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -42,6 +42,8 @@ export interface Student {
   avatar: string;
   rating?: number;
   feedback?: string;
+  university?: string;
+  course?: number;
 }
 
 export interface FraudAlert {
@@ -90,11 +92,11 @@ export const MENTORS: Mentor[] = [
 ];
 
 export const STUDENTS: Student[] = [
-  { id: "s-1", name: "Aziz Yusupov", phone: "+998 90 123 45 67", dob: "12042003", group: "KMI 01", organizationId: "org-1", mentorId: "m-1", avatar: "AY" },
-  { id: "s-2", name: "Malika Tashkentova", phone: "+998 91 222 33 44", dob: "05092003", group: "KAX 01", organizationId: "org-2", mentorId: "m-2", avatar: "MT" },
-  { id: "s-3", name: "Rustam Ergashev", phone: "+998 93 555 66 77", dob: "22112002", group: "KAX 02", organizationId: "org-3", mentorId: "m-3", avatar: "RE" },
-  { id: "s-4", name: "Sitora Nazarova", phone: "+998 97 888 99 00", dob: "18072003", group: "KAX 03", organizationId: "org-4", mentorId: "m-4", avatar: "SN" },
-  { id: "s-5", name: "Jasur Alimov", phone: "+998 94 111 22 33", dob: "30012003", group: "KMI 01", organizationId: "org-1", mentorId: "m-1", avatar: "JA" },
+  { id: "s-1", name: "Aziz Yusupov", phone: "+998 90 123 45 67", dob: "12042003", group: "KMI 01", organizationId: "org-1", mentorId: "m-1", avatar: "AY", university: "Toshkent axborot texnologiyalari universiteti", course: 3 },
+  { id: "s-2", name: "Malika Tashkentova", phone: "+998 91 222 33 44", dob: "05092003", group: "KAX 01", organizationId: "org-2", mentorId: "m-2", avatar: "MT", university: "Toshkent axborot texnologiyalari universiteti", course: 3 },
+  { id: "s-3", name: "Rustam Ergashev", phone: "+998 93 555 66 77", dob: "22112002", group: "KAX 02", organizationId: "org-3", mentorId: "m-3", avatar: "RE", university: "O'zbekiston Milliy universiteti", course: 4 },
+  { id: "s-4", name: "Sitora Nazarova", phone: "+998 97 888 99 00", dob: "18072003", group: "KAX 03", organizationId: "org-4", mentorId: "m-4", avatar: "SN", university: "Toshkent davlat texnika universiteti", course: 3 },
+  { id: "s-5", name: "Jasur Alimov", phone: "+998 94 111 22 33", dob: "30012003", group: "KMI 01", organizationId: "org-1", mentorId: "m-1", avatar: "JA", university: "Toshkent axborot texnologiyalari universiteti", course: 3 },
 ];
 
 function daysAgo(n: number): string {
