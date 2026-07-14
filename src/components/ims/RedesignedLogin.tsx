@@ -208,7 +208,7 @@ export function RedesignedLogin({ onLogin }: RedesignedLoginProps) {
               </div>
               <div className="min-w-0">
                 <h2 className="text-xl font-bold tracking-tight">{t.brand_name}</h2>
-                <Badge variant="secondary" className="bg-primary/10 text-primary hover:bg-primary/10 font-medium px-2 py-0 rounded-full text-[10px]">
+                <Badge variant="secondary" className="bg-primary/10 text-primary hover:bg-primary/10 font-medium px-2 py-0 rounded-full text-xs">
                   {t.brand_subtitle}
                 </Badge>
               </div>
@@ -236,7 +236,7 @@ export function RedesignedLogin({ onLogin }: RedesignedLoginProps) {
                     </div>
                     <div className="space-y-0.5 min-w-0">
                       <h4 className="text-xs font-semibold text-slate-800">{item.title}</h4>
-                      <p className="text-[11px] text-muted-foreground leading-relaxed">{item.desc}</p>
+                      <p className="text-xs text-muted-foreground leading-relaxed">{item.desc}</p>
                     </div>
                   </div>
                 );
@@ -261,7 +261,7 @@ export function RedesignedLogin({ onLogin }: RedesignedLoginProps) {
                 <button
                   type="button"
                   onClick={() => setShowLangDropdown(!showLangDropdown)}
-                  className="flex items-center gap-1 rounded-full border border-slate-100 bg-white px-2.5 py-1 text-[11px] font-semibold text-slate-600 shadow-sm hover:bg-slate-50 transition-all"
+                  className="flex items-center gap-1 rounded-full border border-slate-100 bg-white px-2.5 py-1 text-xs font-semibold text-slate-600 shadow-sm hover:bg-slate-50 transition-all"
                 >
                   <span>{language}</span>
                   <ChevronDown className="h-3 w-3 text-slate-400" />
@@ -273,7 +273,7 @@ export function RedesignedLogin({ onLogin }: RedesignedLoginProps) {
                         setLanguage("UZ");
                         setShowLangDropdown(false);
                       }}
-                      className="w-full px-2 py-1.5 text-left text-[11px] font-medium hover:bg-slate-50 rounded-t-lg"
+                      className="w-full px-2 py-1.5 text-left text-xs font-medium hover:bg-slate-50 rounded-t-lg"
                     >
                       UZ
                     </button>
@@ -282,7 +282,7 @@ export function RedesignedLogin({ onLogin }: RedesignedLoginProps) {
                         setLanguage("RU");
                         setShowLangDropdown(false);
                       }}
-                      className="w-full px-2 py-1.5 text-left text-[11px] font-medium hover:bg-slate-50"
+                      className="w-full px-2 py-1.5 text-left text-xs font-medium hover:bg-slate-50"
                     >
                       RU
                     </button>
@@ -291,7 +291,7 @@ export function RedesignedLogin({ onLogin }: RedesignedLoginProps) {
                         setLanguage("EN");
                         setShowLangDropdown(false);
                       }}
-                      className="w-full px-2 py-1.5 text-left text-[11px] font-medium hover:bg-slate-50 rounded-b-lg"
+                      className="w-full px-2 py-1.5 text-left text-xs font-medium hover:bg-slate-50 rounded-b-lg"
                     >
                       EN
                     </button>
@@ -314,7 +314,7 @@ export function RedesignedLogin({ onLogin }: RedesignedLoginProps) {
               <form onSubmit={handleLogin} className="space-y-4">
                 {/* Telephone input */}
                 <div className="space-y-1.5">
-                  <label className="text-[11px] font-semibold text-slate-700">{t.phone_label}</label>
+                  <label className="text-xs font-semibold text-slate-700">{t.phone_label}</label>
                   <div className="flex h-11 items-center rounded-[14px] border border-slate-200 bg-white px-3 transition-all focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/10 w-full min-w-0">
                     <div className="flex items-center pr-2.5 border-r border-slate-150 h-5 shrink-0">
                       <span className="text-sm font-bold text-slate-800 leading-none flex items-center">+998</span>
@@ -332,7 +332,7 @@ export function RedesignedLogin({ onLogin }: RedesignedLoginProps) {
 
                 {/* Password input */}
                 <div className="space-y-1">
-                  <label className="text-[11px] font-semibold text-slate-700">{t.password_label}</label>
+                  <label className="text-xs font-semibold text-slate-700">{t.password_label}</label>
                   <div className="flex h-11 items-center rounded-[14px] border border-slate-200 bg-white px-3 transition-all focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/10 w-full min-w-0">
                     <input
                       type={showPassword ? "text" : "password"}
@@ -353,7 +353,7 @@ export function RedesignedLogin({ onLogin }: RedesignedLoginProps) {
 
                 {/* Remember Me + Forgot Password */}
                 <div className="flex items-center justify-between pt-0.5">
-                  <label className="flex items-center gap-1.5 cursor-pointer select-none text-[11px] font-semibold text-slate-600">
+                  <label className="flex items-center gap-1.5 cursor-pointer select-none text-xs font-semibold text-slate-600">
                     <input
                       type="checkbox"
                       checked={rememberMe}
@@ -362,7 +362,7 @@ export function RedesignedLogin({ onLogin }: RedesignedLoginProps) {
                     />
                     <span>{t.remember_me}</span>
                   </label>
-                  <a href="#" className="text-[11px] font-bold text-primary hover:underline">
+                  <a href="#" className="text-xs font-bold text-primary hover:underline">
                     {t.forgot_password}
                   </a>
                 </div>
@@ -380,16 +380,16 @@ export function RedesignedLogin({ onLogin }: RedesignedLoginProps) {
                 <div className="flex gap-2.5 items-start rounded-xl border border-slate-100 bg-slate-50/70 p-3 mt-1">
                   <Info className="h-4.5 w-4.5 text-primary shrink-0 mt-0.5" />
                   <div className="space-y-0.5">
-                    <p className="text-[10px] font-semibold text-slate-800 leading-tight">
+                    <p className="text-xs font-semibold text-slate-800 leading-tight">
                       {t.pwd_info}
                     </p>
-                    <p className="text-[9px] font-bold text-primary">{t.pwd_format}</p>
+                    <p className="text-[11px] font-bold text-primary">{t.pwd_format}</p>
                   </div>
                 </div>
 
                 {/* Role Selector */}
                 <div className="pt-3 border-t border-slate-50 space-y-1.5">
-                  <label className="text-[10px] font-bold text-muted-foreground block text-center">{t.role_label}</label>
+                  <label className="text-xs font-bold text-muted-foreground block text-center">{t.role_label}</label>
                   <div className="grid grid-cols-3 gap-1 rounded-xl bg-slate-50/80 p-1 border border-slate-100/50">
                     <button
                       type="button"
@@ -397,11 +397,11 @@ export function RedesignedLogin({ onLogin }: RedesignedLoginProps) {
                       className={`flex flex-col items-center justify-center gap-0.5 rounded-lg py-1.5 px-0.5 transition-all ${
                         role === "student"
                           ? "bg-white text-primary shadow-xs font-bold scale-[1.01]"
-                          : "text-muted-foreground hover:text-foreground font-semibold text-[10px]"
+                          : "text-muted-foreground hover:text-foreground font-semibold text-xs"
                       }`}
                     >
                       <GraduationCap className="h-4 w-4" />
-                      <span className="text-[9px]">{t.role_student}</span>
+                      <span className="text-[11px]">{t.role_student}</span>
                     </button>
                     <button
                       type="button"
@@ -409,11 +409,11 @@ export function RedesignedLogin({ onLogin }: RedesignedLoginProps) {
                       className={`flex flex-col items-center justify-center gap-0.5 rounded-lg py-1.5 px-0.5 transition-all ${
                         role === "mentor"
                           ? "bg-white text-primary shadow-xs font-bold scale-[1.01]"
-                          : "text-muted-foreground hover:text-foreground font-semibold text-[10px]"
+                          : "text-muted-foreground hover:text-foreground font-semibold text-xs"
                       }`}
                     >
                       <UserCog className="h-4 w-4" />
-                      <span className="text-[9px] whitespace-nowrap">{t.role_mentor}</span>
+                      <span className="text-[11px] whitespace-nowrap">{t.role_mentor}</span>
                     </button>
                     <button
                       type="button"
@@ -421,18 +421,18 @@ export function RedesignedLogin({ onLogin }: RedesignedLoginProps) {
                       className={`flex flex-col items-center justify-center gap-0.5 rounded-lg py-1.5 px-0.5 transition-all ${
                         role === "admin"
                           ? "bg-white text-primary shadow-xs font-bold scale-[1.01]"
-                          : "text-muted-foreground hover:text-foreground font-semibold text-[10px]"
+                          : "text-muted-foreground hover:text-foreground font-semibold text-xs"
                       }`}
                     >
                       <ShieldCheck className="h-4 w-4" />
-                      <span className="text-[9px]">{t.role_admin}</span>
+                      <span className="text-[11px]">{t.role_admin}</span>
                     </button>
                   </div>
                 </div>
               </form>
 
               {/* Support footer */}
-              <div className="mt-4 text-center text-[10px] text-muted-foreground">
+              <div className="mt-4 text-center text-xs text-muted-foreground">
                 {t.support_text}{" "}
                 <a href="#" className="font-bold text-primary hover:underline">
                   {t.support_link}

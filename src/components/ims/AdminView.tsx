@@ -96,7 +96,7 @@ export function AdminView({ onLogout }: { onLogout?: () => void }) {
               <h1 className="text-sm font-extrabold text-slate-900 tracking-tight leading-none">
                 {lang === "uz" ? "Platforma koordinatori" : lang === "ru" ? "Координатор платформы" : "Platform Coordinator"}
               </h1>
-              <div className="flex items-center gap-1.5 mt-1.5 text-[10px] font-bold text-slate-500">
+              <div className="flex items-center gap-1.5 mt-1.5 text-xs font-bold text-slate-500">
                 <span>{lang === "uz" ? "Talabalar Amaliyoti Platformasi" : lang === "ru" ? "Платформа практики студентов" : "Student Internship Platform"}</span>
               </div>
             </div>
@@ -115,14 +115,14 @@ export function AdminView({ onLogout }: { onLogout?: () => void }) {
                 onClick={() => setProfileOpen(!profileOpen)}
                 className="flex items-center gap-2.5 px-3 py-1.5 border border-slate-150 bg-white rounded-xl shadow-xs hover:border-slate-200 transition-all cursor-pointer select-none"
               >
-                <div className="h-6.5 w-6.5 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-[10px] font-bold text-slate-600 shadow-xs">
+                <div className="h-6.5 w-6.5 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-xs font-bold text-slate-600 shadow-xs">
                   AD
                 </div>
                 <div className="hidden sm:block text-left">
-                  <p className="text-[11px] font-extrabold text-slate-800 leading-none">Admin</p>
-                  <p className="text-[9px] font-semibold text-slate-400 mt-0.5">{getRoleLabel()}</p>
+                  <p className="text-xs font-extrabold text-slate-800 leading-none">Admin</p>
+                  <p className="text-xs font-semibold text-slate-400 mt-0.5">{getRoleLabel()}</p>
                 </div>
-                <span className="text-slate-400 text-[8px] ml-0.5">▼</span>
+                <span className="text-slate-400 text-xs ml-0.5">▼</span>
               </div>
 
               {profileOpen && (

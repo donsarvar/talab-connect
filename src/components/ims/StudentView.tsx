@@ -237,8 +237,8 @@ function StudentApp({ onLogout }: { onLogout?: () => void }) {
               <h1 className="text-sm font-extrabold text-slate-900 tracking-tight leading-none">
                 {t.welcome}, {student.name}!
               </h1>
-              <div className="flex items-center gap-1.5 mt-1.5 text-[10px] font-bold text-slate-500">
-                <Badge variant="secondary" className="bg-primary/5 text-primary hover:bg-primary/5 font-bold px-1.5 py-0 rounded text-[9px] border border-primary/10">
+              <div className="flex items-center gap-1.5 mt-1.5 text-xs font-bold text-slate-500">
+                <Badge variant="secondary" className="bg-primary/5 text-primary hover:bg-primary/5 font-bold px-1.5 py-0 rounded-md text-xs border border-primary/10">
                   {student.group}
                 </Badge>
                 <span>{org?.name} {t.at_org}</span>
@@ -265,8 +265,8 @@ function StudentApp({ onLogout }: { onLogout?: () => void }) {
                   className="h-6.5 w-6.5 rounded-full object-cover border border-slate-100 shadow-xs"
                 />
                 <div className="hidden sm:block text-left">
-                  <p className="text-[11px] font-extrabold text-slate-800 leading-none">{student.name}</p>
-                  <p className="text-[9px] font-semibold text-slate-400 mt-0.5">{lang === "uz" ? "Talaba" : lang === "ru" ? "Студент" : "Student"}</p>
+                  <p className="text-xs font-extrabold text-slate-800 leading-none">{student.name}</p>
+                  <p className="text-xs font-semibold text-slate-400 mt-0.5">{lang === "uz" ? "Talaba" : lang === "ru" ? "Студент" : "Student"}</p>
                 </div>
                 <span className="text-slate-400 text-[8px] ml-0.5">▼</span>
               </div>
@@ -362,7 +362,7 @@ function StudentApp({ onLogout }: { onLogout?: () => void }) {
                         e.stopPropagation();
                         handleScan();
                       }}
-                      className="flex items-center gap-1.5 rounded-xl bg-white/15 backdrop-blur-md border border-white/20 px-3 py-1.5 text-[11px] font-bold text-white hover:bg-white/25 active:scale-95 transition-all shadow-sm"
+                      className="flex items-center gap-1.5 rounded-xl bg-white/15 backdrop-blur-md border border-white/20 px-3 py-1.5 text-xs font-bold text-white hover:bg-white/25 active:scale-95 transition-all shadow-sm"
                     >
                       <Camera className="h-3.5 w-3.5" />
                       <span>{t.via_camera}</span>
@@ -413,14 +413,14 @@ function StudentApp({ onLogout }: { onLogout?: () => void }) {
 
                 {/* Suggestion Chips */}
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">{t.templates_label}</label>
+                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block">{t.templates_label}</label>
                   <div className="flex flex-wrap gap-1.5">
                     {t.suggestions.map((suggestion) => (
                       <button
                         key={suggestion}
                         type="button"
                         onClick={() => handleSuggestionClick(suggestion)}
-                        className="text-[11px] px-3 py-1.5 rounded-xl border border-slate-100 bg-slate-50/80 text-slate-600 hover:bg-primary/5 hover:border-primary/20 hover:text-primary active:scale-95 transition-all font-semibold"
+                        className="text-xs px-3 py-1.5 rounded-xl border border-slate-100 bg-slate-50/80 text-slate-600 hover:bg-primary/5 hover:border-primary/20 hover:text-primary active:scale-95 transition-all font-semibold"
                       >
                         {suggestion}
                       </button>
@@ -480,13 +480,13 @@ function StudentApp({ onLogout }: { onLogout?: () => void }) {
                     </div>
                     <div className="min-w-0 flex-1">
                       <p className="text-xs font-bold text-slate-800">{l.date}</p>
-                      <p className="text-[11px] font-semibold text-slate-500 mt-0.5">
+                      <p className="text-xs font-semibold text-slate-500 mt-0.5">
                         {l.checkIn ? `${l.checkIn} – ${l.checkOut ?? "…"}` : t.absent}
                       </p>
                     </div>
                     <Badge
                       variant="outline"
-                      className={`font-bold text-[10px] px-2.5 py-0.5 rounded-full ${
+                      className={`font-bold text-xs px-2.5 py-0.5 rounded-full ${
                         l.status === "approved"
                           ? "bg-emerald-50 border-emerald-150 text-emerald-700"
                           : l.status === "rejected"

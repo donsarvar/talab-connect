@@ -66,7 +66,7 @@ export function MentorView({ onLogout }: { onLogout?: () => void }) {
               <h1 className="text-sm font-extrabold text-slate-900 tracking-tight leading-none">
                 {mentor.name}
               </h1>
-              <div className="flex items-center gap-1.5 mt-1.5 text-[10px] font-bold text-slate-500">
+              <div className="flex items-center gap-1.5 mt-1.5 text-xs font-bold text-slate-500">
                 <span>{lang === "uz" ? "Tashkilot rahbari" : lang === "ru" ? "Руководитель организации" : "Organization Mentor"} · {org?.name}</span>
               </div>
             </div>
@@ -91,8 +91,8 @@ export function MentorView({ onLogout }: { onLogout?: () => void }) {
                   className="h-6.5 w-6.5 rounded-full object-cover border border-slate-100 shadow-xs"
                 />
                 <div className="hidden sm:block text-left">
-                  <p className="text-[11px] font-extrabold text-slate-800 leading-none">{mentor.name}</p>
-                  <p className="text-[9px] font-semibold text-slate-400 mt-0.5">{getRoleLabel()}</p>
+                  <p className="text-xs font-extrabold text-slate-800 leading-none">{mentor.name}</p>
+                  <p className="text-xs font-semibold text-slate-400 mt-0.5">{getRoleLabel()}</p>
                 </div>
                 <span className="text-slate-400 text-[8px] ml-0.5">▼</span>
               </div>
@@ -152,7 +152,7 @@ export function MentorView({ onLogout }: { onLogout?: () => void }) {
                     <div className="flex shrink-0 flex-col items-end gap-1">
                       <span className={`h-2 w-2 rounded-full ${present ? "bg-emerald-500 animate-pulse" : "bg-slate-300"}`} />
                       {pendingCount > 0 && (
-                        <Badge variant="outline" className="bg-amber-50 border-amber-200 px-1.5 py-0 text-[10px] text-amber-700 font-bold rounded-full">
+                        <Badge variant="outline" className="bg-amber-50 border-amber-200 px-1.5 py-0 text-xs text-amber-700 font-bold rounded-full">
                           {pendingCount}
                         </Badge>
                       )}
@@ -198,20 +198,20 @@ export function MentorView({ onLogout }: { onLogout?: () => void }) {
                       <div key={l.id} className="rounded-2xl border border-slate-100 bg-white/70 p-4 shadow-xs transition-all hover:bg-white hover:shadow-sm">
                         <div className="flex flex-wrap items-center justify-between gap-2">
                           <div className="flex items-center gap-2">
-                            <Badge variant="outline" className="bg-slate-50 border-slate-200 text-slate-700 font-bold text-[10px] rounded-lg px-2 py-0.5">{l.date}</Badge>
+                            <Badge variant="outline" className="bg-slate-50 border-slate-200 text-slate-700 font-bold text-xs rounded-lg px-2 py-0.5">{l.date}</Badge>
                             {l.checkIn ? (
                               <span className="text-xs font-semibold text-slate-500">
                                 {l.checkIn} – {l.checkOut ?? "…"}
                               </span>
                             ) : (
-                              <Badge variant="outline" className="bg-rose-50 border-rose-100 text-rose-700 font-bold text-[10px] rounded-lg px-2 py-0.5">
+                              <Badge variant="outline" className="bg-rose-50 border-rose-100 text-rose-700 font-bold text-xs rounded-lg px-2 py-0.5">
                                 {lang === "uz" ? "Kelmagan" : lang === "ru" ? "Не пришел" : "Absent"}
                               </Badge>
                             )}
                           </div>
                           <Badge
                             variant="outline"
-                            className={`font-bold text-[10px] px-2.5 py-0.5 rounded-full ${
+                            className={`font-bold text-xs px-2.5 py-0.5 rounded-full ${
                               l.status === "approved"
                                 ? "bg-emerald-50 border-emerald-150 text-emerald-700"
                                 : l.status === "rejected"
@@ -228,7 +228,7 @@ export function MentorView({ onLogout }: { onLogout?: () => void }) {
                         </div>
                         {l.report && <p className="mt-2 text-xs font-semibold text-slate-800 leading-relaxed bg-slate-50/50 p-2.5 rounded-xl border border-slate-100/50">{l.report}</p>}
                         {l.rejectionReason && (
-                          <p className="mt-2 text-[11px] font-bold text-rose-600 bg-rose-50/30 p-2 rounded-lg border border-rose-100/40">
+                          <p className="mt-2 text-xs font-bold text-rose-600 bg-rose-50/30 p-2 rounded-lg border border-rose-100/40">
                             {lang === "uz" ? "Rad etilganlik sababi" : lang === "ru" ? "Причина отклонения" : "Rejection reason"}: {l.rejectionReason}
                           </p>
                         )}
