@@ -351,7 +351,7 @@ function StudentApp({ onLogout }: { onLogout?: () => void }) {
                     }}
                     className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-xs font-bold text-slate-700 hover:bg-slate-50 active:scale-95 transition-all"
                   >
-                    <User className="h-4 w-4 text-slate-500 shrink-0" />
+                    <IconsaxUser className="h-4 w-4 text-slate-500 shrink-0" />
                     <span>{t.my_profile}</span>
                   </button>
 
@@ -680,8 +680,8 @@ function StudentApp({ onLogout }: { onLogout?: () => void }) {
                   alt={student.name}
                   className="h-20 w-20 rounded-full object-cover border-4 border-primary/10 shadow-lg"
                 />
-                <div className="absolute -bottom-1 -right-1 bg-primary text-white p-1 rounded-full border-2 border-white shadow-md">
-                  <User className="h-4.5 w-4.5" />
+                <div className="absolute -bottom-1 -right-1 bg-primary text-white p-1.5 rounded-full border-2 border-white shadow-md">
+                  <IconsaxUser className="h-4 w-4 text-white" />
                 </div>
               </div>
               <h3 className="text-lg font-extrabold text-slate-900 mt-4 leading-none">{student.name}</h3>
@@ -693,7 +693,7 @@ function StudentApp({ onLogout }: { onLogout?: () => void }) {
               {/* Universitet */}
               <div className="flex items-center gap-3 p-3.5 rounded-2xl border border-slate-100 bg-slate-50/50">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-indigo-50 border border-indigo-100 text-indigo-600">
-                  <GraduationCap className="h-5 w-5" />
+                  <IconsaxGraduationCap className="h-5 w-5" />
                 </div>
                 <div className="min-w-0">
                   <p className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider leading-none">{t.univ_label}</p>
@@ -704,7 +704,7 @@ function StudentApp({ onLogout }: { onLogout?: () => void }) {
               {/* Guruh */}
               <div className="flex items-center gap-3 p-3.5 rounded-2xl border border-slate-100 bg-slate-50/50">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50 border border-emerald-100 text-emerald-600">
-                  <ClipboardList className="h-5 w-5" />
+                  <IconsaxClipboardList className="h-5 w-5" />
                 </div>
                 <div className="min-w-0">
                   <p className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider leading-none">{t.group_label}</p>
@@ -715,7 +715,7 @@ function StudentApp({ onLogout }: { onLogout?: () => void }) {
               {/* Kurs */}
               <div className="flex items-center gap-3 p-3.5 rounded-2xl border border-slate-100 bg-slate-50/50">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-50 border border-amber-100 text-amber-600">
-                  <Award className="h-5 w-5" />
+                  <IconsaxAward className="h-5 w-5" />
                 </div>
                 <div className="min-w-0">
                   <p className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider leading-none">{t.course_label}</p>
@@ -726,7 +726,7 @@ function StudentApp({ onLogout }: { onLogout?: () => void }) {
               {/* Amaliyot joyi */}
               <div className="flex items-center gap-3 p-3.5 rounded-2xl border border-slate-100 bg-slate-50/50">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-sky-50 border border-sky-100 text-sky-600">
-                  <Building className="h-5 w-5" />
+                  <IconsaxBuilding className="h-5 w-5" />
                 </div>
                 <div className="min-w-0">
                   <p className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider leading-none">{t.org_label}</p>
@@ -737,7 +737,7 @@ function StudentApp({ onLogout }: { onLogout?: () => void }) {
               {/* Telefon */}
               <div className="flex items-center gap-3 p-3.5 rounded-2xl border border-slate-100 bg-slate-50/50 sm:col-span-2">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-rose-50 border border-rose-100 text-rose-600">
-                  <Phone className="h-5 w-5" />
+                  <IconsaxPhone className="h-5 w-5" />
                 </div>
                 <div className="min-w-0">
                   <p className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider leading-none">{t.phone_label}</p>
@@ -768,6 +768,67 @@ function IconsaxLogout({ className = "h-4 w-4" }: { className?: string }) {
         d="M12 21.75H6.75C4.68 21.75 3 20.07 3 18V6C3 3.93 4.68 2.25 6.75 2.25H12C12.41 2.25 12.75 2.59 12.75 3C12.75 3.41 12.41 3.75 12 3.75H6.75C5.51 3.75 4.5 4.76 4.5 6V18C4.5 19.24 5.51 20.25 6.75 20.25H12C12.41 20.25 12.75 20.59 12.75 21C12.75 21.41 12.41 21.75 12 21.75Z"
         fill="currentColor"
       />
+    </svg>
+  );
+}
+
+function IconsaxUser({ className = "h-4 w-4" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+      <path d="M12.16 10.87C12.06 10.87 11.94 10.87 11.84 10.87C9.3 10.77 7.25 8.68 7.25 6.13C7.25 3.53 9.37 1.42 11.97 1.42C14.57 1.42 16.69 3.53 16.69 6.13C16.63 8.68 14.63 10.77 12.16 10.87Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M11.97 14.88C15.65 14.88 19.03 16.51 21.05 19.23C21.43 19.74 21.1 20.48 20.46 20.48H3.49002C2.85002 20.48 2.52002 19.74 2.90002 19.23C4.91002 16.51 8.29002 14.88 11.97 14.88Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  );
+}
+
+function IconsaxGraduationCap({ className = "h-4 w-4" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+      <path d="M22 6.83L12 2L2 6.83L12 11.66L22 6.83Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M6 9.07V15.75C6 18.06 8.69 19.93 12 19.93C15.31 19.93 18 18.06 18 15.75V9.07" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M22 6.83V14.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  );
+}
+
+function IconsaxClipboardList({ className = "h-4 w-4" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+      <path d="M8 2V5" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M16 2V5" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M7 4H17C19.5 4 21 5.5 21 8V17C21 19.5 19.5 21 17 21H7C4.5 21 3 19.5 3 17V8C3 5.5 4.5 4 7 4Z" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M8 11H16" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M8 15H12" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  );
+}
+
+function IconsaxAward({ className = "h-4 w-4" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+      <path d="M12 15C15.3137 15 18 12.3137 18 9C18 5.68629 15.3137 3 12 3C8.68629 3 6 5.68629 6 9C6 12.3137 8.68629 15 12 15Z" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M8.21 13.89L7 21L12 18L17 21L15.79 13.88" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  );
+}
+
+function IconsaxBuilding({ className = "h-4 w-4" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+      <path d="M2 22H22" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M17 22V5C17 3.9 16.1 3 15 3H9C7.9 3 7 3.9 7 5V22" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M12 18V22" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M10 7H14" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M10 11H14" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M10 15H14" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  );
+}
+
+function IconsaxPhone({ className = "h-4 w-4" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+      <path d="M21.97 18.33C21.97 18.69 21.89 19.06 21.72 19.42C21.55 19.78 21.33 20.12 21.04 20.44C20.55 20.98 20.01 21.37 19.4 21.62C18.8 21.87 18.15 22 17.45 22C16.43 22 15.34 21.76 14.19 21.27C13.04 20.78 11.89 20.12 10.75 19.29C9.6 18.45 8.51 17.52 7.47 16.49C6.44 15.45 5.51 14.36 4.68 13.22C3.86 12.08 3.2 10.94 2.72 9.81C2.24 8.67 2 7.58 2 6.55C2 5.86 2.12 5.21 2.36 4.61C2.6 4 2.98 3.44 3.51 2.94C4.15 2.31 4.85 2 5.59 2C5.87 2 6.15 2.06 6.4 2.18C6.66 2.3 6.89 2.48 7.07 2.74L9.39 6.01C9.57 6.26 9.7 6.49 9.77 6.71C9.84 6.92 9.88 7.12 9.88 7.32C9.88 7.56 9.81 7.8 9.68 8.04C9.55 8.27 9.37 8.51 9.14 8.75L8.43 9.48C8.33 9.58 8.28 9.7 8.28 9.84C8.28 9.91 8.29 9.99 8.32 10.06C8.35 10.13 8.38 10.19 8.41 10.24C8.96 11.22 9.64 12.18 10.45 13.12C11.27 14.05 12.16 14.89 13.12 15.62C13.17 15.66 13.23 15.69 13.29 15.72C13.36 15.75 13.43 15.77 13.5 15.77C13.65 15.77 13.78 15.71 13.88 15.6L14.58 14.89C14.83 14.65 15.08 14.47 15.31 14.34C15.55 14.2 15.79 14.13 16.03 14.13C16.23 14.13 16.43 14.17 16.64 14.24C16.86 14.31 17.09 14.45 17.34 14.64L20.65 16.99C20.92 17.18 21.11 17.41 21.22 17.67C21.33 17.93 21.39 18.15 21.39 18.33V18.33H21.97Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
     </svg>
   );
 }
