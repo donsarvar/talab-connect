@@ -85,7 +85,7 @@ export function AdminView({ onLogout }: { onLogout?: () => void }) {
 
       <div className="relative z-10 w-full px-4 pt-4 sm:px-6 sm:pt-6 lg:px-8 lg:pt-8">
         {/* Header Card Frame */}
-        <header className="bg-white/80 border border-slate-150/60 rounded-3xl p-4 shadow-xl shadow-slate-100/50 backdrop-blur-md flex items-center justify-between w-full mb-6">
+        <header className="bg-white/80 border border-slate-150/60 rounded-3xl p-4 shadow-xl shadow-slate-100/50 backdrop-blur-md flex items-center justify-between w-full mb-6 overflow-visible z-20">
           {/* Left Side: Brand & Welcome */}
           <div className="flex items-center gap-3">
             <div className="gradient-primary flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-xs font-bold text-white shadow-md shadow-primary/25">
