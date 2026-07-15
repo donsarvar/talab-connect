@@ -197,9 +197,9 @@ export function RedesignedLogin({ onLogin }: RedesignedLoginProps) {
       </div>
 
       {/* Main Two-Column Container */}
-      <div className="relative z-10 mx-auto grid min-h-0 lg:min-h-screen lg:h-full max-w-7xl grid-cols-1 gap-8 px-4 sm:px-6 lg:grid-cols-12 w-full min-w-0">
+      <div className="relative z-10 mx-auto grid min-h-screen max-w-7xl grid-cols-1 gap-8 px-4 sm:px-6 lg:grid-cols-12 w-full min-w-0">
         {/* Left Side: Brand Experience */}
-        <div className="flex flex-col justify-between py-8 lg:py-10 lg:h-full lg:col-span-5 lg:pr-8 animate-fade-in w-full min-w-0">
+        <div className="hidden lg:flex flex-col justify-between py-8 lg:py-10 lg:h-full lg:col-span-5 lg:pr-8 animate-fade-in w-full min-w-0">
           {/* Logo and System Name */}
           <div className="space-y-5 min-w-0">
             <div className="flex items-center gap-3 min-w-0">
@@ -251,7 +251,7 @@ export function RedesignedLogin({ onLogin }: RedesignedLoginProps) {
         </div>
 
         {/* Right Side: Authentication */}
-        <div className="flex flex-col items-center justify-start lg:justify-center pt-2 pb-8 lg:items-center lg:py-6 lg:h-full lg:col-span-7 w-full min-w-0">
+        <div className="flex flex-col items-center justify-center min-h-screen lg:min-h-0 lg:h-full lg:col-span-7 w-full min-w-0 py-8">
           <div className="w-full max-w-[520px] animate-fade-up min-w-0">
             {/* Auth Card */}
             <div className="relative overflow-hidden rounded-[28px] border border-slate-100 bg-white/80 p-4 shadow-2xl shadow-slate-100 backdrop-blur-md sm:p-8 w-full">
